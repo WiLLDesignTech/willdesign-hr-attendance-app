@@ -16,8 +16,8 @@
   - Configure CDK to deploy separate resource sets per environment
   - _Requirements: 19.3, 19.6, 19.7_
 
-- [ ] 2. Shared type definitions
-- [ ] 2.1 (P) Define all domain entity types covering employees, attendance, leave, payroll, reports, flags, banking, holidays, audit, permissions, and policies
+- [x] 2. Shared type definitions
+- [x] 2.1 (P) Define all domain entity types covering employees, attendance, leave, payroll, reports, flags, banking, holidays, audit, permissions, and policies
   - Employee types: profile fields, employment types (JP: full-time, contract, outsourced, part-time, sales, intern; NP: full-time contractor, paid/unpaid intern), status (active/inactive), region, timezone, language preference, Slack ID, manager relationship
   - Attendance types: event actions (CLOCK_IN, CLOCK_OUT, BREAK_START, BREAK_END), state enum (IDLE, CLOCKED_IN, ON_BREAK), session summary, source (slack/web/system/admin), work location, optional emergency metadata tag (to distinguish mandatory incident response from voluntary holiday work)
   - Leave types: request status lifecycle (PENDING, APPROVED, REJECTED), configurable leave types (paid, unpaid, shift permission, credited absence, JP-specific types), balance, accrual configuration
