@@ -71,3 +71,13 @@ export {
   validateQuotaPlan,
   calculateForceMajeureAdjustment,
 } from "./flags/service.js";
+
+export { extractReferences, parseReport, hasMissingReferences, createNewVersion } from "./reports/parser.js";
+export type { ParsedReport } from "./reports/parser.js";
+
+export {
+  calculateOvertimeHours,
+  calculateOvertimePay,
+  checkDeemedOvertimeThreshold,
+  check36AgreementLimits,
+} from "./overtime/calculator.js";

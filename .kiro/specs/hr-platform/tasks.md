@@ -231,8 +231,8 @@
   - Write TDD tests: proportional hour reduction, no deduction, 30-day termination trigger
   - _Requirements: 13.1, 13.2_
 
-- [ ] 10. Daily reports and overtime tracking
-- [ ] 10.1 Implement daily report parsing with JIRA/GitHub reference extraction and versioned edits
+- [x] 10. Daily reports and overtime tracking
+- [x] 10.1 Implement daily report parsing with JIRA/GitHub reference extraction and versioned edits
   - Parse Slack messages in the reporting channel as daily reports with: yesterday's work, today's plan, blockers
   - Extract structured references using regex: JIRA ticket IDs (PROJECT-123 pattern) and GitHub PRs (repo-name#42 pattern)
   - Warn via bot reply if a report contains no JIRA or GitHub references
@@ -242,7 +242,7 @@
   - Write TDD tests: JIRA extraction, GitHub extraction, missing reference warning, edit versioning, structured data alongside raw text
   - _Requirements: 2.1, 2.2, 2.3, 2.4_
 
-- [ ] 10.2 (P) Implement overtime tracking with deemed overtime, actual overtime, and 36 Agreement limits
+- [x] 10.2 (P) Implement overtime tracking with deemed overtime, actual overtime, and 36 Agreement limits
   - Track overtime hours for all employees where applicable, regardless of payment type
   - For employees with deemed overtime (minashi zangyo): track actual overtime and flag when actual exceeds the deemed threshold (default: 45h, configurable per policy)
   - Calculate overtime pay rates per Japanese labor law: regular 1.25x, late night (22:00-05:00) +0.25x, holiday 1.35x, exceeding 60h/month 1.5x
