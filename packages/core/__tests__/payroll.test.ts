@@ -7,7 +7,7 @@ import {
   calculateDeficitDeduction,
   calculatePayrollBreakdown,
 } from "../src/payroll/calculator.js";
-import { SalaryTypes, SalaryChangeTypes, Currencies, JP_LABOR } from "@willdesign-hr/types";
+import { SalaryTypes, SalaryChangeTypes, Currencies, JP_LABOR, AllowanceTypes } from "@willdesign-hr/types";
 import type { SalaryRecord, AllowanceItem } from "@willdesign-hr/types";
 
 function makeSalary(overrides: Partial<SalaryRecord> & { amount: number; effectiveFrom: string }): SalaryRecord {
@@ -65,6 +65,18 @@ describe("calculateBlendedSalary", () => {
     expect(result.blendedAmount).toBeCloseTo(expected, 0);
   });
 
+  it("blends three salary changes within the same month", () => {
+    const history: SalaryRecord[] = [
+      makeSalary({ amount: 300000, effectiveFrom: "2024-01-01" }),
+      makeSalary({ amount: 330000, effectiveFrom: "2024-01-11" }),
+      makeSalary({ amount: 360000, effectiveFrom: "2024-01-21" }),
+    ];
+    const result = calculateBlendedSalary(history, "2024-01");
+    // 10 days at 300k, 10 days at 330k, 11 days at 360k (Jan = 31 days)
+    const expected = (300000 * 10 + 330000 * 10 + 360000 * 11) / 31;
+    expect(result.blendedAmount).toBeCloseTo(expected, 0);
+  });
+
   it("returns single salary when no blending needed", () => {
     const history: SalaryRecord[] = [
       makeSalary({ amount: 300000, effectiveFrom: "2024-01-01" }),
@@ -116,7 +128,7 @@ describe("calculateDeficitDeduction", () => {
 describe("calculatePayrollBreakdown", () => {
   it("produces full JP payroll with overtime and allowances", () => {
     const allowances: AllowanceItem[] = [
-      { type: "TRANSPORTATION", name: "Transportation", amount: 15000, currency: Currencies.JPY },
+      { type: AllowanceTypes.TRANSPORTATION, name: "Transportation", amount: 15000, currency: Currencies.JPY },
     ];
     const result = calculatePayrollBreakdown({
       baseSalary: 300000,

@@ -41,26 +41,30 @@ export function calculateBlendedSalary(
     return { blendedAmount: effective ? toMonthlySalary(effective.amount, effective.salaryType) : 0, details: null };
   }
 
-  // Blend: use the last two entries in the month
+  // Multi-segment blend: each entry covers from its effective date to the next entry (or month end)
+  let blendedAmount = 0;
+  for (let i = 0; i < withinMonth.length; i++) {
+    const entry = withinMonth[i]!;
+    const startDay = parseInt(entry.effectiveFrom.split("-")[2]!, 10);
+    const endDay = i + 1 < withinMonth.length
+      ? parseInt(withinMonth[i + 1]!.effectiveFrom.split("-")[2]!, 10) - 1
+      : totalDays;
+    const days = endDay - startDay + 1;
+    blendedAmount += (toMonthlySalary(entry.amount, entry.salaryType) * days) / totalDays;
+  }
+
+  // Return details for the most recent transition (last two entries)
   const older = withinMonth[withinMonth.length - 2]!;
   const newer = withinMonth[withinMonth.length - 1]!;
-
   const newerDay = parseInt(newer.effectiveFrom.split("-")[2]!, 10);
-  const oldDays = newerDay - 1;
-  const newDays = totalDays - oldDays;
-
-  const oldMonthlySalary = toMonthlySalary(older.amount, older.salaryType);
-  const newMonthlySalary = toMonthlySalary(newer.amount, newer.salaryType);
-
-  const blendedAmount = (oldMonthlySalary * oldDays) / totalDays + (newMonthlySalary * newDays) / totalDays;
 
   return {
     blendedAmount,
     details: {
-      oldSalary: oldMonthlySalary,
-      newSalary: newMonthlySalary,
-      oldDays,
-      newDays,
+      oldSalary: toMonthlySalary(older.amount, older.salaryType),
+      newSalary: toMonthlySalary(newer.amount, newer.salaryType),
+      oldDays: newerDay - 1,
+      newDays: totalDays - (newerDay - 1),
       totalDays,
     },
   };
@@ -128,8 +132,9 @@ export interface PayrollInput {
 export function calculatePayrollBreakdown(input: PayrollInput): PayrollBreakdown {
   const overtimePay = input.overtimeHours * input.hourlyRateForOvertime * input.overtimeRate;
   const allowanceTotal = input.allowances.reduce((sum, a) => sum + a.amount, 0);
+  // monthlyHourlyRate is the pre-computed hourly rate (salary / contractual hours)
   const deficitDeduction = input.deficitHours > 0 && input.monthlyHourlyRate > 0
-    ? calculateDeficitDeduction(input.baseSalary, HOURS.MONTHLY_FULL_TIME, input.deficitHours)
+    ? Math.ceil(input.monthlyHourlyRate * input.deficitHours)
     : 0;
 
   let proRataAdjustment = 0;
@@ -168,13 +173,11 @@ export function calculatePayrollBreakdown(input: PayrollInput): PayrollBreakdown
   };
 }
 
-function getLastDayOfMonth(yearMonth: string): string {
-  const [year, month] = yearMonth.split("-").map(Number) as [number, number];
-  const lastDay = new Date(year, month, 0).getDate();
-  return `${yearMonth}-${String(lastDay).padStart(2, "0")}`;
-}
-
 function getDaysInMonth(yearMonth: string): number {
   const [year, month] = yearMonth.split("-").map(Number) as [number, number];
   return new Date(year, month, 0).getDate();
+}
+
+function getLastDayOfMonth(yearMonth: string): string {
+  return `${yearMonth}-${String(getDaysInMonth(yearMonth)).padStart(2, "0")}`;
 }
