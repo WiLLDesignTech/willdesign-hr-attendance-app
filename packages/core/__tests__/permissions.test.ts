@@ -7,24 +7,25 @@ import {
   authorize,
 } from "../src/permissions/engine.js";
 import type { AuthContext, ResourceContext } from "@willdesign-hr/types";
+import { Roles, SensitivityLevels } from "@willdesign-hr/types";
 
 describe("RBAC — Role hierarchy", () => {
   it("defines 5 default roles in order", () => {
     expect(ROLE_HIERARCHY).toEqual([
-      "EMPLOYEE",
-      "MANAGER",
-      "HR_MANAGER",
-      "ADMIN",
-      "SUPER_ADMIN",
+      Roles.EMPLOYEE,
+      Roles.MANAGER,
+      Roles.HR_MANAGER,
+      Roles.ADMIN,
+      Roles.SUPER_ADMIN,
     ]);
   });
 
   it("returns correct level for each role", () => {
-    expect(getRoleLevel("EMPLOYEE")).toBe(0);
-    expect(getRoleLevel("MANAGER")).toBe(1);
-    expect(getRoleLevel("HR_MANAGER")).toBe(2);
-    expect(getRoleLevel("ADMIN")).toBe(3);
-    expect(getRoleLevel("SUPER_ADMIN")).toBe(4);
+    expect(getRoleLevel(Roles.EMPLOYEE)).toBe(0);
+    expect(getRoleLevel(Roles.MANAGER)).toBe(1);
+    expect(getRoleLevel(Roles.HR_MANAGER)).toBe(2);
+    expect(getRoleLevel(Roles.ADMIN)).toBe(3);
+    expect(getRoleLevel(Roles.SUPER_ADMIN)).toBe(4);
   });
 
   it("returns -1 for unknown/custom roles", () => {
@@ -32,14 +33,14 @@ describe("RBAC — Role hierarchy", () => {
   });
 
   it("checks minimum role correctly", () => {
-    expect(hasMinimumRole("ADMIN", "MANAGER")).toBe(true);
-    expect(hasMinimumRole("EMPLOYEE", "MANAGER")).toBe(false);
-    expect(hasMinimumRole("MANAGER", "MANAGER")).toBe(true);
-    expect(hasMinimumRole("SUPER_ADMIN", "EMPLOYEE")).toBe(true);
+    expect(hasMinimumRole(Roles.ADMIN, Roles.MANAGER)).toBe(true);
+    expect(hasMinimumRole(Roles.EMPLOYEE, Roles.MANAGER)).toBe(false);
+    expect(hasMinimumRole(Roles.MANAGER, Roles.MANAGER)).toBe(true);
+    expect(hasMinimumRole(Roles.SUPER_ADMIN, Roles.EMPLOYEE)).toBe(true);
   });
 
   it("Super Admin always meets minimum role", () => {
-    expect(hasMinimumRole("SUPER_ADMIN", "SUPER_ADMIN")).toBe(true);
+    expect(hasMinimumRole(Roles.SUPER_ADMIN, Roles.SUPER_ADMIN)).toBe(true);
   });
 });
 
@@ -47,7 +48,7 @@ describe("RBAC — Permission checks", () => {
   it("allows action when actor has explicit permission", () => {
     const actor: AuthContext = {
       actorId: "EMP#001",
-      actorRole: "EMPLOYEE",
+      actorRole: Roles.EMPLOYEE,
       actorCustomPermissions: ["leave:approve", "holiday:manage"],
     };
     expect(hasPermission(actor, "leave:approve")).toBe(true);
@@ -56,7 +57,7 @@ describe("RBAC — Permission checks", () => {
   it("denies action when actor lacks permission", () => {
     const actor: AuthContext = {
       actorId: "EMP#001",
-      actorRole: "EMPLOYEE",
+      actorRole: Roles.EMPLOYEE,
       actorCustomPermissions: [],
     };
     expect(hasPermission(actor, "leave:approve")).toBe(false);
@@ -65,7 +66,7 @@ describe("RBAC — Permission checks", () => {
   it("Super Admin bypasses all permission checks", () => {
     const actor: AuthContext = {
       actorId: "EMP#000",
-      actorRole: "SUPER_ADMIN",
+      actorRole: Roles.SUPER_ADMIN,
       actorCustomPermissions: [],
     };
     expect(hasPermission(actor, "anything:at-all")).toBe(true);
@@ -75,25 +76,25 @@ describe("RBAC — Permission checks", () => {
 describe("ABAC — authorize", () => {
   const managerCtx: AuthContext = {
     actorId: "EMP#001",
-    actorRole: "MANAGER",
+    actorRole: Roles.MANAGER,
     actorCustomPermissions: [],
   };
 
   const employeeCtx: AuthContext = {
     actorId: "EMP#002",
-    actorRole: "EMPLOYEE",
+    actorRole: Roles.EMPLOYEE,
     actorCustomPermissions: [],
   };
 
   const superAdminCtx: AuthContext = {
     actorId: "EMP#000",
-    actorRole: "SUPER_ADMIN",
+    actorRole: Roles.SUPER_ADMIN,
     actorCustomPermissions: [],
   };
 
   const adminCtx: AuthContext = {
     actorId: "EMP#003",
-    actorRole: "ADMIN",
+    actorRole: Roles.ADMIN,
     actorCustomPermissions: [],
   };
 
@@ -102,7 +103,7 @@ describe("ABAC — authorize", () => {
       resourceType: "ATTENDANCE",
       resourceOwnerId: "EMP#002",
       ownerManagerId: "EMP#001",
-      sensitivityLevel: "INTERNAL",
+      sensitivityLevel: SensitivityLevels.INTERNAL,
     };
     const result = authorize(employeeCtx, "read", resource);
     expect(result.allowed).toBe(true);
@@ -114,7 +115,7 @@ describe("ABAC — authorize", () => {
       resourceType: "ATTENDANCE",
       resourceOwnerId: "EMP#002",
       ownerManagerId: "EMP#001",
-      sensitivityLevel: "INTERNAL",
+      sensitivityLevel: SensitivityLevels.INTERNAL,
     };
     const result = authorize(managerCtx, "read", resource);
     expect(result.allowed).toBe(true);
@@ -126,7 +127,7 @@ describe("ABAC — authorize", () => {
       resourceType: "ATTENDANCE",
       resourceOwnerId: "EMP#099",
       ownerManagerId: "EMP#050",
-      sensitivityLevel: "INTERNAL",
+      sensitivityLevel: SensitivityLevels.INTERNAL,
     };
     const result = authorize(managerCtx, "read", resource);
     expect(result.allowed).toBe(false);
@@ -137,7 +138,7 @@ describe("ABAC — authorize", () => {
       resourceType: "SALARY",
       resourceOwnerId: "EMP#003",
       ownerManagerId: "EMP#001",
-      sensitivityLevel: "CONFIDENTIAL",
+      sensitivityLevel: SensitivityLevels.CONFIDENTIAL,
     };
     const result = authorize(employeeCtx, "read", resource);
     expect(result.allowed).toBe(false);
@@ -148,7 +149,7 @@ describe("ABAC — authorize", () => {
       resourceType: "SALARY",
       resourceOwnerId: "EMP#002",
       ownerManagerId: "EMP#001",
-      sensitivityLevel: "CONFIDENTIAL",
+      sensitivityLevel: SensitivityLevels.CONFIDENTIAL,
     };
     const result = authorize(managerCtx, "read", resource);
     expect(result.allowed).toBe(true);
@@ -159,7 +160,7 @@ describe("ABAC — authorize", () => {
       resourceType: "SALARY",
       resourceOwnerId: "EMP#099",
       ownerManagerId: "EMP#050",
-      sensitivityLevel: "CONFIDENTIAL",
+      sensitivityLevel: SensitivityLevels.CONFIDENTIAL,
     };
     const result = authorize(adminCtx, "read", resource);
     expect(result.allowed).toBe(true);
@@ -171,7 +172,7 @@ describe("ABAC — authorize", () => {
       resourceType: "SALARY",
       resourceOwnerId: "EMP#099",
       ownerManagerId: "EMP#050",
-      sensitivityLevel: "CONFIDENTIAL",
+      sensitivityLevel: SensitivityLevels.CONFIDENTIAL,
     };
     const result = authorize(superAdminCtx, "read", resource);
     expect(result.allowed).toBe(true);
@@ -183,7 +184,7 @@ describe("ABAC — authorize", () => {
       resourceType: "LEAVE_CALENDAR",
       resourceOwnerId: "EMP#099",
       ownerManagerId: "EMP#050",
-      sensitivityLevel: "PUBLIC",
+      sensitivityLevel: SensitivityLevels.PUBLIC,
     };
     const result = authorize(employeeCtx, "read", resource);
     expect(result.allowed).toBe(true);
@@ -195,7 +196,7 @@ describe("ABAC — authorize", () => {
       resourceType: "SALARY",
       resourceOwnerId: "EMP#002",
       ownerManagerId: "EMP#001",
-      sensitivityLevel: "CONFIDENTIAL",
+      sensitivityLevel: SensitivityLevels.CONFIDENTIAL,
     };
     const result = authorize(employeeCtx, "read", resource);
     expect(result.allowed).toBe(true);
@@ -207,7 +208,7 @@ describe("ABAC — authorize", () => {
       resourceType: "LEAVE_REQUEST",
       resourceOwnerId: "EMP#003",
       ownerManagerId: "EMP#001",
-      sensitivityLevel: "SENSITIVE",
+      sensitivityLevel: SensitivityLevels.SENSITIVE,
     };
     const result = authorize(employeeCtx, "read", resource);
     expect(result.allowed).toBe(false);

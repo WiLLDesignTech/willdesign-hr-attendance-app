@@ -3,6 +3,7 @@ import {
   WorkArrangements,
   TimeTypes,
   TerminationHandlings,
+  SalaryTypes,
   JP_LABOR,
   HOURS,
   PROBATION,
@@ -62,7 +63,7 @@ export const orgPolicy: RawPolicy = {
     yearlyLimit: JP_LABOR.YEARLY_OVERTIME_LIMIT,
   },
   compensation: {
-    salaryType: "MONTHLY",
+    salaryType: SalaryTypes.MONTHLY,
     bonusSchedule: [
       { month: 6, multiplier: 1 },
       { month: 12, multiplier: 1 },

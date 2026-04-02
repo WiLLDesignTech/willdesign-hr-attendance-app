@@ -51,6 +51,17 @@ import type {
   PaymentPolicy,
   ReportPolicy,
 } from "@willdesign-hr/types";
+import {
+  Roles,
+  SensitivityLevels,
+  AttendanceActions,
+  AttendanceStates,
+  WorkArrangements,
+  TimeTypes,
+  TerminationHandlings,
+  LeaveRequestStatuses,
+  SalaryTypes,
+} from "@willdesign-hr/types";
 
 describe("Employee types", () => {
   it("should define all employment types for JP and NP", () => {
@@ -106,12 +117,12 @@ describe("Employee types", () => {
 describe("Attendance types", () => {
   it("should define all actions and states", () => {
     const actions: AttendanceAction[] = [
-      "CLOCK_IN",
-      "CLOCK_OUT",
-      "BREAK_START",
-      "BREAK_END",
+      AttendanceActions.CLOCK_IN,
+      AttendanceActions.CLOCK_OUT,
+      AttendanceActions.BREAK_START,
+      AttendanceActions.BREAK_END,
     ];
-    const states: AttendanceState[] = ["IDLE", "CLOCKED_IN", "ON_BREAK"];
+    const states: AttendanceState[] = [AttendanceStates.IDLE, AttendanceStates.CLOCKED_IN, AttendanceStates.ON_BREAK];
     expect(actions).toHaveLength(4);
     expect(states).toHaveLength(3);
   });
@@ -120,20 +131,20 @@ describe("Attendance types", () => {
     const event: AttendanceEvent = {
       id: "ATT#001",
       employeeId: "EMP#001",
-      action: "CLOCK_IN",
+      action: AttendanceActions.CLOCK_IN,
       timestamp: "2024-01-15T09:00:00Z",
       source: "slack",
       workLocation: "office",
       isEmergency: false,
     };
-    expect(event.action).toBe("CLOCK_IN");
+    expect(event.action).toBe(AttendanceActions.CLOCK_IN);
     expect(event.isEmergency).toBe(false);
   });
 });
 
 describe("Leave types", () => {
   it("should define request statuses", () => {
-    const statuses: LeaveRequestStatus[] = ["PENDING", "APPROVED", "REJECTED"];
+    const statuses: LeaveRequestStatus[] = [LeaveRequestStatuses.PENDING, LeaveRequestStatuses.APPROVED, LeaveRequestStatuses.REJECTED];
     expect(statuses).toHaveLength(3);
   });
 
@@ -144,12 +155,12 @@ describe("Leave types", () => {
       leaveType: "PAID",
       startDate: "2024-02-01",
       endDate: "2024-02-02",
-      status: "PENDING",
+      status: LeaveRequestStatuses.PENDING,
       reason: "Personal",
       createdAt: "2024-01-20T00:00:00Z",
       updatedAt: "2024-01-20T00:00:00Z",
     };
-    expect(req.status).toBe("PENDING");
+    expect(req.status).toBe(LeaveRequestStatuses.PENDING);
   });
 });
 
@@ -176,7 +187,7 @@ describe("Payroll types", () => {
       employeeId: "EMP#001",
       amount: 300000,
       currency: "JPY",
-      salaryType: "MONTHLY",
+      salaryType: SalaryTypes.MONTHLY,
       changeType: "INITIAL",
       effectiveFrom: "2024-01-15",
       agreementDocumentId: "DOC#001",
@@ -253,7 +264,7 @@ describe("Banking types", () => {
       surplusHours: 10,
       usedHours: 0,
       remainingHours: 10,
-      approvalStatus: "PENDING",
+      approvalStatus: LeaveRequestStatuses.PENDING,
       yearMonth: "2024-01",
       expiresAt: "2025-01-31",
       createdAt: "2024-02-01T00:00:00Z",
@@ -297,21 +308,21 @@ describe("Audit types", () => {
 describe("Permission types", () => {
   it("should define default roles", () => {
     const roles: Role[] = [
-      "EMPLOYEE",
-      "MANAGER",
-      "HR_MANAGER",
-      "ADMIN",
-      "SUPER_ADMIN",
+      Roles.EMPLOYEE,
+      Roles.MANAGER,
+      Roles.HR_MANAGER,
+      Roles.ADMIN,
+      Roles.SUPER_ADMIN,
     ];
     expect(roles).toHaveLength(5);
   });
 
   it("should define sensitivity levels", () => {
     const levels: SensitivityLevel[] = [
-      "PUBLIC",
-      "INTERNAL",
-      "SENSITIVE",
-      "CONFIDENTIAL",
+      SensitivityLevels.PUBLIC,
+      SensitivityLevels.INTERNAL,
+      SensitivityLevels.SENSITIVE,
+      SensitivityLevels.CONFIDENTIAL,
     ];
     expect(levels).toHaveLength(4);
   });
@@ -319,17 +330,17 @@ describe("Permission types", () => {
   it("should create auth and resource contexts", () => {
     const auth: AuthContext = {
       actorId: "EMP#001",
-      actorRole: "MANAGER",
+      actorRole: Roles.MANAGER,
       actorCustomPermissions: ["leave:approve"],
     };
     const resource: ResourceContext = {
       resourceType: "LEAVE_REQUEST",
       resourceOwnerId: "EMP#002",
       ownerManagerId: "EMP#001",
-      sensitivityLevel: "INTERNAL",
+      sensitivityLevel: SensitivityLevels.INTERNAL,
     };
-    expect(auth.actorRole).toBe("MANAGER");
-    expect(resource.sensitivityLevel).toBe("INTERNAL");
+    expect(auth.actorRole).toBe(Roles.MANAGER);
+    expect(resource.sensitivityLevel).toBe(SensitivityLevels.INTERNAL);
   });
 });
 
@@ -340,8 +351,8 @@ describe("Policy types", () => {
         dailyMinimum: 8,
         weeklyMinimum: 40,
         monthlyMinimum: 160,
-        workArrangement: "OFFICE",
-        timeType: "FIXED",
+        workArrangement: WorkArrangements.OFFICE,
+        timeType: TimeTypes.FIXED,
         coreHoursStart: "10:00",
         coreHoursEnd: "15:00",
       },
@@ -352,7 +363,7 @@ describe("Policy types", () => {
         carryOverMonths: 24,
         leaveTypes: ["PAID", "UNPAID"],
         mandatoryUsageDays: 5,
-        terminationHandling: "LABOR_LAW",
+        terminationHandling: TerminationHandlings.LABOR_LAW,
       },
       overtime: {
         deemedHours: 45,
@@ -361,7 +372,7 @@ describe("Policy types", () => {
         yearlyLimit: 360,
       },
       compensation: {
-        salaryType: "MONTHLY",
+        salaryType: SalaryTypes.MONTHLY,
         bonusSchedule: [],
         allowanceTypes: [],
         commissionTracking: false,
@@ -409,10 +420,10 @@ describe("Document types", () => {
       fileName: "contract.pdf",
       fileType: "application/pdf",
       s3Key: "documents/EMP#001/contract.pdf",
-      verificationStatus: "PENDING",
+      verificationStatus: LeaveRequestStatuses.PENDING,
       uploadedAt: "2024-01-15T00:00:00Z",
     };
-    expect(doc.verificationStatus).toBe("PENDING");
+    expect(doc.verificationStatus).toBe(LeaveRequestStatuses.PENDING);
   });
 });
 

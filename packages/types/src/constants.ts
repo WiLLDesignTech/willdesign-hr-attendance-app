@@ -54,6 +54,13 @@ export const LeaveRequestStatuses = {
   REJECTED: "REJECTED",
 } as const;
 
+// ─── Salary ───
+export const SalaryTypes = {
+  MONTHLY: "MONTHLY",
+  ANNUAL: "ANNUAL",
+  HOURLY: "HOURLY",
+} as const;
+
 // ─── JP Labor Law Constants ───
 export const JP_LABOR = {
   OVERTIME_RATE_STANDARD: 1.25,

@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { resolveCascade } from "../src/policies/resolver.js";
+import { TerminationHandlings, SalaryTypes, WorkArrangements } from "@willdesign-hr/types";
 import {
   orgPolicy,
   jpFulltimePolicy,
@@ -41,14 +42,14 @@ describe("Seed policy cascade", () => {
   it("JP outsourced has no leave accrual", () => {
     const resolved = resolveCascade(orgPolicy, jpOutsourcedPolicy, null);
     expect(resolved.leave?.accrualSchedule).toEqual([]);
-    expect(resolved.leave?.terminationHandling).toBe("FORFEIT");
+    expect(resolved.leave?.terminationHandling).toBe(TerminationHandlings.FORFEIT);
     expect(resolved.overtime?.monthlyLimit).toBe(0);
   });
 
   it("JP part-time resolves with 80h/mo and hourly salary", () => {
     const resolved = resolveCascade(orgPolicy, jpParttimePolicy, null);
     expect(resolved.hours?.monthlyMinimum).toBe(80);
-    expect(resolved.compensation?.salaryType).toBe("HOURLY");
+    expect(resolved.compensation?.salaryType).toBe(SalaryTypes.HOURLY);
     expect(resolved.hours?.dailyMinimum).toBe(8);
   });
 
@@ -67,8 +68,8 @@ describe("Seed policy cascade", () => {
 
   it("NP full-time resolves with remote work and FORFEIT leave", () => {
     const resolved = resolveCascade(orgPolicy, npFulltimePolicy, null);
-    expect(resolved.hours?.workArrangement).toBe("REMOTE");
-    expect(resolved.leave?.terminationHandling).toBe("FORFEIT");
+    expect(resolved.hours?.workArrangement).toBe(WorkArrangements.REMOTE);
+    expect(resolved.leave?.terminationHandling).toBe(TerminationHandlings.FORFEIT);
     expect(resolved.leave?.startConditionMonths).toBe(3);
     expect(resolved.overtime?.rates?.standard).toBe(1.0);
     expect(resolved.payment?.deadlineDay).toBe(15);
@@ -77,8 +78,8 @@ describe("Seed policy cascade", () => {
   it("NP paid intern has 80h/mo minimum", () => {
     const resolved = resolveCascade(orgPolicy, npPaidInternPolicy, null);
     expect(resolved.hours?.monthlyMinimum).toBe(80);
-    expect(resolved.hours?.workArrangement).toBe("REMOTE");
-    expect(resolved.leave?.terminationHandling).toBe("FORFEIT");
+    expect(resolved.hours?.workArrangement).toBe(WorkArrangements.REMOTE);
+    expect(resolved.leave?.terminationHandling).toBe(TerminationHandlings.FORFEIT);
   });
 
   it("NP unpaid intern has no leave types", () => {
@@ -97,6 +98,6 @@ describe("Seed policy cascade", () => {
     const userOverride = { hours: { monthlyMinimum: 140 } };
     const resolved = resolveCascade(orgPolicy, npFulltimePolicy, userOverride);
     expect(resolved.hours?.monthlyMinimum).toBe(140);
-    expect(resolved.hours?.workArrangement).toBe("REMOTE");
+    expect(resolved.hours?.workArrangement).toBe(WorkArrangements.REMOTE);
   });
 });

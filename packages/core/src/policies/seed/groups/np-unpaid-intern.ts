@@ -1,5 +1,5 @@
 import type { RawPolicy } from "@willdesign-hr/types";
-import { WorkArrangements, TerminationHandlings, HOURS, PAYMENT } from "@willdesign-hr/types";
+import { WorkArrangements, TerminationHandlings, SalaryTypes, HOURS, PAYMENT } from "@willdesign-hr/types";
 
 /** Nepal unpaid intern — tracked hours, no pay, no leave. */
 export const npUnpaidInternPolicy: RawPolicy = {
@@ -22,7 +22,7 @@ export const npUnpaidInternPolicy: RawPolicy = {
     yearlyLimit: 0,
   },
   compensation: {
-    salaryType: "MONTHLY",
+    salaryType: SalaryTypes.MONTHLY,
     bonusSchedule: [],
     allowanceTypes: [],
     commissionTracking: false,

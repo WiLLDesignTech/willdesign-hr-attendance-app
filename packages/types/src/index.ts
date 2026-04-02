@@ -118,6 +118,7 @@ export {
   TimeTypes,
   TerminationHandlings,
   LeaveRequestStatuses,
+  SalaryTypes,
   JP_LABOR,
   HOURS,
   PROBATION,

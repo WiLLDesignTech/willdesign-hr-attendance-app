@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { AttendanceStates } from "@willdesign-hr/types";
 import type {
   EmployeeRepository,
   AttendanceRepository,
@@ -38,7 +39,7 @@ describe("Repository interfaces (ports)", () => {
 
   it("AttendanceRepository has required methods", () => {
     const mock: AttendanceRepository = {
-      getState: async () => ({ employeeId: "", state: "IDLE", lastEventId: null, lastEventTimestamp: null }),
+      getState: async () => ({ employeeId: "", state: AttendanceStates.IDLE, lastEventId: null, lastEventTimestamp: null }),
       saveState: async () => {},
       saveEvent: async () => {},
       getEventsForDate: async () => [],
