@@ -14,7 +14,6 @@
   ],
   "scripts": {
     "build": "npm run build --workspaces --if-present",
-    "build:watch": "tsc --build --watch",
     "dev": "npm run dev --workspace=@willdesign-hr/web",
     "dev:web": "npm run dev --workspace=@willdesign-hr/web",
     "test": "vitest run",
