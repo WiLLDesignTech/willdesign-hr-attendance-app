@@ -189,6 +189,16 @@ export const ATTENDANCE = {
   IDEMPOTENCY_WINDOW_MS: 60_000,
 } as const;
 
+// ─── Banking ───
+export const BANKING = {
+  EXPIRY_MONTHS: 12,
+} as const;
+
+// ─── Force Majeure ───
+export const FORCE_MAJEURE = {
+  TERMINATION_DAYS: 30,
+} as const;
+
 // ─── Probation ───
 export const PROBATION = {
   DEFAULT_DURATION_MONTHS: 3,

@@ -133,6 +133,8 @@ export {
   ReferenceTypes,
   ATTENDANCE,
   AllowanceTypes,
+  BANKING,
+  FORCE_MAJEURE,
   JP_LABOR,
   HOURS,
   PROBATION,

@@ -60,3 +60,14 @@ export {
   calculatePayrollBreakdown,
 } from "./payroll/calculator.js";
 export type { PayrollInput } from "./payroll/calculator.js";
+
+export {
+  shouldGenerateFlag,
+  resolveFlag,
+  createBankEntry,
+  isExpired,
+  applyBankOffset,
+  createQuotaPlan,
+  validateQuotaPlan,
+  calculateForceMajeureAdjustment,
+} from "./flags/service.js";

@@ -186,8 +186,8 @@
   - Write TDD tests: full NP payroll with deficit, full JP payroll with overtime and allowances, mid-month join pro-rata, blending, commission, exchange rate tracking
   - _Requirements: 10.3, 10.4, 10.5, 10.6, 10.7, 10.8, 10.10, 10.11, 10.15, 10.16_
 
-- [ ] 9. Flags, banking, and quota management
-- [ ] 9.1 Implement 3-level shortfall flag generation with anti-double-penalty and pre-approval suppression
+- [x] 9. Flags, banking, and quota management
+- [x] 9.1 Implement 3-level shortfall flag generation with anti-double-penalty and pre-approval suppression
   - Daily flag: generated at end-of-day if worked hours are below daily minimum and no approved leave exists for that date
   - Weekly flag: generated at end-of-week if weekly total is below weekly minimum
   - Monthly flag: generated at end-of-month if monthly total is below required hours (from policy cascade or override)
@@ -197,7 +197,7 @@
   - Write TDD tests: daily shortfall with and without leave, weekly rollup, monthly deduction, pre-approval suppression, configurable thresholds
   - _Requirements: 11.1, 11.3, 11.4, 11.5_
 
-- [ ] 9.2 Implement flag resolution workflow with bank offset options
+- [x] 9.2 Implement flag resolution workflow with bank offset options
   - Resolution options: NO_PENALTY (forgive), DEDUCT_FULL (full salary deduction), USE_BANK (offset from surplus), PARTIAL_BANK (partial offset + partial deduction), DISCUSS (keep pending)
   - Bank offset: when manager selects USE_BANK or PARTIAL_BANK, apply specified hours from active (non-expired) bank entries to reduce the deficit
   - Update flag status, bank entry used hours, and create audit entry as a single atomic operation
@@ -205,7 +205,7 @@
   - Write TDD tests: each resolution type, bank offset reducing deficit to zero, partial bank offset, expired bank entries ignored
   - _Requirements: 11.2, 12.4_
 
-- [ ] 9.3 (P) Implement hours banking with manager pre-approval, 12-month expiry, and visibility rules
+- [x] 9.3 (P) Implement hours banking with manager pre-approval, 12-month expiry, and visibility rules
   - Surplus hours require manager pre-approval before becoming bankable
   - Manager specifies max_leave_days convertible from the surplus when approving
   - Banked hours expire after 12 months from accrual date (configurable via policy)
@@ -215,7 +215,7 @@
   - Write TDD tests: approval flow, expiry at 12 months, visibility rules by role, leave conversion within max_leave_days, expired entries excluded from offset
   - _Requirements: 12.1, 12.2, 12.3, 12.5_
 
-- [ ] 9.4 (P) Implement quota redistribution with validation and termination settlement rules
+- [x] 9.4 (P) Implement quota redistribution with validation and termination settlement rules
   - Manager can redistribute hours across months (e.g., April 140h + May 180h = 320h total)
   - Validate redistributed totals equal the original standard total; if less, warn and allow with explicit manager acknowledgment
   - Salary remains the same for both months regardless of redistributed hours
@@ -224,7 +224,7 @@
   - Write TDD tests: valid redistribution, under-total with warning, same salary both months, termination settlement using standard hours
   - _Requirements: 14.1, 14.2, 14.3_
 
-- [ ] 9.5 (P) Implement force majeure handling with proportional adjustment
+- [x] 9.5 (P) Implement force majeure handling with proportional adjustment
   - For verified events (natural disaster, political bandh, internet outage >24h), adjust hour requirements proportionally with no salary deduction
   - Track 24-hour notification requirement
   - If event persists >30 days, either party may terminate with 7 days' notice
