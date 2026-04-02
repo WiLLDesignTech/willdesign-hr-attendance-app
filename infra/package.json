@@ -1,0 +1,21 @@
+{
+  "name": "@willdesign-hr/infra",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "rm -rf dist",
+    "cdk": "cdk",
+    "synth": "cdk synth",
+    "deploy": "cdk deploy --all",
+    "diff": "cdk diff"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "aws-cdk": "^2.1116.0",
+    "aws-cdk-lib": "^2.246.0",
+    "constructs": "^10.6.0",
+    "source-map-support": "^0.5.21",
+    "ts-node": "^10.9.2"
+  }
+}
