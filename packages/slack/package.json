@@ -1,0 +1,17 @@
+{
+  "name": "@willdesign-hr/slack",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@willdesign-hr/types": "*",
+    "@willdesign-hr/core": "*",
+    "@willdesign-hr/data": "*"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "rm -rf dist",
+    "test": "vitest run"
+  }
+}

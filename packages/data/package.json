@@ -1,0 +1,16 @@
+{
+  "name": "@willdesign-hr/data",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@willdesign-hr/types": "*",
+    "@willdesign-hr/core": "*"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "rm -rf dist",
+    "test": "vitest run"
+  }
+}

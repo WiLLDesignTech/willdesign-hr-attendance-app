@@ -1,0 +1,12 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/types" },
+    { "path": "packages/core" },
+    { "path": "packages/data" },
+    { "path": "packages/api" },
+    { "path": "packages/slack" },
+    { "path": "packages/web" },
+    { "path": "infra" }
+  ]
+}

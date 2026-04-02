@@ -1,0 +1,47 @@
+{
+  "name": "willdesign-hr",
+  "version": "0.1.0",
+  "private": true,
+  "description": "WillDesign HR Platform — Monorepo",
+  "workspaces": [
+    "packages/types",
+    "packages/core",
+    "packages/data",
+    "packages/api",
+    "packages/slack",
+    "packages/web",
+    "infra"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "build:watch": "tsc --build --watch",
+    "dev": "npm run dev --workspace=@willdesign-hr/web",
+    "dev:web": "npm run dev --workspace=@willdesign-hr/web",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "lint": "eslint 'packages/*/src/**/*.{ts,tsx}' 'infra/**/*.ts'",
+    "lint:fix": "eslint --fix 'packages/*/src/**/*.{ts,tsx}' 'infra/**/*.ts'",
+    "format": "prettier --write 'packages/*/src/**/*.{ts,tsx,json}' 'infra/**/*.ts'",
+    "format:check": "prettier --check 'packages/*/src/**/*.{ts,tsx,json}' 'infra/**/*.ts'",
+    "typecheck": "tsc --build",
+    "typecheck:watch": "tsc --build --watch",
+    "clean": "npm run clean --workspaces --if-present && rm -rf node_modules",
+    "cdk:synth": "npm run synth --workspace=@willdesign-hr/infra",
+    "cdk:deploy": "npm run deploy --workspace=@willdesign-hr/infra",
+    "cdk:diff": "npm run diff --workspace=@willdesign-hr/infra"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@vitest/ui": "^4.1.2",
+    "eslint": "^10.1.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.8.1",
+    "typescript": "^6.0.2",
+    "typescript-eslint": "^8.58.0",
+    "vitest": "^4.1.2"
+  }
+}
