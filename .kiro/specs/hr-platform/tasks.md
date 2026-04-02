@@ -163,8 +163,8 @@
   - Write TDD tests: NP accrual with probation gate, JP labor law schedule at various tenures, cap enforcement, carry-over expiry, mandatory 5-day tracking
   - _Requirements: 9.2, 9.4, 9.6_
 
-- [ ] 8. Payroll and compensation
-- [ ] 8.1 Implement the effective salary resolution that always reads from salary history, never current salary
+- [x] 8. Payroll and compensation
+- [x] 8.1 Implement the effective salary resolution that always reads from salary history, never current salary
   - Build getEffectiveSalary: query all salary history entries for employee, filter by entries effective on or before the last day of the target month, return the most recent entry's salary
   - Handle mid-month salary changes: when two entries fall within the same month, calculate blended salary using pro-rata formula (old_salary x days_at_old / total_days + new_salary x days_at_new / total_days)
   - Support all salary types: monthly (JPY/NPR), annual (divided by 12), hourly (for part-time)
@@ -173,7 +173,7 @@
   - Write TDD tests: single salary lookup, mid-month blending, annual-to-monthly conversion, no history fallback, agreement document linkage
   - _Requirements: 10.1, 10.2, 10.9, 10.14, 16.7_
 
-- [ ] 8.2 Implement the full monthly payroll breakdown calculation
+- [x] 8.2 Implement the full monthly payroll breakdown calculation
   - Calculate base salary via getEffectiveSalary
   - Add pro-rata adjustment for mid-month join or exit: amount x (calendar_days_worked / total_calendar_days)
   - Add overtime pay based on hours exceeding policy threshold and applicable rates

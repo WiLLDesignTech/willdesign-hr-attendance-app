@@ -50,3 +50,13 @@ export { LeaveService } from "./leave/service.js";
 export type { CreateLeaveRequestInput } from "./leave/service.js";
 export { calculateAccrual, getJpAccrualDays, getNpAccrualDays, getMandatoryLeaveStatus } from "./leave/accrual.js";
 export type { AccrualInput, AccrualResult, MandatoryLeaveStatus } from "./leave/accrual.js";
+
+export {
+  getEffectiveSalary,
+  calculateBlendedSalary,
+  toMonthlySalary,
+  calculateProRata,
+  calculateDeficitDeduction,
+  calculatePayrollBreakdown,
+} from "./payroll/calculator.js";
+export type { PayrollInput } from "./payroll/calculator.js";
