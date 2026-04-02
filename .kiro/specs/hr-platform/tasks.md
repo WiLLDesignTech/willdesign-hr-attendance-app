@@ -251,8 +251,8 @@
   - Write TDD tests: deemed overtime threshold flag, rate calculations for each category, 36 Agreement warning triggers, policy cascade for overtime config
   - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5_
 
-- [ ] 11. DynamoDB repository adapters
-- [ ] 11.1 Implement the DynamoDB single-table schema setup and shared client configuration
+- [x] 11. DynamoDB repository adapters
+- [x] 11.1 Implement the DynamoDB single-table schema setup and shared client configuration
   - Create the CDK DynamoDB table definition with PK (String), SK (String), GSI1 (GSI1PK/GSI1SK), and GSI2 (GSI2PK/GSI2SK)
   - Configure on-demand capacity mode for free-tier usage
   - Implement a shared DynamoDB DocumentClient factory that is instantiated once per Lambda invocation and injected into repositories
@@ -260,7 +260,7 @@
   - Write integration tests against local DynamoDB verifying table creation and basic put/get operations
   - _Requirements: 19.3, 21.1_
 
-- [ ] 11.2 Implement the employee, attendance, and audit DynamoDB repositories
+- [x] 11.2 Implement the employee, attendance, and audit DynamoDB repositories
   - Employee repository: CRUD operations using PK=EMP#id, SK=PROFILE; Slack ID lookup via GSI1; manager's reports via GSI1 MGR# key; all employees via GSI2 ORG#EMP
   - Attendance repository: save event (ATT#date#timestamp), save/get state (ATT_STATE), get events by date using SK begins_with, unclosed sessions query
   - Audit repository: append-only writes (AUDIT#target_id, timestamp#uuid SK), query by target or by actor via GSI1
@@ -269,7 +269,7 @@
   - Write integration tests against local DynamoDB for each repository
   - _Requirements: 18.1, 18.2, 18.3, 18.4, 7.1_
 
-- [ ] 11.3 (P) Implement leave, salary, flag, bank, and report DynamoDB repositories
+- [x] 11.3 (P) Implement leave, salary, flag, bank, and report DynamoDB repositories
   - Leave repository: CRUD with PK=EMP#id SK=LEAVE#id; pending leave query via GSI1 LEAVE#PENDING; team calendar via GSI2 ORG#LEAVE
   - Salary repository: append-only writes PK=EMP#id SK=SALARY#effective_date; history query with begins_with
   - Flag repository: save/update with PK=EMP#id SK=FLAG#type#period; pending flags via GSI1 FLAG#PENDING
@@ -279,7 +279,7 @@
   - Write integration tests for each repository against local DynamoDB
   - _Requirements: 9.3, 10.9, 11.2, 12.1_
 
-- [ ] 11.4 (P) Implement holiday, override, role, monthly summary, config, and document DynamoDB repositories
+- [x] 11.4 (P) Implement holiday, override, role, monthly summary, config, and document DynamoDB repositories
   - Holiday repository: PK=REGION#region SK=HOL#date; year query via GSI2 ORG#HOLIDAY
   - Override repository: PK=EMP#id SK=OVR#type#value; exact lookup by employee + period
   - Role repository: PK=ROLE#name SK=DEFINITION for role metadata; PK=ROLE#name SK=PERM#resource#action for permissions; all roles via GSI2 ORG#ROLE

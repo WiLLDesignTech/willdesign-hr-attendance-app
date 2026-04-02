@@ -5,12 +5,17 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@willdesign-hr/types": "*",
-    "@willdesign-hr/core": "*"
+    "@aws-sdk/client-dynamodb": "^3.1022.0",
+    "@aws-sdk/lib-dynamodb": "^3.1022.0",
+    "@willdesign-hr/core": "*",
+    "@willdesign-hr/types": "*"
   },
   "scripts": {
     "build": "tsc --build",
     "clean": "rm -rf dist",
     "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0"
   }
 }
