@@ -3,7 +3,7 @@ import type { Flag, FlagLevel, FlagStatus } from "@willdesign-hr/types";
 export interface FlagQueryOptions {
   readonly level?: FlagLevel;
   readonly status?: FlagStatus;
-  readonly period?: FlagLevel;
+  readonly period?: string;
 }
 
 export interface FlagRepository {
