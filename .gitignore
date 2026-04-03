@@ -8,3 +8,5 @@ dist/
 *.tsbuildinfo
 cdk.out/
 .vite/
+__pycache__/
+*.pyc
