@@ -1,6 +1,7 @@
 import { GetCommand, PutCommand, QueryCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import type { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import type { Employee, EmployeeStatus } from "@willdesign-hr/types";
+import { nowIso, timestampId } from "@willdesign-hr/types";
 import type { EmployeeRepository, CreateEmployeeInput, UpdateEmployeeInput } from "@willdesign-hr/core";
 import { KEYS } from "./keys.js";
 
@@ -54,8 +55,8 @@ export class DynamoEmployeeRepository implements EmployeeRepository {
   }
 
   async create(input: CreateEmployeeInput): Promise<Employee> {
-    const now = new Date().toISOString();
-    const id = `${Date.now()}`;
+    const now = nowIso();
+    const id = timestampId();
     const employee: Employee = {
       id,
       ...input,
@@ -97,7 +98,7 @@ export class DynamoEmployeeRepository implements EmployeeRepository {
 
     expressions.push("#updatedAt = :updatedAt");
     names["#updatedAt"] = "updatedAt";
-    values[":updatedAt"] = new Date().toISOString();
+    values[":updatedAt"] = nowIso();
 
     const result = await this.client.send(new UpdateCommand({
       TableName: this.tableName,

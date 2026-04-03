@@ -1,6 +1,7 @@
 import { PutCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import type { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import type { BankEntry } from "@willdesign-hr/types";
+import { todayDate } from "@willdesign-hr/types";
 import type { BankRepository, BankQueryOptions } from "@willdesign-hr/core";
 import { KEYS } from "./keys.js";
 
@@ -26,7 +27,7 @@ export class DynamoBankRepository implements BankRepository {
 
   async findActive(employeeId: string): Promise<readonly BankEntry[]> {
     const all = await this.findByEmployee(employeeId);
-    const now = new Date().toISOString().split("T")[0]!;
+    const now = todayDate();
     return all.filter((e) => e.expiresAt >= now && e.remainingHours > 0);
   }
 
