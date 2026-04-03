@@ -124,8 +124,9 @@
 
 ## Phase 4: Admin Core Pages
 
-- [ ] 4. Build Admin page with all tabs
-- [ ] 4.1 Build admin onboarding tab with multi-step form
+- [ ] 4. Build Admin section content components
+  - Admin shell redesigned: sidebar nav (desktop) + card grid (mobile) — committed separately
+- [ ] 4.1 Build admin onboarding section with multi-step form
   - Create 3-step onboarding wizard: Personal Info (name, email, slackId, language) → Employment (type, region, manager, join date) → Salary (amount, currency, salary type)
   - Employment type dropdown auto-suggests default policy group as read-only hint
   - Manager field: searchable combobox filtering active employees
