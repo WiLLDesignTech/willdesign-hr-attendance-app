@@ -86,3 +86,11 @@ export { CronService } from "./cron/service.js";
 export type { CronDeps, DailyCheckResult, WeeklyCheckResult, MonthlyCheckResult } from "./cron/service.js";
 export { ReminderService } from "./cron/reminders.js";
 export type { ReminderDeps, LeaveReminder, SurplusExpiryWarning, ProbationAlert } from "./cron/reminders.js";
+
+export { OnboardingService } from "./onboarding/service.js";
+export type { OnboardingDeps, OnboardingInput, OnboardingResult } from "./onboarding/service.js";
+export { OffboardingService } from "./onboarding/offboarding.js";
+export type { OffboardingDeps, OffboardingInput, OffboardingResult, SettlementPreview } from "./onboarding/offboarding.js";
+
+export { HolidayService, JP_NATIONAL_HOLIDAYS_2026 } from "./holidays/service.js";
+export type { HolidayServiceDeps, SeedResult } from "./holidays/service.js";

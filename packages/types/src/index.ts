@@ -140,6 +140,7 @@ export {
   JP_LABOR,
   HOURS,
   FlagStatuses,
+  LEGAL_OBLIGATIONS,
   PROBATION,
   PAYMENT,
   CRON,

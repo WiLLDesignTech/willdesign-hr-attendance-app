@@ -513,8 +513,8 @@
   - Configure environment-specific schedules (dev may run less frequently)
   - _Requirements: 19.7, 19.3_
 
-- [ ] 18. Onboarding, offboarding, and holiday seeding
-- [ ] 18.1 Implement the complete onboarding workflow that creates all required records across systems
+- [x] 18. Onboarding, offboarding, and holiday seeding
+- [x] 18.1 Implement the complete onboarding workflow that creates all required records across systems
   - Create employee record in DynamoDB with all fields: profile, employment type, initial salary history entry (change type INITIAL), policy group assignment, manager assignment, Slack ID mapping, region/timezone
   - Create Cognito user account with temporary password, employee_id custom attribute, and role group assignment
   - Set initial document verification status to PENDING for identity documents (citizenship, PAN) per contract Article 4.11; admin can later update to VERIFIED/REJECTED with audit trail
@@ -522,7 +522,7 @@
   - Write integration tests for complete onboarding flow
   - _Requirements: 16.1, 16.6_
 
-- [ ] 18.2 (P) Implement the offboarding workflow with settlement preview, buyout option, and deactivation
+- [x] 18.2 (P) Implement the offboarding workflow with settlement preview, buyout option, and deactivation
   - Show settlement preview before confirmation: pro-rata salary for partial month, outstanding deductions, leave handling per employment type (NP forfeit, JP labor law)
   - Record termination type: WITHOUT_CAUSE (30-day notice or buyout), FOR_CAUSE (7-day notice with cure period per Article 2.4), MUTUAL, or RESIGNATION. For FOR_CAUSE, track cure period expiry date to document that contractual good-faith requirements were met
   - Include notice period buyout toggle: per contract Article 2.3, either party may pay one month's service fee in lieu of the 30-day notice period, payable within 7 days. Settlement preview calculates the buyout amount (1 month's service fee at current rate)
@@ -534,7 +534,7 @@
   - Write integration tests for settlement calculation, buyout, termination types, cure period, and deactivation
   - _Requirements: 16.2, 16.3, 16.4, 16.8_
 
-- [ ] 18.3 (P) Seed Japanese national holidays and implement holiday management operations
+- [x] 18.3 (P) Seed Japanese national holidays and implement holiday management operations
   - Seed JP national holidays as defaults with substitute holiday (振替休日) support
   - NP holidays configured manually by admin each year
   - CRUD operations for holiday calendars per region, respecting RBAC permissions for who can manage holidays

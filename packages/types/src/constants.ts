@@ -234,6 +234,13 @@ export const PAYMENT = {
   SETTLEMENT_DEADLINE_DAY: 15,
 } as const;
 
+// ─── Legal Obligations ───
+export const LEGAL_OBLIGATIONS = {
+  CONFIDENTIALITY_YEARS: 2,
+  NON_COMPETE_MONTHS: 12,
+  CURE_PERIOD_DAYS: 7,
+} as const;
+
 // ─── Cron ───
 export const CRON = {
   MIN_SESSION_MINUTES: 5,
