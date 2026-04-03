@@ -21,6 +21,7 @@ export type {
   PolicyRepository,
   RoleRepository,
   MonthlySummaryRepository,
+  AttendanceLockRepository,
   DocumentRepository,
   EmailAdapter,
   AuthProviderAdapter,
@@ -42,7 +43,7 @@ export type { TransitionResult } from "./attendance/state-machine.js";
 export { matchKeyword, matchCommand, DEFAULT_KEYWORD_CONFIGS } from "./attendance/keyword-matcher.js";
 export type { KeywordConfig, MatchResult, CommandResult } from "./attendance/keyword-matcher.js";
 export { AttendanceService } from "./attendance/service.js";
-export type { ProcessEventInput } from "./attendance/service.js";
+export type { ProcessEventInput, CreateAttendanceLockInput } from "./attendance/service.js";
 export { calculateDailyHours } from "./attendance/hours-calculator.js";
 export type { HoursBreakdown } from "./attendance/hours-calculator.js";
 

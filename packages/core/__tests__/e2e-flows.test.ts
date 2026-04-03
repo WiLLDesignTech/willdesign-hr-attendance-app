@@ -14,6 +14,8 @@ describe("E2E Flow: Slack Attendance → Hours → Flag", () => {
   let attendanceService: AttendanceService;
   let attendanceRepo: Record<string, ReturnType<typeof vi.fn>>;
   let auditRepo: Record<string, ReturnType<typeof vi.fn>>;
+  let lockRepo: Record<string, ReturnType<typeof vi.fn>>;
+  let employeeRepo: Record<string, ReturnType<typeof vi.fn>>;
 
   beforeEach(() => {
     attendanceRepo = {
@@ -24,7 +26,9 @@ describe("E2E Flow: Slack Attendance → Hours → Flag", () => {
       getUnclosedSessions: vi.fn().mockResolvedValue([]),
     };
     auditRepo = { append: vi.fn(), findByTarget: vi.fn().mockResolvedValue([]), findByActor: vi.fn().mockResolvedValue([]) };
-    attendanceService = new AttendanceService(attendanceRepo as never, auditRepo as never);
+    lockRepo = { findByYearMonth: vi.fn().mockResolvedValue([]), save: vi.fn(), delete: vi.fn() };
+    employeeRepo = { findById: vi.fn().mockResolvedValue(null), findBySlackId: vi.fn().mockResolvedValue(null), findByManagerId: vi.fn().mockResolvedValue([]), findAll: vi.fn().mockResolvedValue([]), create: vi.fn(), update: vi.fn() };
+    attendanceService = new AttendanceService(attendanceRepo as never, auditRepo as never, lockRepo as never, employeeRepo as never);
   });
 
   it("processes clock-in → clock-out → generates shortfall flag for deficit hours", async () => {
@@ -131,7 +135,9 @@ describe("E2E Flow: Onboarding → First Clock-In", () => {
       getEventsForMonth: vi.fn().mockResolvedValue([]),
       getUnclosedSessions: vi.fn().mockResolvedValue([]),
     };
-    const clockIn = await new AttendanceService(attendanceRepo as never, auditRepo as never).processEvent({
+    const lockRepo2 = { findByYearMonth: vi.fn().mockResolvedValue([]), save: vi.fn(), delete: vi.fn() };
+    const employeeRepo2 = { findById: vi.fn().mockResolvedValue(null), findBySlackId: vi.fn().mockResolvedValue(null), findByManagerId: vi.fn().mockResolvedValue([]), findAll: vi.fn().mockResolvedValue([]), create: vi.fn(), update: vi.fn() };
+    const clockIn = await new AttendanceService(attendanceRepo as never, auditRepo as never, lockRepo2 as never, employeeRepo2 as never).processEvent({
       employeeId: "EMP#NEW", action: AttendanceActions.CLOCK_IN,
       timestamp: new Date("2026-04-03T09:00:00Z"), source: "slack", actorId: "EMP#NEW",
     });

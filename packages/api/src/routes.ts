@@ -13,6 +13,7 @@ import { reportRoutes } from "./handlers/reports.js";
 import { adminRoutes } from "./handlers/admin.js";
 import { holidayRoutes } from "./handlers/holidays.js";
 import { policyRoutes } from "./handlers/policies.js";
+import { attendanceLockRoutes } from "./handlers/attendance-lock.js";
 
 export function buildRoutes(deps: AppDeps): readonly RouteDefinition[] {
   return [
@@ -26,5 +27,6 @@ export function buildRoutes(deps: AppDeps): readonly RouteDefinition[] {
     ...adminRoutes(deps),
     ...holidayRoutes(deps),
     ...policyRoutes(deps),
+    ...attendanceLockRoutes(deps),
   ];
 }

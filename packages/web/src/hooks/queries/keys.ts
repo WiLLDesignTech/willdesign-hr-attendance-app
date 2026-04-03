@@ -4,7 +4,7 @@
  */
 import {
   API_EMPLOYEES, API_EMPLOYEES_ME,
-  API_ATTENDANCE_STATE, API_ATTENDANCE_EVENTS,
+  API_ATTENDANCE_STATE, API_ATTENDANCE_EVENTS, API_ATTENDANCE_LOCK,
   API_LEAVE_REQUESTS, API_LEAVE_BALANCE,
   API_PAYROLL, API_FLAGS, API_BANK, API_BANK_APPROVE,
   API_REPORTS, API_HOLIDAYS, API_AUDIT,
@@ -63,5 +63,9 @@ export const queryKeys = {
   },
   audit: {
     byTarget: (targetId: string) => [API_AUDIT, targetId] as const,
+  },
+  locks: {
+    all: [API_ATTENDANCE_LOCK] as const,
+    byMonth: (yearMonth: string) => [API_ATTENDANCE_LOCK, yearMonth] as const,
   },
 } as const;

@@ -2,8 +2,9 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { Card, PageLayout, SectionTitle, TextMuted } from "../../theme/primitives";
+import { AttendanceLockTab } from "./AttendanceLockTab";
 
-const ADMIN_TAB_IDS = ["onboarding", "offboarding", "policies", "roles", "holidays"] as const;
+const ADMIN_TAB_IDS = ["onboarding", "offboarding", "policies", "roles", "holidays", "locks"] as const;
 type AdminTab = (typeof ADMIN_TAB_IDS)[number];
 
 const TabNav = styled.nav`
@@ -48,7 +49,11 @@ export function AdminPage() {
 
       <Card>
         <SectionTitle>{t(`admin.${activeTab}`)}</SectionTitle>
-        <TextMuted>{t(`admin.${activeTab}Desc`)}</TextMuted>
+        {activeTab === "locks" ? (
+          <AttendanceLockTab />
+        ) : (
+          <TextMuted>{t(`admin.${activeTab}Desc`)}</TextMuted>
+        )}
       </Card>
     </PageLayout>
   );

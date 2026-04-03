@@ -8,3 +8,4 @@ export { useReports, useSubmitReport } from "./useReports";
 export { useTeamMembers } from "./useTeam";
 export { useHolidays } from "./useHolidays";
 export { useOnboard, useOffboard } from "./useAdmin";
+export { useAttendanceLocks, useCreateLock, useDeleteLock } from "./useAttendanceLock";

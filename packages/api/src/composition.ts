@@ -13,6 +13,7 @@ import {
   DynamoBankRepository,
   DynamoReportRepository,
   DynamoHolidayRepository,
+  DynamoAttendanceLockRepository,
 } from "@willdesign-hr/data";
 import {
   AttendanceService,
@@ -79,6 +80,7 @@ export function createDeps(): AppDeps {
   const bankRepo = new DynamoBankRepository(client, tableName);
   const reportRepo = new DynamoReportRepository(client, tableName);
   const holidayRepo = new DynamoHolidayRepository(client, tableName);
+  const lockRepo = new DynamoAttendanceLockRepository(client, tableName);
   // Reserved for future services — instantiated when needed
   // const overrideRepo = new DynamoOverrideRepository(client, tableName);
   // const roleRepo = new DynamoRoleRepository(client, tableName);
@@ -108,7 +110,7 @@ export function createDeps(): AppDeps {
 
   const services: AppServices = {
     employee: new EmployeeService({ employeeRepo }),
-    attendance: new AttendanceService(attendanceRepo, auditRepo),
+    attendance: new AttendanceService(attendanceRepo, auditRepo, lockRepo, employeeRepo),
     leave: new LeaveService(leaveRepo, auditRepo, getBalance),
     payroll: new PayrollService({ salaryRepo }),
     flagQuery: new FlagQueryService({ flagRepo }),

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { AttendanceService } from "../src/attendance/service.js";
 import { AttendanceActions, AttendanceStates } from "@willdesign-hr/types";
-import type { AttendanceRepository, AuditRepository } from "../src/repositories/index.js";
+import type { AttendanceRepository, AuditRepository, AttendanceLockRepository, EmployeeRepository } from "../src/repositories/index.js";
 
 function createMockRepos() {
   const events: unknown[] = [];
@@ -27,13 +27,28 @@ function createMockRepos() {
     findByActor: vi.fn().mockResolvedValue([]),
   };
 
-  return { attendanceRepo, auditRepo, events, auditEntries };
+  const lockRepo: AttendanceLockRepository = {
+    findByYearMonth: vi.fn().mockResolvedValue([]),
+    save: vi.fn().mockResolvedValue(undefined),
+    delete: vi.fn().mockResolvedValue(undefined),
+  };
+
+  const employeeRepo: EmployeeRepository = {
+    findById: vi.fn().mockResolvedValue(null),
+    findBySlackId: vi.fn().mockResolvedValue(null),
+    findByManagerId: vi.fn().mockResolvedValue([]),
+    findAll: vi.fn().mockResolvedValue([]),
+    create: vi.fn().mockResolvedValue(null as never),
+    update: vi.fn().mockResolvedValue(null as never),
+  };
+
+  return { attendanceRepo, auditRepo, lockRepo, employeeRepo, events, auditEntries };
 }
 
 describe("AttendanceService", () => {
   it("processes a valid clock-in event", async () => {
-    const { attendanceRepo, auditRepo } = createMockRepos();
-    const service = new AttendanceService(attendanceRepo, auditRepo);
+    const { attendanceRepo, auditRepo, lockRepo, employeeRepo } = createMockRepos();
+    const service = new AttendanceService(attendanceRepo, auditRepo, lockRepo, employeeRepo);
 
     const result = await service.processEvent({
       employeeId: "EMP#001",
@@ -50,9 +65,9 @@ describe("AttendanceService", () => {
   });
 
   it("rejects invalid transition", async () => {
-    const { attendanceRepo, auditRepo } = createMockRepos();
+    const { attendanceRepo, auditRepo, lockRepo, employeeRepo } = createMockRepos();
     // Already IDLE, trying to clock out
-    const service = new AttendanceService(attendanceRepo, auditRepo);
+    const service = new AttendanceService(attendanceRepo, auditRepo, lockRepo, employeeRepo);
 
     const result = await service.processEvent({
       employeeId: "EMP#001",
@@ -67,7 +82,7 @@ describe("AttendanceService", () => {
   });
 
   it("enforces 60-second idempotency window", async () => {
-    const { attendanceRepo, auditRepo } = createMockRepos();
+    const { attendanceRepo, auditRepo, lockRepo, employeeRepo } = createMockRepos();
     vi.mocked(attendanceRepo.getState).mockResolvedValue({
       employeeId: "EMP#001",
       state: AttendanceStates.IDLE,
@@ -75,7 +90,7 @@ describe("AttendanceService", () => {
       lastEventTimestamp: "2024-01-15T09:00:00Z",
     });
 
-    const service = new AttendanceService(attendanceRepo, auditRepo);
+    const service = new AttendanceService(attendanceRepo, auditRepo, lockRepo, employeeRepo);
 
     const result = await service.processEvent({
       employeeId: "EMP#001",
@@ -90,7 +105,7 @@ describe("AttendanceService", () => {
   });
 
   it("allows event at exact boundary (60s)", async () => {
-    const { attendanceRepo, auditRepo } = createMockRepos();
+    const { attendanceRepo, auditRepo, lockRepo, employeeRepo } = createMockRepos();
     vi.mocked(attendanceRepo.getState).mockResolvedValue({
       employeeId: "EMP#001",
       state: AttendanceStates.IDLE,
@@ -98,7 +113,7 @@ describe("AttendanceService", () => {
       lastEventTimestamp: "2024-01-15T09:00:00Z",
     });
 
-    const service = new AttendanceService(attendanceRepo, auditRepo);
+    const service = new AttendanceService(attendanceRepo, auditRepo, lockRepo, employeeRepo);
 
     const result = await service.processEvent({
       employeeId: "EMP#001",
@@ -112,7 +127,7 @@ describe("AttendanceService", () => {
   });
 
   it("rejects event with past timestamp", async () => {
-    const { attendanceRepo, auditRepo } = createMockRepos();
+    const { attendanceRepo, auditRepo, lockRepo, employeeRepo } = createMockRepos();
     vi.mocked(attendanceRepo.getState).mockResolvedValue({
       employeeId: "EMP#001",
       state: AttendanceStates.IDLE,
@@ -120,7 +135,7 @@ describe("AttendanceService", () => {
       lastEventTimestamp: "2024-01-15T09:00:00Z",
     });
 
-    const service = new AttendanceService(attendanceRepo, auditRepo);
+    const service = new AttendanceService(attendanceRepo, auditRepo, lockRepo, employeeRepo);
 
     const result = await service.processEvent({
       employeeId: "EMP#001",
@@ -135,7 +150,7 @@ describe("AttendanceService", () => {
   });
 
   it("allows event after idempotency window expires", async () => {
-    const { attendanceRepo, auditRepo } = createMockRepos();
+    const { attendanceRepo, auditRepo, lockRepo, employeeRepo } = createMockRepos();
     vi.mocked(attendanceRepo.getState).mockResolvedValue({
       employeeId: "EMP#001",
       state: AttendanceStates.IDLE,
@@ -143,7 +158,7 @@ describe("AttendanceService", () => {
       lastEventTimestamp: "2024-01-15T09:00:00Z",
     });
 
-    const service = new AttendanceService(attendanceRepo, auditRepo);
+    const service = new AttendanceService(attendanceRepo, auditRepo, lockRepo, employeeRepo);
 
     const result = await service.processEvent({
       employeeId: "EMP#001",
@@ -157,8 +172,8 @@ describe("AttendanceService", () => {
   });
 
   it("tracks work location when provided", async () => {
-    const { attendanceRepo, auditRepo } = createMockRepos();
-    const service = new AttendanceService(attendanceRepo, auditRepo);
+    const { attendanceRepo, auditRepo, lockRepo, employeeRepo } = createMockRepos();
+    const service = new AttendanceService(attendanceRepo, auditRepo, lockRepo, employeeRepo);
 
     await service.processEvent({
       employeeId: "EMP#001",
