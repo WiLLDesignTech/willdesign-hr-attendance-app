@@ -1,5 +1,5 @@
 import type { ReportReference, DailyReport } from "@willdesign-hr/types";
-import { ReferenceTypes } from "@willdesign-hr/types";
+import { ReferenceTypes, nowIso } from "@willdesign-hr/types";
 
 const JIRA_PATTERN = /\b([A-Z][A-Z0-9]{1,9}-\d+)\b/g;
 const GITHUB_PATTERN = /\b([\w.-]+(?:\/[\w.-]+)?#\d+)\b/g;
@@ -79,6 +79,6 @@ export function createNewVersion(
     blockers: parsed.blockers,
     references: parsed.references,
     version: original.version + 1,
-    updatedAt: new Date().toISOString(),
+    updatedAt: nowIso(),
   };
 }

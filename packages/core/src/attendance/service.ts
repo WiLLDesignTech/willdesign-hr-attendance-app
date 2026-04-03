@@ -1,5 +1,5 @@
-import type { AttendanceAction, AttendanceEvent, AttendanceSource, Result, WorkLocation } from "@willdesign-hr/types";
-import { AuditActions, ATTENDANCE } from "@willdesign-hr/types";
+import type { AttendanceAction, AttendanceEvent, AttendanceSource, AttendanceStateRecord, Result, WorkLocation } from "@willdesign-hr/types";
+import { AuditActions, ATTENDANCE, KeyPatterns, KeyPrefixes, dateToIso, dateToDateStr } from "@willdesign-hr/types";
 import type { AttendanceRepository, AuditRepository } from "../repositories/index.js";
 import { validateTransition } from "./state-machine.js";
 
@@ -18,6 +18,18 @@ export class AttendanceService {
     private readonly attendanceRepo: AttendanceRepository,
     private readonly auditRepo: AuditRepository,
   ) {}
+
+  async getState(employeeId: string): Promise<AttendanceStateRecord> {
+    return this.attendanceRepo.getState(employeeId);
+  }
+
+  async getEventsForDate(employeeId: string, date: string): Promise<readonly AttendanceEvent[]> {
+    return this.attendanceRepo.getEventsForDate(employeeId, date);
+  }
+
+  async getEventsForMonth(employeeId: string, yearMonth: string): Promise<readonly AttendanceEvent[]> {
+    return this.attendanceRepo.getEventsForMonth(employeeId, yearMonth);
+  }
 
   async processEvent(input: ProcessEventInput): Promise<Result<AttendanceEvent, string>> {
     const state = await this.attendanceRepo.getState(input.employeeId);
@@ -47,7 +59,7 @@ export class AttendanceService {
     const transition = validateTransition(
       state.state,
       input.action,
-      state.lastEventTimestamp ?? input.timestamp.toISOString(),
+      state.lastEventTimestamp ?? dateToIso(input.timestamp),
     );
 
     if (!transition.success) {
@@ -56,10 +68,10 @@ export class AttendanceService {
 
     // Build event
     const event: AttendanceEvent = {
-      id: `ATT#${input.employeeId}#${input.timestamp.toISOString()}`,
+      id: KeyPatterns.attendanceEvent(dateToDateStr(input.timestamp), dateToIso(input.timestamp)),
       employeeId: input.employeeId,
       action: input.action,
-      timestamp: input.timestamp.toISOString(),
+      timestamp: dateToIso(input.timestamp),
       source: input.source,
       workLocation: input.workLocation,
       isEmergency: input.isEmergency,
@@ -74,9 +86,9 @@ export class AttendanceService {
       lastEventTimestamp: event.timestamp,
     });
     await this.auditRepo.append({
-      id: `AUDIT#${event.id}`,
+      id: KeyPatterns.audit(event.id),
       targetId: input.employeeId,
-      targetType: "ATTENDANCE",
+      targetType: KeyPrefixes.ATTENDANCE,
       action: AuditActions.UPDATE,
       actorId: input.actorId,
       source: input.source,

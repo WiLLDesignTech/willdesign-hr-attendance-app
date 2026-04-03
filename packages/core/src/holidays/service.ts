@@ -1,4 +1,5 @@
 import type { Holiday, Region } from "@willdesign-hr/types";
+import { yearFromDate } from "@willdesign-hr/types";
 import type { HolidayRepository } from "../repositories/holiday.js";
 import { generateJpHolidays } from "./jp-generator.js";
 
@@ -36,20 +37,15 @@ export class HolidayService {
   }
 
   async countHolidaysInRange(region: Region, startDate: string, endDate: string): Promise<number> {
-    const startYear = new Date(startDate).getFullYear();
-    const endYear = new Date(endDate).getFullYear();
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+    const startYear = yearFromDate(startDate);
+    const endYear = yearFromDate(endDate);
 
-    let allHolidays: Holiday[] = [];
-    for (let year = startYear; year <= endYear; year++) {
-      const yearHolidays = await this.deps.holidayRepo.findByRegionAndYear(region, year);
-      allHolidays = allHolidays.concat([...yearHolidays]);
-    }
+    const years = Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i);
+    const results = await Promise.all(
+      years.map(y => this.deps.holidayRepo.findByRegionAndYear(region, y)),
+    );
+    const allHolidays = results.flat();
 
-    return allHolidays.filter(h => {
-      const d = new Date(h.date);
-      return d >= start && d <= end;
-    }).length;
+    return allHolidays.filter(h => h.date >= startDate && h.date <= endDate).length;
   }
 }

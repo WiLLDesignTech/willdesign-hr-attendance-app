@@ -1,5 +1,9 @@
 import type { TerminationType, LegalObligation } from "@willdesign-hr/types";
-import { EmployeeStatuses, TerminationTypes, AuditActions, AuditTargetTypes, AuditSources, AuditActorIds, LegalObligationTypes, PAYMENT, LEGAL_OBLIGATIONS } from "@willdesign-hr/types";
+import {
+  EmployeeStatuses, TerminationTypes, AuditActions, AuditTargetTypes, AuditSources, AuditActorIds,
+  LegalObligationTypes, PAYMENT, LEGAL_OBLIGATIONS, KeyPatterns,
+  nowIso, timestampId, dateToDateStr, dateToIso, isoToYearMonth, formatYearMonth, daysInMonth, addDays, addMonths, addYears,
+} from "@willdesign-hr/types";
 import type { EmployeeRepository } from "../repositories/employee.js";
 import type { SalaryRepository } from "../repositories/salary.js";
 import type { AuthProviderAdapter } from "../repositories/auth-provider-adapter.js";
@@ -42,17 +46,17 @@ export class OffboardingService {
 
   async getSettlementPreview(employeeId: string, terminationDate: string): Promise<SettlementPreview> {
     const termDate = new Date(terminationDate);
-    const yearMonth = `${termDate.getFullYear()}-${String(termDate.getMonth() + 1).padStart(2, "0")}`;
+    const yearMonth = formatYearMonth(termDate.getFullYear(), termDate.getMonth() + 1);
     const salary = await this.deps.salaryRepo.getEffective(employeeId, yearMonth);
     const monthlySalary = salary?.amount ?? 0;
 
-    const daysInMonth = new Date(termDate.getFullYear(), termDate.getMonth() + 1, 0).getDate();
+    const monthDays = daysInMonth(termDate.getFullYear(), termDate.getMonth() + 1);
     const workedDays = termDate.getDate();
-    const proRataSalary = Math.round((monthlySalary / daysInMonth) * workedDays);
+    const proRataSalary = Math.round((monthlySalary / monthDays) * workedDays);
 
-    const settlementMonth = termDate.getMonth() + 2;
-    const settlementYear = settlementMonth > 12 ? termDate.getFullYear() + 1 : termDate.getFullYear();
-    const settlementDeadline = `${settlementYear}-${String(settlementMonth > 12 ? 1 : settlementMonth).padStart(2, "0")}-${String(PAYMENT.SETTLEMENT_DEADLINE_DAY).padStart(2, "0")}`;
+    const settlementDate = addMonths(termDate, 1);
+    const settlementYm = isoToYearMonth(dateToIso(settlementDate));
+    const settlementDeadline = `${settlementYm}-${String(PAYMENT.SETTLEMENT_DEADLINE_DAY).padStart(2, "0")}`;
 
     return {
       proRataSalary,
@@ -79,11 +83,11 @@ export class OffboardingService {
       const legalObligations = this.buildLegalObligations(termDate);
 
       const curePeriodExpiry = input.terminationType === TerminationTypes.FOR_CAUSE
-        ? this.addDays(termDate, LEGAL_OBLIGATIONS.CURE_PERIOD_DAYS).toISOString().split("T")[0]
+        ? dateToDateStr(addDays(termDate, LEGAL_OBLIGATIONS.CURE_PERIOD_DAYS))
         : null;
 
       await this.deps.auditRepo.append({
-        id: `AUDIT#${Date.now()}`,
+        id: KeyPatterns.audit(timestampId()),
         targetId: input.employeeId,
         targetType: AuditTargetTypes.EMPLOYEE,
         actorId: AuditActorIds.SYSTEM,
@@ -96,7 +100,7 @@ export class OffboardingService {
           terminationDate: input.terminationDate,
           exitNotes: input.exitNotes,
         },
-        timestamp: new Date().toISOString(),
+        timestamp: nowIso(),
       });
 
       return { success: true, legalObligations, curePeriodExpiry };
@@ -106,29 +110,21 @@ export class OffboardingService {
   }
 
   private buildLegalObligations(terminationDate: Date): LegalObligation[] {
-    const confExpiry = new Date(terminationDate);
-    confExpiry.setFullYear(confExpiry.getFullYear() + LEGAL_OBLIGATIONS.CONFIDENTIALITY_YEARS);
-
-    const nonCompeteExpiry = new Date(terminationDate);
-    nonCompeteExpiry.setMonth(nonCompeteExpiry.getMonth() + LEGAL_OBLIGATIONS.NON_COMPETE_MONTHS);
+    const confExpiry = addYears(terminationDate, LEGAL_OBLIGATIONS.CONFIDENTIALITY_YEARS);
+    const nonCompeteExpiry = addMonths(terminationDate, LEGAL_OBLIGATIONS.NON_COMPETE_MONTHS);
 
     return [
       {
         type: LegalObligationTypes.CONFIDENTIALITY,
         description: `Confidentiality obligation (${LEGAL_OBLIGATIONS.CONFIDENTIALITY_YEARS} years)`,
-        expiresAt: confExpiry.toISOString().slice(0, 10),
+        expiresAt: dateToDateStr(confExpiry),
       },
       {
         type: LegalObligationTypes.NON_COMPETE,
         description: `Non-compete obligation (${LEGAL_OBLIGATIONS.NON_COMPETE_MONTHS} months)`,
-        expiresAt: nonCompeteExpiry.toISOString().slice(0, 10),
+        expiresAt: dateToDateStr(nonCompeteExpiry),
       },
     ];
   }
 
-  private addDays(date: Date, days: number): Date {
-    const result = new Date(date);
-    result.setDate(result.getDate() + days);
-    return result;
-  }
 }

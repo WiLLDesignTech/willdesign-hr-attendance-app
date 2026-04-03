@@ -1,5 +1,5 @@
 import type { LeaveRequest, LeaveBalance, LeaveType, Result } from "@willdesign-hr/types";
-import { LeaveTypes, LeaveRequestStatuses, AuditActions } from "@willdesign-hr/types";
+import { LeaveTypes, LeaveRequestStatuses, AuditActions, AuditSources, KeyPatterns, KeyPrefixes, nowIso } from "@willdesign-hr/types";
 import type { LeaveRepository, AuditRepository } from "../repositories/index.js";
 
 export interface CreateLeaveRequestInput {
@@ -34,9 +34,9 @@ export class LeaveService {
       }
     }
 
-    const now = new Date().toISOString();
+    const now = nowIso();
     const request: LeaveRequest = {
-      id: `LEAVE#${input.employeeId}#${input.startDate}`,
+      id: KeyPatterns.leave(input.employeeId, input.startDate),
       employeeId: input.employeeId,
       leaveType: input.leaveType,
       startDate: input.startDate,
@@ -50,12 +50,12 @@ export class LeaveService {
     const created = await this.leaveRepo.create(request);
 
     await this.auditRepo.append({
-      id: `AUDIT#${request.id}`,
+      id: KeyPatterns.audit(request.id),
       targetId: input.employeeId,
-      targetType: "LEAVE",
+      targetType: KeyPrefixes.LEAVE,
       action: AuditActions.CREATE,
       actorId: input.employeeId,
-      source: "web",
+      source: AuditSources.WEB,
       before: null,
       after: { leaveRequest: request },
       timestamp: now,
@@ -70,7 +70,7 @@ export class LeaveService {
       return { success: false, error: `Leave request ${requestId} not found` };
     }
 
-    const now = new Date().toISOString();
+    const now = nowIso();
     const updated = await this.leaveRepo.update(requestId, {
       status: LeaveRequestStatuses.APPROVED,
       approvedBy: managerId,
@@ -78,12 +78,12 @@ export class LeaveService {
     });
 
     await this.auditRepo.append({
-      id: `AUDIT#APPROVE#${requestId}`,
+      id: KeyPatterns.auditAction(AuditActions.APPROVE, requestId),
       targetId: request.employeeId,
-      targetType: "LEAVE",
+      targetType: KeyPrefixes.LEAVE,
       action: AuditActions.APPROVE,
       actorId: managerId,
-      source: "web",
+      source: AuditSources.WEB,
       before: { status: request.status },
       after: { status: LeaveRequestStatuses.APPROVED },
       timestamp: now,
@@ -92,13 +92,25 @@ export class LeaveService {
     return { success: true, data: updated };
   }
 
+  async findRequests(employeeId: string, options?: { status?: LeaveRequest["status"] }): Promise<readonly LeaveRequest[]> {
+    return this.leaveRepo.findByEmployee(employeeId, options);
+  }
+
+  async findPending(): Promise<readonly LeaveRequest[]> {
+    return this.leaveRepo.findPending();
+  }
+
+  async getLeaveBalance(employeeId: string): Promise<LeaveBalance> {
+    return this.getBalance(employeeId);
+  }
+
   async rejectRequest(requestId: string, managerId: string, reason: string): Promise<Result<LeaveRequest, string>> {
     const request = await this.leaveRepo.findById(requestId);
     if (!request) {
       return { success: false, error: `Leave request ${requestId} not found` };
     }
 
-    const now = new Date().toISOString();
+    const now = nowIso();
     const updated = await this.leaveRepo.update(requestId, {
       status: LeaveRequestStatuses.REJECTED,
       rejectionReason: reason,
@@ -106,12 +118,12 @@ export class LeaveService {
     });
 
     await this.auditRepo.append({
-      id: `AUDIT#REJECT#${requestId}`,
+      id: KeyPatterns.auditAction(AuditActions.REJECT, requestId),
       targetId: request.employeeId,
-      targetType: "LEAVE",
+      targetType: KeyPrefixes.LEAVE,
       action: AuditActions.REJECT,
       actorId: managerId,
-      source: "web",
+      source: AuditSources.WEB,
       before: { status: request.status },
       after: { status: LeaveRequestStatuses.REJECTED, rejectionReason: reason },
       timestamp: now,

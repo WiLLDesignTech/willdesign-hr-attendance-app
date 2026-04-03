@@ -1,5 +1,5 @@
 import type { Holiday } from "@willdesign-hr/types";
-import { Regions } from "@willdesign-hr/types";
+import { Regions, KeyPatterns } from "@willdesign-hr/types";
 
 const SUNDAY = 0;
 
@@ -33,7 +33,7 @@ function formatDate(year: number, month: number, day: number): string {
 function makeHoliday(year: number, month: number, day: number, name: string, nameJa: string, isSubstitute = false): Holiday {
   const date = formatDate(year, month, day);
   return {
-    id: `HOL#JP#${date}`,
+    id: KeyPatterns.holiday(Regions.JP, date),
     date,
     name,
     nameJa,

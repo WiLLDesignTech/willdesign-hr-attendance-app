@@ -95,3 +95,16 @@ export type { OffboardingDeps, OffboardingInput, OffboardingResult, SettlementPr
 export { HolidayService } from "./holidays/service.js";
 export type { HolidayServiceDeps, SeedResult } from "./holidays/service.js";
 export { generateJpHolidays } from "./holidays/jp-generator.js";
+
+export { EmployeeService } from "./employee/service.js";
+export type { EmployeeServiceDeps } from "./employee/service.js";
+export { PayrollService } from "./payroll/service.js";
+export type { PayrollServiceDeps } from "./payroll/service.js";
+export { FlagQueryService } from "./flags/query-service.js";
+export type { FlagQueryServiceDeps } from "./flags/query-service.js";
+export { BankService } from "./banking/service.js";
+export type { BankServiceDeps } from "./banking/service.js";
+export { ReportService } from "./reports/service.js";
+export type { ReportServiceDeps } from "./reports/service.js";
+export { AuditService } from "./audit/service.js";
+export type { AuditServiceDeps } from "./audit/service.js";

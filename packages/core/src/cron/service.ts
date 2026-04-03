@@ -1,5 +1,5 @@
 import type { Flag, AttendanceEvent } from "@willdesign-hr/types";
-import { FlagLevels, FlagStatuses, AttendanceStates, AttendanceActions, CRON } from "@willdesign-hr/types";
+import { FlagLevels, FlagStatuses, AttendanceStates, AttendanceActions, CRON, KeyPatterns, nowIso, nowMs, todayDate } from "@willdesign-hr/types";
 import type { EmployeeRepository } from "../repositories/employee.js";
 import type { AttendanceRepository } from "../repositories/attendance.js";
 import type { FlagRepository } from "../repositories/flag.js";
@@ -94,10 +94,10 @@ export class CronService {
 
     for (const emp of employees) {
       const activeEntries = await this.deps.bankRepo.findActive(emp.id);
-      const now = new Date();
+      const today = todayDate();
 
       for (const entry of activeEntries) {
-        if (new Date(entry.expiresAt) <= now) {
+        if (entry.expiresAt <= today) {
           surplusExpiredCount++;
           await this.deps.bankRepo.update(entry.id, { remainingHours: 0 });
         }
@@ -119,13 +119,13 @@ export class CronService {
 
   private buildFlag(employeeId: string, level: Flag["level"], period: string, deficitHours: number): Flag {
     return {
-      id: `FLAG#${employeeId}#${period}#${Date.now()}`,
+      id: KeyPatterns.flagInstance(level, period, employeeId, nowMs()),
       employeeId,
       level,
       period,
       deficitHours,
       status: FlagStatuses.PENDING,
-      createdAt: new Date().toISOString(),
+      createdAt: nowIso(),
     };
   }
 }
