@@ -1,0 +1,24 @@
+{
+  "name": "@hr-attendance-app/cli",
+  "version": "0.1.0",
+  "description": "CLI for HR Attendance App — setup wizard, deploy, and local dev",
+  "type": "module",
+  "bin": {
+    "hr-app": "./bin/cli.js"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "dev": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@hr-attendance-app/types": "*",
+    "commander": "^13.1.0",
+    "inquirer": "^12.6.0",
+    "yaml": "^2.7.1",
+    "chalk": "^5.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.17",
+    "tsx": "^4.19.4"
+  }
+}

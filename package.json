@@ -10,6 +10,7 @@
     "packages/api",
     "packages/slack",
     "packages/web",
+    "packages/cli",
     "infra"
   ],
   "scripts": {
