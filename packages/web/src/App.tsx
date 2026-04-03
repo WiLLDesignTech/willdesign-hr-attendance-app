@@ -1,9 +1,21 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ThemeProvider } from "styled-components";
 import { AuthProvider } from "./hooks/useAuth";
 import { Layout } from "./components/common/Layout";
+import { theme } from "./theme/theme";
+import { GlobalStyle } from "./theme/GlobalStyle";
 import "./i18n/index";
-import "./theme/theme.css";
+
+const DashboardPage = lazy(() => import("./components/dashboard/DashboardPage").then(m => ({ default: m.DashboardPage })));
+const AttendancePage = lazy(() => import("./components/attendance/AttendancePage").then(m => ({ default: m.AttendancePage })));
+const LeavePage = lazy(() => import("./components/leave/LeavePage").then(m => ({ default: m.LeavePage })));
+const ReportsPage = lazy(() => import("./components/reports/ReportsPage").then(m => ({ default: m.ReportsPage })));
+const PayrollPage = lazy(() => import("./components/payroll/PayrollPage").then(m => ({ default: m.PayrollPage })));
+const TeamPage = lazy(() => import("./components/team/TeamPage").then(m => ({ default: m.TeamPage })));
+const AdminPage = lazy(() => import("./components/admin/AdminPage").then(m => ({ default: m.AdminPage })));
+const SettingsPage = lazy(() => import("./components/settings/SettingsPage").then(m => ({ default: m.SettingsPage })));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -11,29 +23,30 @@ const queryClient = new QueryClient({
   },
 });
 
-function Placeholder({ name }: { name: string }) {
-  return <div className="wd-card"><h2>{name}</h2><p>Coming soon</p></div>;
-}
-
 export function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route element={<Layout />}>
-              <Route index element={<Placeholder name="Dashboard" />} />
-              <Route path="attendance" element={<Placeholder name="Attendance" />} />
-              <Route path="leave" element={<Placeholder name="Leave" />} />
-              <Route path="reports" element={<Placeholder name="Reports" />} />
-              <Route path="payroll" element={<Placeholder name="Payroll" />} />
-              <Route path="team" element={<Placeholder name="Team" />} />
-              <Route path="admin" element={<Placeholder name="Admin" />} />
-              <Route path="settings" element={<Placeholder name="Settings" />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
-    </QueryClientProvider>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <BrowserRouter>
+            <Suspense fallback={<div>Loading...</div>}>
+              <Routes>
+                <Route element={<Layout />}>
+                  <Route index element={<DashboardPage />} />
+                  <Route path="attendance" element={<AttendancePage />} />
+                  <Route path="leave" element={<LeavePage />} />
+                  <Route path="reports" element={<ReportsPage />} />
+                  <Route path="payroll" element={<PayrollPage />} />
+                  <Route path="team" element={<TeamPage />} />
+                  <Route path="admin" element={<AdminPage />} />
+                  <Route path="settings" element={<SettingsPage />} />
+                </Route>
+              </Routes>
+            </Suspense>
+          </BrowserRouter>
+        </AuthProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }

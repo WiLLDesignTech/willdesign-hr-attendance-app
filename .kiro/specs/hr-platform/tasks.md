@@ -422,9 +422,9 @@
   - Write visual regression baseline tests for layout at each breakpoint
   - _Requirements: 22.1, 22.2, 22.3, 22.4, 22.5, 22.6_
 
-- [ ] 16. Web PWA shell, pages, and components
+- [x] 16. Web PWA shell, pages, and components
 
-- [ ] 16.0 Set up the Progressive Web App shell with service worker, manifest, offline support, and push notifications
+- [x] 16.0 Set up the Progressive Web App shell with service worker, manifest, offline support, and push notifications
   - Configure Vite PWA plugin (vite-plugin-pwa) with Workbox for service worker generation
   - Create web app manifest with WillDesign branding: app name "WillDesign HR", short name "WD HR", theme color #58C2D9, background #FFFFFF, display standalone, app icons (192px, 512px) derived from WillDesign logo
   - Implement service worker caching strategy: cache-first for static assets (JS, CSS, fonts, images, i18n JSON), network-first for API calls with stale-while-revalidate fallback
@@ -434,7 +434,7 @@
   - "Add to Home Screen" install prompt: show custom install banner on first 3 visits for mobile users
   - Write tests for service worker registration, offline fallback, queue sync, and manifest validation
   - _Requirements: 22.7_
-- [ ] 16.1 Build the employee dashboard page with mobile-first quick-action clock widget
+- [x] 16.1 Build the employee dashboard page with mobile-first quick-action clock widget
   - Display current clock status (idle/clocked in/on break) with today's hours
   - **Mobile quick-clock widget**: prominent one-tap clock-in/out button at top of dashboard (alternative to Slack for mobile PWA users), with swipe gestures for break start/end. Touch targets minimum 44px
   - Show weekly and monthly hours progress against policy requirements — at-a-glance on mobile
@@ -444,20 +444,20 @@
   - Mobile layout: single column, bottom navigation, clock widget always visible without scrolling
   - _Requirements: 3.1, 22.8_
 
-- [ ] 16.2 (P) Build the attendance management page with history view, edit capability, and team leave calendar
+- [x] 16.2 (P) Build the attendance management page with history view, edit capability, and team leave calendar
   - Attendance history: list attendance events by date with session summaries (worked hours, break durations)
   - Web clock-in/out: allow employees to log attendance events from the web (with audit trail)
   - Attendance edit: employees can edit their own records; edits create new audit entries preserving originals
   - Team leave calendar: visible to all employees showing who is off which days. Permission-based privacy: employees see only name + "on leave" (no type); managers and admin see leave type details (paid/unpaid/shift). API must strip leave type from response based on caller's role before returning data
   - _Requirements: 3.2, 3.7, 5.2_
 
-- [ ] 16.3 (P) Build the leave request, daily reports, and payroll pages
+- [x] 16.3 (P) Build the leave request, daily reports, and payroll pages
   - Leave request page: form to submit leave requests with date picker optimized for touch (native date inputs on mobile); date range and type selection; list of own requests with status; manager view with approve/reject actions (swipe or one-tap on mobile) for direct reports
   - Daily reports page: view own reports by date; submit/edit reports from web; view team reports (manager view)
   - Payroll page: monthly payroll breakdown view showing every component — base salary, pro-rata adjustments, overtime calculations, allowances, bonuses, commission, deductions (deficit hours), blending details (if applicable), transfer fees, net amount, JPY equivalent; transparent and auditable for both employees (own data) and managers (direct reports)
   - _Requirements: 3.2, 3.8, 10.16_
 
-- [ ] 16.4 Build the admin panel with onboarding, offboarding, policy builder, role management, and configuration
+- [x] 16.4 Build the admin panel with onboarding, offboarding, policy builder, role management, and configuration
   - Onboarding form: create employee record with all required fields (name, email, Slack ID, employment type, salary, manager, region, policy group), creates both DynamoDB record and Cognito account
   - Offboarding flow: show settlement preview (pro-rata salary, deductions, leave handling), allow exit notes, deactivate employee
   - Post-termination tracking: display confidentiality obligation expiry (2 years) and non-compete expiry (12 months); admin can query active legal obligations
@@ -469,7 +469,7 @@
   - Document management: view employee documents (admin view)
   - _Requirements: 3.4, 3.6, 16.1, 16.2, 16.4, 5.7, 5.9, 15.1, 15.2, 15.3, 1.8_
 
-- [ ] 16.5 (P) Build the manager team view with flags, hours banking, surplus approval, and quota management
+- [x] 16.5 (P) Build the manager team view with flags, hours banking, surplus approval, and quota management
   - Team hours overview: list direct reports with current week/month hour progress
   - Flag management: list pending flags for direct reports with resolution actions (no penalty, deduct, use bank, partial bank, discuss); show available bank balance alongside each flag. Mobile: quick-action buttons for common resolutions, swipe to resolve
   - Surplus banking: approve/reject surplus banking requests; set max_leave_days per approval
