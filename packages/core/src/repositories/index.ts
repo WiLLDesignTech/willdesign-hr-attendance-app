@@ -12,5 +12,6 @@ export type { PolicyRepository } from "./policy.js";
 export type { RoleRepository } from "./role.js";
 export type { MonthlySummaryRepository } from "./monthly-summary.js";
 export type { DocumentRepository } from "./document.js";
+export type { AttendanceLockRepository } from "./attendance-lock.js";
 export type { EmailAdapter } from "./email-adapter.js";
 export type { AuthProviderAdapter, CreateAuthUserInput } from "./auth-provider-adapter.js";

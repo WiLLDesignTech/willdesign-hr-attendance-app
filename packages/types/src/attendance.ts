@@ -28,3 +28,17 @@ export interface BreakPeriod {
   readonly start: string;
   readonly end: string | null;
 }
+
+// ─── Attendance Lock ───
+
+export type AttendanceLockScope = "COMPANY" | "GROUP" | "EMPLOYEE";
+
+export interface AttendanceLock {
+  readonly id: string;
+  readonly scope: AttendanceLockScope;
+  readonly yearMonth: string;
+  readonly groupId?: string;
+  readonly employeeId?: string;
+  readonly lockedBy: string;
+  readonly lockedAt: string;
+}

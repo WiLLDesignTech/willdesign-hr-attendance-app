@@ -3,6 +3,7 @@
  * Single source of truth for all entity key formats.
  * Shared across core (services) and data (repositories).
  */
+import { AttendanceLockScopes } from "./constants.js";
 
 // ─── Key Prefixes ───
 export const KeyPrefixes = {
@@ -26,6 +27,8 @@ export const KeyPrefixes = {
   DOCUMENT: "DOC",
   LEGAL: "LEGAL",
   PROFILE: "PROFILE",
+  LOCK: "LOCK",
+  LOCK_GROUP: "GROUP",
 } as const;
 
 // ─── Key Builders ───
@@ -55,4 +58,8 @@ export const KeyPatterns = {
   channel: (channelId: string) => `${P.CHANNEL}#${channelId}`,
   document: (id: string) => `${P.DOCUMENT}#${id}`,
   legal: (type: string) => `${P.LEGAL}#${type}`,
+  lock: (yearMonth: string) => `${P.LOCK}#${yearMonth}`,
+  lockSkCompany: AttendanceLockScopes.COMPANY,
+  lockSkGroup: (groupId: string) => `${P.LOCK_GROUP}#${groupId}`,
+  lockSkEmployee: (employeeId: string) => `${P.EMPLOYEE}#${employeeId}`,
 } as const;

@@ -64,6 +64,12 @@ export const KEYS = {
   // Legal Obligation
   LEGAL: (type: string) => `LEGAL#${type}`,
 
+  // Attendance Lock
+  LOCK: (yearMonth: string) => `LOCK#${yearMonth}`,
+  LOCK_SK_COMPANY: "COMPANY",
+  LOCK_SK_GROUP: (groupId: string) => `GROUP#${groupId}`,
+  LOCK_SK_EMP: (employeeId: string) => `EMP#${employeeId}`,
+
   // GSI patterns
   GSI1: {
     SLACK: (slackId: string) => `SLACK#${slackId}`,

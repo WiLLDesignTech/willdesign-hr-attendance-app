@@ -121,6 +121,28 @@ export interface CreateHolidayBody {
   readonly isSubstitute?: boolean;
 }
 
+// ─── Attendance Lock ───
+export const API_ATTENDANCE_LOCK = "/api/attendance/lock" as const;
+
+export interface CreateAttendanceLockBody {
+  readonly scope: import("./attendance.js").AttendanceLockScope;
+  readonly yearMonth: string;
+  readonly groupId?: string;
+  readonly employeeId?: string;
+}
+
+export interface DeleteAttendanceLockParams {
+  readonly scope: import("./attendance.js").AttendanceLockScope;
+  readonly yearMonth: string;
+  readonly groupId?: string;
+  readonly employeeId?: string;
+}
+
+export interface AttendanceLockQueryParams {
+  readonly yearMonth?: string;
+  readonly scope?: import("./attendance.js").AttendanceLockScope;
+}
+
 // ─── Policies ───
 export const API_POLICIES = "/api/policies/:groupName" as const;
 

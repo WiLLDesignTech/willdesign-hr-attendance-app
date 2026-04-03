@@ -223,6 +223,15 @@ export const ATTENDANCE = {
   IDEMPOTENCY_WINDOW_MS: 60_000,
 } as const;
 
+// ─── Attendance Lock ───
+export const AttendanceLockScopes = {
+  COMPANY: "COMPANY",
+  GROUP: "GROUP",
+  EMPLOYEE: "EMPLOYEE",
+} as const;
+
+export const YEAR_MONTH_PATTERN = /^\d{4}-\d{2}$/;
+
 // ─── Banking ───
 export const BANKING = {
   EXPIRY_MONTHS: 12,
@@ -289,4 +298,10 @@ export const ErrorCodes = {
 // ─── Error Messages ───
 export const ErrorMessages = {
   INSUFFICIENT_PERMISSIONS: "Insufficient permissions",
+  YEAR_MONTH_REQUIRED: "yearMonth required in YYYY-MM format",
+  YEAR_MONTH_QUERY_REQUIRED: "yearMonth query parameter required in YYYY-MM format",
+  INVALID_SCOPE: "scope must be COMPANY, GROUP, or EMPLOYEE",
+  GROUP_ID_REQUIRED: "groupId required for GROUP scope",
+  EMPLOYEE_ID_REQUIRED: "employeeId required for EMPLOYEE scope",
+  LOCK_ALREADY_EXISTS: "Lock already exists for this scope and period",
 } as const;

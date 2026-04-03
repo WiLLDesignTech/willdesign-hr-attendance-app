@@ -13,6 +13,7 @@ export { DynamoFlagRepository } from "./dynamo/flag.js";
 export { DynamoBankRepository } from "./dynamo/bank.js";
 export { DynamoReportRepository } from "./dynamo/report.js";
 export { DynamoHolidayRepository } from "./dynamo/holiday.js";
+export { DynamoAttendanceLockRepository } from "./dynamo/attendance-lock.js";
 export { DynamoOverrideRepository } from "./dynamo/override.js";
 export { DynamoRoleRepository } from "./dynamo/role.js";
 export { DynamoMonthlySummaryRepository } from "./dynamo/monthly-summary.js";

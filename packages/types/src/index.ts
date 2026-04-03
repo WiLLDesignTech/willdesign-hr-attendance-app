@@ -14,6 +14,8 @@ export type {
   AttendanceEvent,
   AttendanceSession,
   BreakPeriod,
+  AttendanceLockScope,
+  AttendanceLock,
 } from "./attendance.js";
 
 export type {
@@ -139,6 +141,8 @@ export {
   LegalObligationTypes,
   ReferenceTypes,
   ATTENDANCE,
+  AttendanceLockScopes,
+  YEAR_MONTH_PATTERN,
   AllowanceTypes,
   BANKING,
   COGNITO,
@@ -165,6 +169,7 @@ export {
   API_REPORTS,
   API_ONBOARD, API_OFFBOARD, API_AUDIT,
   API_HOLIDAYS, API_HOLIDAY_DELETE,
+  API_ATTENDANCE_LOCK,
   API_POLICIES,
   API_DEV_AUTH_EMPLOYEES, API_DEV_AUTH_LOGIN,
   ROUTE_SEGMENTS, ROUTES,
@@ -178,6 +183,9 @@ export type {
   ReportsQueryParams, CreateReportBody,
   HolidaysQueryParams,
   CreateHolidayBody,
+  CreateAttendanceLockBody,
+  DeleteAttendanceLockParams,
+  AttendanceLockQueryParams,
 } from "./api-routes.js";
 
 export { KeyPrefixes, KeyPatterns } from "./key-patterns.js";
