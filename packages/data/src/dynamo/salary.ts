@@ -2,16 +2,24 @@ import { PutCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import type { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import type { SalaryRecord } from "@hr-attendance-app/types";
 import type { SalaryRepository } from "@hr-attendance-app/core";
-import { KEYS } from "./keys.js";
+import { createTenantKeys } from "./keys.js";
 
 export class DynamoSalaryRepository implements SalaryRepository {
-  constructor(private readonly client: DynamoDBDocumentClient, private readonly tableName: string) {}
+  private readonly keys;
+
+  constructor(
+    private readonly client: DynamoDBDocumentClient,
+    private readonly tableName: string,
+    tenantId: string,
+  ) {
+    this.keys = createTenantKeys(tenantId);
+  }
 
   async getHistory(employeeId: string): Promise<readonly SalaryRecord[]> {
     const result = await this.client.send(new QueryCommand({
       TableName: this.tableName,
       KeyConditionExpression: "PK = :pk AND begins_with(SK, :prefix)",
-      ExpressionAttributeValues: { ":pk": KEYS.EMP(employeeId), ":prefix": KEYS.SALARY_PREFIX },
+      ExpressionAttributeValues: { ":pk": this.keys.EMP(employeeId), ":prefix": this.keys.SALARY_PREFIX },
     }));
     return (result.Items as SalaryRecord[]) ?? [];
   }
@@ -29,8 +37,8 @@ export class DynamoSalaryRepository implements SalaryRepository {
     await this.client.send(new PutCommand({
       TableName: this.tableName,
       Item: {
-        PK: KEYS.EMP(entry.employeeId),
-        SK: KEYS.SALARY(entry.effectiveFrom),
+        PK: this.keys.EMP(entry.employeeId),
+        SK: this.keys.SALARY(entry.effectiveFrom),
         ...entry,
       },
     }));

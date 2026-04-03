@@ -10,7 +10,7 @@ import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import express from "express";
 import { createRouter } from "./handlers/router.js";
-import { createDeps } from "./composition.js";
+import { getTenantDeps } from "./composition.js";
 import { buildRoutes } from "./routes.js";
 import { devAuthRoutes, parseDevToken } from "./dev-auth.js";
 
@@ -36,8 +36,7 @@ try {
 
 const PORT = Number(process.env["API_PORT"] ?? 3001);
 
-const deps = createDeps();
-const routes = [...buildRoutes(deps), ...devAuthRoutes(deps)];
+const routes = [...buildRoutes(getTenantDeps), ...devAuthRoutes(getTenantDeps)];
 const lambdaHandler = createRouter(routes);
 
 const app = express();

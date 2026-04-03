@@ -4,13 +4,13 @@
  */
 import type { RouteDefinition } from "./handlers/router.js";
 import { buildResponse, handleError } from "./middleware/index.js";
-import type { AppDeps } from "./composition.js";
+import type { DepsResolver } from "./composition.js";
 import {
-  COGNITO, ErrorCodes,
+  COGNITO, ErrorCodes, DEFAULT_TENANT_ID,
   API_DEV_AUTH_EMPLOYEES, API_DEV_AUTH_LOGIN,
 } from "@hr-attendance-app/types";
 
-export function devAuthRoutes(deps: AppDeps): RouteDefinition[] {
+export function devAuthRoutes(getDeps: DepsResolver): RouteDefinition[] {
   if (process.env["NODE_ENV"] === "production") return [];
 
   return [
@@ -18,6 +18,7 @@ export function devAuthRoutes(deps: AppDeps): RouteDefinition[] {
       method: "GET",
       path: API_DEV_AUTH_EMPLOYEES,
       handler: async () => {
+        const deps = getDeps(DEFAULT_TENANT_ID);
         const employees = await deps.services.employee.findAll({ status: "ACTIVE" });
         const list = employees.map((e) => ({
           id: e.id,
@@ -37,6 +38,7 @@ export function devAuthRoutes(deps: AppDeps): RouteDefinition[] {
         if (!input?.employeeId) {
           return handleError(ErrorCodes.VALIDATION, "employeeId is required");
         }
+        const deps = getDeps(DEFAULT_TENANT_ID);
         const employee = await deps.services.employee.findById(input.employeeId);
         if (!employee) {
           return handleError(ErrorCodes.NOT_FOUND, "Employee not found");
@@ -47,6 +49,7 @@ export function devAuthRoutes(deps: AppDeps): RouteDefinition[] {
         const claims = {
           [COGNITO.ATTR_EMPLOYEE_ID]: employee.id,
           "cognito:groups": role,
+          "custom:tenant_id": DEFAULT_TENANT_ID,
           email: employee.email,
           name: employee.name,
         };

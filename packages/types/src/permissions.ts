@@ -11,6 +11,7 @@ export type Role =
 export type SensitivityLevel = "PUBLIC" | "INTERNAL" | "SENSITIVE" | "CONFIDENTIAL";
 
 export interface AuthContext {
+  readonly tenantId: string;
   readonly actorId: string;
   readonly actorRole: Role;
   readonly actorCustomPermissions: readonly string[];

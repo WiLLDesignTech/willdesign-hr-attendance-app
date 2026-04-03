@@ -1,23 +1,21 @@
 import type { RouteDefinition } from "./router.js";
-import type { AppDeps } from "../composition.js";
-import { parseAuthContext, buildResponse, handleError } from "../middleware/index.js";
-import { ErrorCodes, API_PAYROLL } from "@hr-attendance-app/types";
+import type { DepsResolver } from "../composition.js";
+import { withAuth, buildResponse } from "../middleware/index.js";
+import { API_PAYROLL } from "@hr-attendance-app/types";
 
-export function payrollRoutes(deps: AppDeps): RouteDefinition[] {
+export function payrollRoutes(getDeps: DepsResolver): RouteDefinition[] {
   return [
     {
       method: "GET",
       path: API_PAYROLL,
-      handler: async ({ claims, pathParams }) => {
-        const auth = parseAuthContext(claims);
-        if (!auth.success) return handleError(ErrorCodes.UNAUTHORIZED, auth.error);
+      handler: withAuth(getDeps, async ({ auth, deps, pathParams }) => {
         const yearMonth = pathParams["yearMonth"] ?? "";
-        const breakdown = await deps.services.payroll.getBreakdown(auth.data.actorId, yearMonth);
+        const breakdown = await deps.services.payroll.getBreakdown(auth.actorId, yearMonth);
         if (!breakdown) {
-          return buildResponse(200, { employeeId: auth.data.actorId, yearMonth, message: "No salary record found" });
+          return buildResponse(200, { employeeId: auth.actorId, yearMonth, message: "No salary record found" });
         }
         return buildResponse(200, breakdown);
-      },
+      }),
     },
   ];
 }

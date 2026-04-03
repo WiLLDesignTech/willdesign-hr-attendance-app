@@ -1,5 +1,9 @@
 import type { AuthContext, Result } from "@hr-attendance-app/types";
-import { Roles, ErrorCodes, COGNITO } from "@hr-attendance-app/types";
+import { Roles, ErrorCodes, COGNITO, DEFAULT_TENANT_ID } from "@hr-attendance-app/types";
+import type { AppDeps, DepsResolver } from "../composition.js";
+import type { RouteHandler } from "../handlers/router.js";
+
+const DEPLOYMENT_MODE = process.env["DEPLOYMENT_MODE"] ?? "single";
 
 export { ErrorCodes };
 
@@ -27,6 +31,8 @@ const CORS_HEADERS = {
 
 /**
  * Extract AuthContext from Cognito JWT claims.
+ * In single-tenant mode (DEPLOYMENT_MODE=single or unset), tenantId defaults to "default".
+ * In multi-tenant mode (DEPLOYMENT_MODE=multi), tenantId is read from custom:tenant_id claim.
  */
 export function parseAuthContext(
   claims: Record<string, unknown>,
@@ -39,9 +45,21 @@ export function parseAuthContext(
   const groups = claims["cognito:groups"] as string | undefined;
   const role = groups ?? Roles.EMPLOYEE;
 
+  let tenantId: string;
+  if (DEPLOYMENT_MODE === "multi") {
+    const tid = claims["custom:tenant_id"] as string | undefined;
+    if (!tid) {
+      return { success: false, error: "Missing tenant_id claim" };
+    }
+    tenantId = tid;
+  } else {
+    tenantId = DEFAULT_TENANT_ID;
+  }
+
   return {
     success: true,
     data: {
+      tenantId,
       actorId: employeeId,
       actorRole: role,
       actorCustomPermissions: [],
@@ -84,5 +102,29 @@ export function buildResponse(statusCode: number, body: unknown): ApiResponse {
     statusCode,
     body: JSON.stringify(body),
     headers: { ...CORS_HEADERS },
+  };
+}
+
+export interface AuthenticatedParams {
+  readonly auth: AuthContext;
+  readonly deps: AppDeps;
+  readonly pathParams: Record<string, string>;
+  readonly queryParams: Record<string, string>;
+  readonly body: unknown;
+}
+
+/**
+ * Wraps a handler with auth parsing and tenant-scoped deps resolution.
+ * Eliminates the repeated parseAuthContext + getDeps boilerplate from every handler.
+ */
+export function withAuth(
+  getDeps: DepsResolver,
+  handler: (params: AuthenticatedParams) => Promise<ApiResponse>,
+): RouteHandler {
+  return async ({ claims, pathParams, queryParams, body }) => {
+    const auth = parseAuthContext(claims);
+    if (!auth.success) return handleError(ErrorCodes.UNAUTHORIZED, auth.error);
+    const deps = getDeps(auth.data.tenantId);
+    return handler({ auth: auth.data, deps, pathParams, queryParams, body });
   };
 }

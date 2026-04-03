@@ -3,18 +3,23 @@ import type { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import type { Employee, EmployeeStatus } from "@hr-attendance-app/types";
 import { nowIso, timestampId } from "@hr-attendance-app/types";
 import type { EmployeeRepository, CreateEmployeeInput, UpdateEmployeeInput } from "@hr-attendance-app/core";
-import { KEYS } from "./keys.js";
+import { createTenantKeys } from "./keys.js";
 
 export class DynamoEmployeeRepository implements EmployeeRepository {
+  private readonly keys;
+
   constructor(
     private readonly client: DynamoDBDocumentClient,
     private readonly tableName: string,
-  ) {}
+    tenantId: string,
+  ) {
+    this.keys = createTenantKeys(tenantId);
+  }
 
   async findById(id: string): Promise<Employee | null> {
     const result = await this.client.send(new GetCommand({
       TableName: this.tableName,
-      Key: { PK: KEYS.EMP(id), SK: KEYS.PROFILE },
+      Key: { PK: this.keys.EMP(id), SK: this.keys.PROFILE },
     }));
     return (result.Item as Employee) ?? null;
   }
@@ -24,7 +29,7 @@ export class DynamoEmployeeRepository implements EmployeeRepository {
       TableName: this.tableName,
       IndexName: "GSI1",
       KeyConditionExpression: "GSI1PK = :pk",
-      ExpressionAttributeValues: { ":pk": KEYS.GSI1.SLACK(slackId) },
+      ExpressionAttributeValues: { ":pk": this.keys.GSI1.SLACK(slackId) },
       Limit: 1,
     }));
     return (result.Items?.[0] as Employee) ?? null;
@@ -35,7 +40,7 @@ export class DynamoEmployeeRepository implements EmployeeRepository {
       TableName: this.tableName,
       IndexName: "GSI1",
       KeyConditionExpression: "GSI1PK = :pk",
-      ExpressionAttributeValues: { ":pk": KEYS.GSI1.MGR(managerId) },
+      ExpressionAttributeValues: { ":pk": this.keys.GSI1.MGR(managerId) },
     }));
     return (result.Items as Employee[]) ?? [];
   }
@@ -45,7 +50,7 @@ export class DynamoEmployeeRepository implements EmployeeRepository {
       TableName: this.tableName,
       IndexName: "GSI2",
       KeyConditionExpression: "GSI2PK = :pk",
-      ExpressionAttributeValues: { ":pk": KEYS.GSI2.ORG_EMP },
+      ExpressionAttributeValues: { ":pk": this.keys.GSI2.ORG_EMP },
     }));
     const items = (result.Items as Employee[]) ?? [];
     if (options?.status) {
@@ -68,12 +73,12 @@ export class DynamoEmployeeRepository implements EmployeeRepository {
     await this.client.send(new PutCommand({
       TableName: this.tableName,
       Item: {
-        PK: KEYS.EMP(id),
-        SK: KEYS.PROFILE,
-        GSI1PK: KEYS.GSI1.SLACK(input.slackId),
-        GSI1SK: KEYS.EMP(id),
-        GSI2PK: KEYS.GSI2.ORG_EMP,
-        GSI2SK: KEYS.EMP(id),
+        PK: this.keys.EMP(id),
+        SK: this.keys.PROFILE,
+        GSI1PK: this.keys.GSI1.SLACK(input.slackId),
+        GSI1SK: this.keys.EMP(id),
+        GSI2PK: this.keys.GSI2.ORG_EMP,
+        GSI2SK: this.keys.EMP(id),
         ...employee,
       },
     }));
@@ -102,7 +107,7 @@ export class DynamoEmployeeRepository implements EmployeeRepository {
 
     const result = await this.client.send(new UpdateCommand({
       TableName: this.tableName,
-      Key: { PK: KEYS.EMP(id), SK: KEYS.PROFILE },
+      Key: { PK: this.keys.EMP(id), SK: this.keys.PROFILE },
       UpdateExpression: `SET ${expressions.join(", ")}`,
       ExpressionAttributeNames: names,
       ExpressionAttributeValues: values,

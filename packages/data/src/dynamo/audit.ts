@@ -2,21 +2,26 @@ import { PutCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import type { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import type { AuditEntry } from "@hr-attendance-app/types";
 import type { AuditRepository, AuditQueryOptions } from "@hr-attendance-app/core";
-import { KEYS } from "./keys.js";
+import { createTenantKeys } from "./keys.js";
 
 export class DynamoAuditRepository implements AuditRepository {
+  private readonly keys;
+
   constructor(
     private readonly client: DynamoDBDocumentClient,
     private readonly tableName: string,
-  ) {}
+    tenantId: string,
+  ) {
+    this.keys = createTenantKeys(tenantId);
+  }
 
   async append(entry: AuditEntry): Promise<void> {
     await this.client.send(new PutCommand({
       TableName: this.tableName,
       Item: {
-        PK: KEYS.AUDIT(entry.targetId),
+        PK: this.keys.AUDIT(entry.targetId),
         SK: `${entry.timestamp}#${entry.id}`,
-        GSI1PK: KEYS.GSI1.AUDIT_ACTOR(entry.actorId),
+        GSI1PK: this.keys.GSI1.AUDIT_ACTOR(entry.actorId),
         GSI1SK: entry.timestamp,
         ...entry,
       },
@@ -55,7 +60,7 @@ export class DynamoAuditRepository implements AuditRepository {
   }
 
   private buildTargetValues(targetId: string, options?: AuditQueryOptions): Record<string, unknown> {
-    const values: Record<string, unknown> = { ":pk": KEYS.AUDIT(targetId) };
+    const values: Record<string, unknown> = { ":pk": this.keys.AUDIT(targetId) };
     if (options?.from) values[":from"] = options.from;
     if (options?.to) values[":to"] = options.to;
     return values;
@@ -72,7 +77,7 @@ export class DynamoAuditRepository implements AuditRepository {
   }
 
   private buildActorValues(actorId: string, options?: AuditQueryOptions): Record<string, unknown> {
-    const values: Record<string, unknown> = { ":pk": KEYS.GSI1.AUDIT_ACTOR(actorId) };
+    const values: Record<string, unknown> = { ":pk": this.keys.GSI1.AUDIT_ACTOR(actorId) };
     if (options?.from) values[":from"] = options.from;
     if (options?.to) values[":to"] = options.to;
     return values;

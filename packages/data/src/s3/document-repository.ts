@@ -6,24 +6,29 @@ import type { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import type { Document } from "@hr-attendance-app/types";
 import { S3_PREFIXES } from "@hr-attendance-app/types";
 import type { DocumentRepository } from "@hr-attendance-app/core";
-import { KEYS } from "../dynamo/keys.js";
+import { createTenantKeys } from "../dynamo/keys.js";
 
 const PRESIGN_EXPIRY_SECONDS = 900; // 15 minutes
 
 export class S3DocumentRepository implements DocumentRepository {
+  private readonly keys;
+
   constructor(
     private readonly s3: S3Client,
     private readonly docClient: DynamoDBDocumentClient,
     private readonly bucketName: string,
     private readonly tableName: string,
-  ) {}
+    tenantId: string,
+  ) {
+    this.keys = createTenantKeys(tenantId);
+  }
 
   async save(metadata: Document): Promise<Document> {
     await this.docClient.send(new PutCommand({
       TableName: this.tableName,
       Item: {
-        PK: KEYS.EMP(metadata.employeeId),
-        SK: KEYS.DOC(metadata.id),
+        PK: this.keys.EMP(metadata.employeeId),
+        SK: this.keys.DOC(metadata.id),
         ...metadata,
       },
     }));
@@ -35,8 +40,8 @@ export class S3DocumentRepository implements DocumentRepository {
       TableName: this.tableName,
       KeyConditionExpression: "PK = :pk AND begins_with(SK, :prefix)",
       ExpressionAttributeValues: {
-        ":pk": KEYS.EMP(employeeId),
-        ":prefix": KEYS.DOC_PREFIX,
+        ":pk": this.keys.EMP(employeeId),
+        ":prefix": this.keys.DOC_PREFIX,
       },
     }));
     return (result.Items as Document[]) ?? [];

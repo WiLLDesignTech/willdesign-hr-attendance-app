@@ -1,6 +1,6 @@
 import type { RouteDefinition } from "./router.js";
-import type { AppDeps } from "../composition.js";
-import { parseAuthContext, buildResponse, handleError } from "../middleware/index.js";
+import type { DepsResolver } from "../composition.js";
+import { withAuth, buildResponse, handleError } from "../middleware/index.js";
 import { hasPermission } from "@hr-attendance-app/core";
 import {
   ErrorCodes, ErrorMessages, Permissions,
@@ -13,15 +13,13 @@ function isValidScope(scope: string): scope is AttendanceLockScope {
   return Object.values(AttendanceLockScopes).includes(scope as AttendanceLockScope);
 }
 
-export function attendanceLockRoutes(deps: AppDeps): RouteDefinition[] {
+export function attendanceLockRoutes(getDeps: DepsResolver): RouteDefinition[] {
   return [
     {
       method: "GET",
       path: API_ATTENDANCE_LOCK,
-      handler: async ({ claims, queryParams }) => {
-        const auth = parseAuthContext(claims);
-        if (!auth.success) return handleError(ErrorCodes.UNAUTHORIZED, auth.error);
-        if (!hasPermission(auth.data, Permissions.ATTENDANCE_LOCK)) {
+      handler: withAuth(getDeps, async ({ auth, deps, queryParams }) => {
+        if (!hasPermission(auth, Permissions.ATTENDANCE_LOCK)) {
           return handleError(ErrorCodes.FORBIDDEN, ErrorMessages.INSUFFICIENT_PERMISSIONS);
         }
         const query = queryParams as unknown as AttendanceLockQueryParams;
@@ -30,15 +28,13 @@ export function attendanceLockRoutes(deps: AppDeps): RouteDefinition[] {
         }
         const locks = await deps.services.attendance.getLocksForMonth(query.yearMonth);
         return buildResponse(200, locks);
-      },
+      }),
     },
     {
       method: "POST",
       path: API_ATTENDANCE_LOCK,
-      handler: async ({ claims, body }) => {
-        const auth = parseAuthContext(claims);
-        if (!auth.success) return handleError(ErrorCodes.UNAUTHORIZED, auth.error);
-        if (!hasPermission(auth.data, Permissions.ATTENDANCE_LOCK)) {
+      handler: withAuth(getDeps, async ({ auth, deps, body }) => {
+        if (!hasPermission(auth, Permissions.ATTENDANCE_LOCK)) {
           return handleError(ErrorCodes.FORBIDDEN, ErrorMessages.INSUFFICIENT_PERMISSIONS);
         }
         const input = body as CreateAttendanceLockBody | null;
@@ -59,21 +55,19 @@ export function attendanceLockRoutes(deps: AppDeps): RouteDefinition[] {
           yearMonth: input.yearMonth,
           groupId: input.groupId,
           employeeId: input.employeeId,
-          lockedBy: auth.data.actorId,
+          lockedBy: auth.actorId,
         });
         if (!result.success) {
           return handleError(ErrorCodes.CONFLICT, result.error);
         }
         return buildResponse(201, result.data);
-      },
+      }),
     },
     {
       method: "DELETE",
       path: API_ATTENDANCE_LOCK,
-      handler: async ({ claims, queryParams }) => {
-        const auth = parseAuthContext(claims);
-        if (!auth.success) return handleError(ErrorCodes.UNAUTHORIZED, auth.error);
-        if (!hasPermission(auth.data, Permissions.ATTENDANCE_LOCK)) {
+      handler: withAuth(getDeps, async ({ auth, deps, queryParams }) => {
+        if (!hasPermission(auth, Permissions.ATTENDANCE_LOCK)) {
           return handleError(ErrorCodes.FORBIDDEN, ErrorMessages.INSUFFICIENT_PERMISSIONS);
         }
         const { yearMonth, scope, groupId, employeeId } = queryParams as Record<string, string>;
@@ -88,7 +82,7 @@ export function attendanceLockRoutes(deps: AppDeps): RouteDefinition[] {
           : undefined;
         await deps.services.attendance.removeLock(yearMonth, scope, targetId);
         return buildResponse(200, { deleted: true });
-      },
+      }),
     },
   ];
 }

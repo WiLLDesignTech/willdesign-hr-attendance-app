@@ -1,6 +1,9 @@
 /**
  * Composition root — instantiates all repositories and services with DI.
  * Used by both Lambda handler and local dev server.
+ *
+ * Supports multi-tenancy: each tenantId gets its own set of repos/services,
+ * cached for Lambda reuse across invocations within the same tenant.
  */
 import {
   getDocClient,
@@ -31,8 +34,7 @@ import {
   AuditService,
 } from "@hr-attendance-app/core";
 import type { AuthProviderAdapter } from "@hr-attendance-app/core";
-import type { LeaveBalance } from "@hr-attendance-app/types";
-import { LeaveTypes, nowMs } from "@hr-attendance-app/types";
+import { nowMs, DEFAULT_TENANT_ID } from "@hr-attendance-app/types";
 
 export interface AppServices {
   readonly employee: EmployeeService;
@@ -54,6 +56,9 @@ export interface AppDeps {
   readonly services: AppServices;
 }
 
+/** Resolves tenant-scoped deps from a tenantId. Used by route handlers. */
+export type DepsResolver = (tenantId: string) => AppDeps;
+
 /** Stub auth provider for local dev (no real Cognito). */
 const devAuthProvider: AuthProviderAdapter = {
   async createUser() { return { authUserId: `cog-${nowMs()}` }; },
@@ -63,55 +68,35 @@ const devAuthProvider: AuthProviderAdapter = {
   async updateAttributes() { /* noop */ },
 };
 
-let cached: AppDeps | null = null;
+const tenantCache = new Map<string, AppDeps>();
 
-export function createDeps(): AppDeps {
+/**
+ * Get or create tenant-scoped dependencies.
+ * Repos are tenant-specific (keys prefixed with T#{tenantId}#).
+ * Services are stateless and safe to cache per tenant.
+ */
+export function getTenantDeps(tenantId: string): AppDeps {
+  const cached = tenantCache.get(tenantId);
   if (cached) return cached;
 
   const { client, tableName } = getDocClient();
 
   // Repositories (internal — not exposed to handlers)
-  const employeeRepo = new DynamoEmployeeRepository(client, tableName);
-  const attendanceRepo = new DynamoAttendanceRepository(client, tableName);
-  const auditRepo = new DynamoAuditRepository(client, tableName);
-  const leaveRepo = new DynamoLeaveRepository(client, tableName);
-  const salaryRepo = new DynamoSalaryRepository(client, tableName);
-  const flagRepo = new DynamoFlagRepository(client, tableName);
-  const bankRepo = new DynamoBankRepository(client, tableName);
-  const reportRepo = new DynamoReportRepository(client, tableName);
-  const holidayRepo = new DynamoHolidayRepository(client, tableName);
-  const lockRepo = new DynamoAttendanceLockRepository(client, tableName);
-  // Reserved for future services — instantiated when needed
-  // const overrideRepo = new DynamoOverrideRepository(client, tableName);
-  // const roleRepo = new DynamoRoleRepository(client, tableName);
-  // const monthlySummaryRepo = new DynamoMonthlySummaryRepository(client, tableName);
-
-  const getBalance = async (employeeId: string): Promise<LeaveBalance> => {
-    const requests = await leaveRepo.findByEmployee(employeeId, { status: "APPROVED" });
-    const used = requests.reduce((sum, r) => {
-      if (r.leaveType === LeaveTypes.PAID) {
-        const start = new Date(r.startDate).getTime();
-        const end = new Date(r.endDate).getTime();
-        return sum + Math.max(1, Math.round((end - start) / 86_400_000) + 1);
-      }
-      return sum;
-    }, 0);
-
-    return {
-      employeeId,
-      paidLeaveTotal: 10,
-      paidLeaveUsed: used,
-      paidLeaveRemaining: Math.max(0, 10 - used),
-      carryOver: 0,
-      carryOverExpiry: null,
-      lastAccrualDate: null,
-    };
-  };
+  const employeeRepo = new DynamoEmployeeRepository(client, tableName, tenantId);
+  const attendanceRepo = new DynamoAttendanceRepository(client, tableName, tenantId);
+  const auditRepo = new DynamoAuditRepository(client, tableName, tenantId);
+  const leaveRepo = new DynamoLeaveRepository(client, tableName, tenantId);
+  const salaryRepo = new DynamoSalaryRepository(client, tableName, tenantId);
+  const flagRepo = new DynamoFlagRepository(client, tableName, tenantId);
+  const bankRepo = new DynamoBankRepository(client, tableName, tenantId);
+  const reportRepo = new DynamoReportRepository(client, tableName, tenantId);
+  const holidayRepo = new DynamoHolidayRepository(client, tableName, tenantId);
+  const lockRepo = new DynamoAttendanceLockRepository(client, tableName, tenantId);
 
   const services: AppServices = {
     employee: new EmployeeService({ employeeRepo }),
     attendance: new AttendanceService(attendanceRepo, auditRepo, lockRepo, employeeRepo),
-    leave: new LeaveService(leaveRepo, auditRepo, getBalance),
+    leave: new LeaveService(leaveRepo, auditRepo),
     payroll: new PayrollService({ salaryRepo }),
     flagQuery: new FlagQueryService({ flagRepo }),
     bank: new BankService({ bankRepo }),
@@ -136,6 +121,12 @@ export function createDeps(): AppDeps {
     }),
   };
 
-  cached = { services };
-  return cached;
+  const deps = { services };
+  tenantCache.set(tenantId, deps);
+  return deps;
+}
+
+/** Backward-compatible: returns deps for the default (single-tenant) tenant. */
+export function createDeps(): AppDeps {
+  return getTenantDeps(DEFAULT_TENANT_ID);
 }

@@ -2,17 +2,25 @@ import { PutCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import type { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import type { Flag } from "@hr-attendance-app/types";
 import type { FlagRepository, FlagQueryOptions } from "@hr-attendance-app/core";
-import { KEYS } from "./keys.js";
+import { createTenantKeys } from "./keys.js";
 
 export class DynamoFlagRepository implements FlagRepository {
-  constructor(private readonly client: DynamoDBDocumentClient, private readonly tableName: string) {}
+  private readonly keys;
+
+  constructor(
+    private readonly client: DynamoDBDocumentClient,
+    private readonly tableName: string,
+    tenantId: string,
+  ) {
+    this.keys = createTenantKeys(tenantId);
+  }
 
   async save(flag: Flag): Promise<Flag> {
     await this.client.send(new PutCommand({
       TableName: this.tableName,
       Item: {
-        PK: KEYS.EMP(flag.employeeId), SK: KEYS.FLAG(flag.level, flag.period),
-        GSI1PK: KEYS.GSI1.FLAG_STATUS(flag.status), GSI1SK: `${flag.period}#${KEYS.EMP(flag.employeeId)}`,
+        PK: this.keys.EMP(flag.employeeId), SK: this.keys.FLAG(flag.level, flag.period),
+        GSI1PK: this.keys.GSI1.FLAG_STATUS(flag.status), GSI1SK: `${flag.period}#${this.keys.EMP(flag.employeeId)}`,
         ...flag,
       },
     }));
@@ -23,7 +31,7 @@ export class DynamoFlagRepository implements FlagRepository {
     const result = await this.client.send(new QueryCommand({
       TableName: this.tableName,
       KeyConditionExpression: "PK = :pk AND begins_with(SK, :prefix)",
-      ExpressionAttributeValues: { ":pk": KEYS.EMP(employeeId), ":prefix": KEYS.FLAG_PREFIX },
+      ExpressionAttributeValues: { ":pk": this.keys.EMP(employeeId), ":prefix": this.keys.FLAG_PREFIX },
     }));
     return (result.Items as Flag[]) ?? [];
   }
@@ -32,14 +40,12 @@ export class DynamoFlagRepository implements FlagRepository {
     const result = await this.client.send(new QueryCommand({
       TableName: this.tableName, IndexName: "GSI1",
       KeyConditionExpression: "GSI1PK = :pk",
-      ExpressionAttributeValues: { ":pk": KEYS.GSI1.FLAG_STATUS("PENDING") },
+      ExpressionAttributeValues: { ":pk": this.keys.GSI1.FLAG_STATUS("PENDING") },
     }));
     return (result.Items as Flag[]) ?? [];
   }
 
   async update(id: string, updates: Partial<Flag>): Promise<Flag> {
-    // Flags are keyed by employee+level+period, not by id — would need lookup
-    // For now, this is a simplified implementation
     void id; void updates;
     throw new Error("Flag update requires employee context — use save() with full flag object");
   }

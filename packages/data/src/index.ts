@@ -2,7 +2,8 @@
 // Shared by both API and Slack packages
 
 export { getDocClient, resetClient } from "./dynamo/client.js";
-export { KEYS } from "./dynamo/keys.js";
+export { createTenantKeys } from "./dynamo/keys.js";
+export type { TenantKeys } from "./dynamo/keys.js";
 
 export { DynamoEmployeeRepository } from "./dynamo/employee.js";
 export { DynamoAttendanceRepository } from "./dynamo/attendance.js";

@@ -2,7 +2,7 @@
  * Aggregates all route definitions from handler modules.
  */
 import type { RouteDefinition } from "./handlers/router.js";
-import type { AppDeps } from "./composition.js";
+import type { DepsResolver } from "./composition.js";
 import { employeeRoutes } from "./handlers/employees.js";
 import { attendanceRoutes } from "./handlers/attendance.js";
 import { leaveRoutes } from "./handlers/leave.js";
@@ -15,18 +15,18 @@ import { holidayRoutes } from "./handlers/holidays.js";
 import { policyRoutes } from "./handlers/policies.js";
 import { attendanceLockRoutes } from "./handlers/attendance-lock.js";
 
-export function buildRoutes(deps: AppDeps): readonly RouteDefinition[] {
+export function buildRoutes(getDeps: DepsResolver): readonly RouteDefinition[] {
   return [
-    ...employeeRoutes(deps),
-    ...attendanceRoutes(deps),
-    ...leaveRoutes(deps),
-    ...payrollRoutes(deps),
-    ...flagRoutes(deps),
-    ...bankRoutes(deps),
-    ...reportRoutes(deps),
-    ...adminRoutes(deps),
-    ...holidayRoutes(deps),
-    ...policyRoutes(deps),
-    ...attendanceLockRoutes(deps),
+    ...employeeRoutes(getDeps),
+    ...attendanceRoutes(getDeps),
+    ...leaveRoutes(getDeps),
+    ...payrollRoutes(getDeps),
+    ...flagRoutes(getDeps),
+    ...bankRoutes(getDeps),
+    ...reportRoutes(getDeps),
+    ...adminRoutes(getDeps),
+    ...holidayRoutes(getDeps),
+    ...policyRoutes(getDeps),
+    ...attendanceLockRoutes(getDeps),
   ];
 }
