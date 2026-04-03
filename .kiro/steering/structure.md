@@ -142,6 +142,7 @@ hr-attendance-app/
 │   └── web/                     # React frontend (S3 + CloudFront)
 │       ├── src/
 │       │   ├── components/
+│       │   │   ├── ui/            # UI primitives library (Modal, DataTable, Tabs, Calendar, etc.)
 │       │   │   ├── common/        # Layout shell (styled-components)
 │       │   │   ├── dashboard/     # DashboardPage, ClockWidget
 │       │   │   ├── attendance/    # AttendancePage
@@ -157,8 +158,8 @@ hr-attendance-app/
 │       │   ├── theme/
 │       │   │   ├── theme.ts       # Design token object (colors, fonts, spacing, radii)
 │       │   │   ├── styled.d.ts    # Theme type augmentation for styled-components
-│       │   │   ├── GlobalStyle.ts # createGlobalStyle (reset, base typography)
-│       │   │   └── primitives.ts  # Shared: Card, Button*, SectionTitle, TextMuted, FormField, PageLayout
+│       │   │   ├── GlobalStyle.ts # createGlobalStyle (reset, base typography, CSS custom properties)
+│       │   │   └── primitives.ts  # DEPRECATED — re-exports from components/ui/
 │       │   ├── pwa/
 │       │   │   ├── config.ts      # PWA manifest config (HR Attendance App brand)
 │       │   │   └── offline-queue.ts # Offline attendance action queue

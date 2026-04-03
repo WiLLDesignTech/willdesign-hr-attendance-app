@@ -8,6 +8,7 @@ import { RoleGuard } from "./components/auth/RoleGuard";
 import { LoginPage } from "./components/auth/LoginPage";
 import { Permissions, ROUTE_SEGMENTS } from "@hr-attendance-app/types";
 import { Layout } from "./components/common/Layout";
+import { ToastProvider } from "./components/ui/Toast";
 import { theme } from "./theme/theme";
 import { GlobalStyle } from "./theme/GlobalStyle";
 import "./i18n/index";
@@ -31,33 +32,35 @@ export function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <BrowserRouter>
-            <Suspense fallback={<div>Loading...</div>}>
-              <Routes>
-                <Route path={ROUTE_SEGMENTS.LOGIN} element={<LoginPage />} />
-                <Route element={<AuthGuard />}>
-                  <Route element={<Layout />}>
-                    <Route index element={<DashboardPage />} />
-                    <Route path={ROUTE_SEGMENTS.ATTENDANCE} element={<AttendancePage />} />
-                    <Route path={ROUTE_SEGMENTS.LEAVE} element={<LeavePage />} />
-                    <Route path={ROUTE_SEGMENTS.REPORTS} element={<ReportsPage />} />
-                    <Route path={ROUTE_SEGMENTS.PAYROLL} element={<PayrollPage />} />
-                    <Route element={<RoleGuard requiredPermission={Permissions.LEAVE_APPROVE} />}>
-                      <Route path={ROUTE_SEGMENTS.TEAM} element={<TeamPage />} />
+      <ToastProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <BrowserRouter>
+              <Suspense fallback={<div>Loading...</div>}>
+                <Routes>
+                  <Route path={ROUTE_SEGMENTS.LOGIN} element={<LoginPage />} />
+                  <Route element={<AuthGuard />}>
+                    <Route element={<Layout />}>
+                      <Route index element={<DashboardPage />} />
+                      <Route path={ROUTE_SEGMENTS.ATTENDANCE} element={<AttendancePage />} />
+                      <Route path={ROUTE_SEGMENTS.LEAVE} element={<LeavePage />} />
+                      <Route path={ROUTE_SEGMENTS.REPORTS} element={<ReportsPage />} />
+                      <Route path={ROUTE_SEGMENTS.PAYROLL} element={<PayrollPage />} />
+                      <Route element={<RoleGuard requiredPermission={Permissions.LEAVE_APPROVE} />}>
+                        <Route path={ROUTE_SEGMENTS.TEAM} element={<TeamPage />} />
+                      </Route>
+                      <Route element={<RoleGuard requiredPermission={Permissions.ONBOARD} />}>
+                        <Route path={ROUTE_SEGMENTS.ADMIN} element={<AdminPage />} />
+                      </Route>
+                      <Route path={ROUTE_SEGMENTS.SETTINGS} element={<SettingsPage />} />
                     </Route>
-                    <Route element={<RoleGuard requiredPermission={Permissions.ONBOARD} />}>
-                      <Route path={ROUTE_SEGMENTS.ADMIN} element={<AdminPage />} />
-                    </Route>
-                    <Route path={ROUTE_SEGMENTS.SETTINGS} element={<SettingsPage />} />
                   </Route>
-                </Route>
-              </Routes>
-            </Suspense>
-          </BrowserRouter>
-        </AuthProvider>
-      </QueryClientProvider>
+                </Routes>
+              </Suspense>
+            </BrowserRouter>
+          </AuthProvider>
+        </QueryClientProvider>
+      </ToastProvider>
     </ThemeProvider>
   );
 }

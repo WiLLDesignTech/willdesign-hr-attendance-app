@@ -146,6 +146,48 @@ export interface AttendanceLockQueryParams {
 // ─── Policies ───
 export const API_POLICIES = "/api/policies/:groupName" as const;
 
+// ─── Roles ───
+export const API_ROLES = "/api/roles" as const;
+export const API_ROLE_BY_NAME = "/api/roles/:name" as const;
+
+export interface RoleBody {
+  readonly name: string;
+  readonly description: string;
+  readonly permissions: readonly string[];
+}
+
+// ─── Documents ───
+export const API_DOCUMENTS = "/api/documents" as const;
+export const API_DOCUMENT_BY_ID = "/api/documents/:id" as const;
+export const API_DOCUMENT_UPLOAD_URL = "/api/documents/upload-url" as const;
+
+export interface DocumentsQueryParams {
+  readonly employeeId?: string;
+}
+
+export interface CreateDocumentBody {
+  readonly employeeId: string;
+  readonly fileName: string;
+  readonly fileType: string;
+  readonly documentType: "contract" | "certificate" | "identity" | "agreement" | "other";
+}
+
+export interface DocumentVerifyBody {
+  readonly status: "VERIFIED" | "REJECTED";
+}
+
+// ─── Quotas ───
+export const API_QUOTAS = "/api/quotas/:employeeId" as const;
+
+export interface QuotaRedistributionBody {
+  readonly employeeId: string;
+  readonly redistributions: readonly {
+    readonly yearMonth: string;
+    readonly hours: number;
+  }[];
+  readonly acknowledged: boolean;
+}
+
 // ─── Dev Auth (dev only) ───
 export const API_DEV_AUTH_EMPLOYEES = "/api/dev-auth/employees" as const;
 export const API_DEV_AUTH_LOGIN = "/api/dev-auth/login" as const;

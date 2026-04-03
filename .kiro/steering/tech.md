@@ -110,7 +110,12 @@ Both attendance messages and daily report messages follow this async pattern.
 - Frontend currency: `packages/web/src/utils/currency.ts` (formatAmount)
 
 ## Frontend Coding Rules
-- **styled-components only** — no CSS files. `theme.ts` for tokens, `primitives.ts` for shared components
+- **styled-components only** — no CSS files. `theme.ts` for tokens, `components/ui/` for shared primitives
+- **UI primitives** �� import from `components/ui/` (Modal, DataTable, Tabs, Calendar, FormWizard, Badge, Toast, ProgressBar, EmptyState, Skeleton). `theme/primitives.ts` is deprecated and re-exports from `components/ui/`
+- **Form validation** — use `react-hook-form` + `@hookform/resolvers/zod` for all forms. Define Zod schemas per form/step. Never use manual useState for form validation
+- **Calendar views** — use `react-day-picker` v9 with styled-component wrappers. Never build custom calendar grids
+- **Data tables** — use `@tanstack/react-table` v8 via the `DataTable` primitive for all sortable/filterable lists
+- **Toast notifications** — use `useToast()` hook from `ToastProvider` for mutation success/error feedback. Never use `alert()` or `window.confirm()`
 - **Never display raw ISO strings** — use `utils/date.ts` (formatDate, formatDateTime, formatRelative)
 - **Form inputs**: `localDateToIso()` before API calls, `isoToLocalDate()` for pre-fill from API
 - **All user-facing text via i18n** — `t("section.key")`, never hardcoded strings in JSX
@@ -118,3 +123,12 @@ Both attendance messages and daily report messages follow this async pattern.
 - **No magic strings/numbers** — use constants from `@hr-attendance-app/types`
 - **React Query hooks** — all API calls go through `packages/web/src/hooks/queries/`, using `useApiClient()` + centralized `queryKeys`
 - **DynamoDB keys** — use `KeyPatterns` and `KeyPrefixes` from `@hr-attendance-app/types`, never inline template literals
+
+## App.tsx Provider Hierarchy
+Providers must be nested in this exact order (outermost → innermost):
+1. `ThemeProvider` (styled-components with theme object)
+2. `GlobalStyle` (CSS reset + CSS custom properties)
+3. `ToastProvider` (toast state context + toast container portal)
+4. `QueryClientProvider` (React Query, staleTime 30s, retry 1)
+5. `AuthProvider` (JWT in memory, login/logout, permission lookup)
+6. `BrowserRouter` (React Router v7)
