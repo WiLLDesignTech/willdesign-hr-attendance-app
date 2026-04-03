@@ -14,16 +14,17 @@ const BALANCE_REQUIRED_TYPES: ReadonlySet<string> = new Set([
   LeaveTypes.PAID,
 ]);
 
+const MS_PER_DAY = 86_400_000;
+
 export class LeaveService {
   constructor(
     private readonly leaveRepo: LeaveRepository,
     private readonly auditRepo: AuditRepository,
-    private readonly getBalance: (employeeId: string) => Promise<LeaveBalance>,
   ) {}
 
   async createRequest(input: CreateLeaveRequestInput): Promise<Result<LeaveRequest, string>> {
     if (BALANCE_REQUIRED_TYPES.has(input.leaveType)) {
-      const balance = await this.getBalance(input.employeeId);
+      const balance = await this.getLeaveBalance(input.employeeId);
       const days = countDays(input.startDate, input.endDate);
 
       if (balance.paidLeaveRemaining < days) {
@@ -101,7 +102,23 @@ export class LeaveService {
   }
 
   async getLeaveBalance(employeeId: string): Promise<LeaveBalance> {
-    return this.getBalance(employeeId);
+    const requests = await this.leaveRepo.findByEmployee(employeeId, { status: LeaveRequestStatuses.APPROVED });
+    const used = requests.reduce((sum, r) => {
+      if (r.leaveType === LeaveTypes.PAID) {
+        return sum + countDays(r.startDate, r.endDate);
+      }
+      return sum;
+    }, 0);
+
+    return {
+      employeeId,
+      paidLeaveTotal: 10,
+      paidLeaveUsed: used,
+      paidLeaveRemaining: Math.max(0, 10 - used),
+      carryOver: 0,
+      carryOverExpiry: null,
+      lastAccrualDate: null,
+    };
   }
 
   async rejectRequest(requestId: string, managerId: string, reason: string): Promise<Result<LeaveRequest, string>> {
@@ -136,5 +153,5 @@ export class LeaveService {
 function countDays(startDate: string, endDate: string): number {
   const start = new Date(startDate).getTime();
   const end = new Date(endDate).getTime();
-  return Math.max(1, Math.round((end - start) / 86_400_000) + 1);
+  return Math.max(1, Math.round((end - start) / MS_PER_DAY) + 1);
 }

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { renderSalaryStatementHtml } from "../src/ses/salary-template.js";
-import { AppBranding, Currencies, AllowanceTypes } from "@hr-attendance-app/types";
+import { Currencies, AllowanceTypes } from "@hr-attendance-app/types";
 import type { PayrollBreakdown } from "@hr-attendance-app/types";
 
 describe("Salary Statement Template", () => {
@@ -20,7 +20,7 @@ describe("Salary Statement Template", () => {
     transferFees: 0,
     netAmount: 338438,
     currency: Currencies.JPY,
-    jpyEquivalent: null,
+    homeCurrencyEquivalent: null,
     exchangeRate: null,
     exchangeRateDate: null,
   };
@@ -33,7 +33,7 @@ describe("Salary Statement Template", () => {
     expect(html).toContain("Overtime Pay");
     expect(html).toContain("Transportation");
     expect(html).toContain("Net Amount");
-    expect(html).toContain(AppBranding.salaryStatementTitle);
+    expect(html).toContain("Salary Statement");
   });
 
   it("renders NP salary with exchange rate and deficit", () => {
@@ -51,7 +51,7 @@ describe("Salary Statement Template", () => {
       transferFees: 500,
       netAmount: 47937,
       currency: Currencies.NPR,
-      jpyEquivalent: 37337,
+      homeCurrencyEquivalent: 37337,
       exchangeRate: 0.77,
       exchangeRateDate: "2024-01-25",
     };
@@ -61,7 +61,7 @@ describe("Salary Statement Template", () => {
     expect(html).toContain("Transfer Fees");
     expect(html).toContain("Exchange rate");
     expect(html).toContain("0.77");
-    expect(html).toContain("Rs.");
+    expect(html).toContain("NPR");
   });
 
   it("omits zero components", () => {
@@ -79,7 +79,7 @@ describe("Salary Statement Template", () => {
       transferFees: 0,
       netAmount: 300000,
       currency: Currencies.JPY,
-      jpyEquivalent: null,
+      homeCurrencyEquivalent: null,
       exchangeRate: null,
       exchangeRateDate: null,
     };
@@ -87,5 +87,34 @@ describe("Salary Statement Template", () => {
     expect(html).not.toContain("Overtime Pay");
     expect(html).not.toContain("Deficit Deduction");
     expect(html).not.toContain("Exchange rate");
+  });
+
+  it("uses custom statement config from policy", () => {
+    const html = renderSalaryStatementHtml(jpBreakdown, "Taro Yamada", {
+      title: "Acme Corp Payslip",
+      footer: "Questions? Contact payroll@acme.com",
+      greeting: "Hi",
+      headerBgColor: "#2563EB",
+      showCommission: false,
+    });
+    expect(html).toContain("Acme Corp Payslip");
+    expect(html).toContain("Questions? Contact payroll@acme.com");
+    expect(html).toContain("Hi <strong>Taro Yamada</strong>");
+    expect(html).toContain("#2563EB");
+  });
+
+  it("hides components when disabled in config", () => {
+    const breakdown: PayrollBreakdown = {
+      ...jpBreakdown,
+      overtimePay: 10000,
+      bonus: 50000,
+    };
+    const html = renderSalaryStatementHtml(breakdown, "Test", {
+      showOvertimePay: false,
+      showBonus: false,
+    });
+    expect(html).not.toContain("Overtime Pay");
+    expect(html).not.toContain("Bonus");
+    expect(html).toContain("Base Salary");
   });
 });

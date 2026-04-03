@@ -158,7 +158,7 @@ describe("Payroll types", () => {
       transferFees: 0,
       netAmount: 300000,
       currency: Currencies.JPY,
-      jpyEquivalent: null,
+      homeCurrencyEquivalent: null,
       exchangeRate: null,
       exchangeRateDate: null,
     };

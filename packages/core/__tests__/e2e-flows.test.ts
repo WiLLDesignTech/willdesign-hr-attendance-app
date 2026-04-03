@@ -8,7 +8,7 @@ import {
   AttendanceStates, AttendanceActions, Roles, FlagLevels, FlagResolutions,
   EmployeeStatuses, EmploymentTypes, LeaveTypes, LeaveRequestStatuses, HOURS, Currencies,
 } from "@hr-attendance-app/types";
-import type { LeaveBalance } from "@hr-attendance-app/types";
+// LeaveBalance is now computed internally by LeaveService
 
 describe("E2E Flow: Slack Attendance → Hours → Flag", () => {
   let attendanceService: AttendanceService;
@@ -75,12 +75,7 @@ describe("E2E Flow: Leave Request → Approval", () => {
       update: vi.fn().mockImplementation((_id, updates) => Promise.resolve({ id: "LEAVE#001", ...updates })),
     };
     const auditRepo = { append: vi.fn(), findByTarget: vi.fn().mockResolvedValue([]), findByActor: vi.fn().mockResolvedValue([]) };
-    const getBalance = vi.fn().mockResolvedValue({
-      employeeId: "EMP#001", paidLeaveTotal: 10, paidLeaveUsed: 0,
-      paidLeaveRemaining: 10, carryOver: 0, carryOverExpiry: null, lastAccrualDate: null,
-    } satisfies LeaveBalance);
-
-    const leaveService = new LeaveService(leaveRepo as never, auditRepo as never, getBalance);
+    const leaveService = new LeaveService(leaveRepo as never, auditRepo as never);
 
     const createResult = await leaveService.createRequest({
       employeeId: "EMP#001", leaveType: LeaveTypes.PAID,

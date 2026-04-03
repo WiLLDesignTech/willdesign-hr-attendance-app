@@ -124,6 +124,8 @@ export interface PayrollInput {
   readonly exchangeRate: number | null;
   readonly exchangeRateDate: string | null;
   readonly transferFees: number;
+  /** Home/reporting currency for equivalent calculation. Defaults to JPY for backward compat. */
+  readonly homeCurrency?: string;
 }
 
 /**
@@ -148,9 +150,10 @@ export function calculatePayrollBreakdown(input: PayrollInput): PayrollBreakdown
   const gross = effectiveBase + overtimePay + allowanceTotal + input.bonus + input.commission;
   const netAmount = gross - deficitDeduction - input.transferFees;
 
-  let jpyEquivalent: number | null = null;
-  if (input.currency !== Currencies.JPY && input.exchangeRate) {
-    jpyEquivalent = Math.round((gross - deficitDeduction) * input.exchangeRate);
+  const homeCurrency = input.homeCurrency ?? Currencies.JPY;
+  let homeCurrencyEquivalent: number | null = null;
+  if (input.currency !== homeCurrency && input.exchangeRate) {
+    homeCurrencyEquivalent = Math.round((gross - deficitDeduction) * input.exchangeRate);
   }
 
   return {
@@ -167,7 +170,7 @@ export function calculatePayrollBreakdown(input: PayrollInput): PayrollBreakdown
     transferFees: input.transferFees,
     netAmount,
     currency: input.currency,
-    jpyEquivalent,
+    homeCurrencyEquivalent,
     exchangeRate: input.exchangeRate,
     exchangeRateDate: input.exchangeRateDate,
   };

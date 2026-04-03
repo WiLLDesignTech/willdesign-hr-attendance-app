@@ -180,7 +180,7 @@ describe("calculatePayrollBreakdown", () => {
 
     expect(result.deficitDeduction).toBe(1563); // ceil(312.5 * 5)
     expect(result.netAmount).toBe(50000 - 1563 - 500);
-    expect(result.jpyEquivalent).toBeCloseTo((50000 - 1563) * 0.77, 0);
+    expect(result.homeCurrencyEquivalent).toBeCloseTo((50000 - 1563) * 0.77, 0);
     expect(result.exchangeRate).toBe(0.77);
     expect(result.transferFees).toBe(500);
   });
