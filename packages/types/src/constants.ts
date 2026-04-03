@@ -116,6 +116,11 @@ export const FlagLevels = {
   MONTHLY: "MONTHLY",
 } as const;
 
+export const FlagStatuses = {
+  PENDING: "PENDING",
+  RESOLVED: "RESOLVED",
+} as const;
+
 export const FlagResolutions = {
   NO_PENALTY: "NO_PENALTY",
   DEDUCT_FULL: "DEDUCT_FULL",
@@ -227,4 +232,12 @@ export const PAYMENT = {
   NP_DEADLINE_DAY: 15,
   ALERT_DAYS_BEFORE: 5,
   SETTLEMENT_DEADLINE_DAY: 15,
+} as const;
+
+// ─── Cron ───
+export const CRON = {
+  MIN_SESSION_MINUTES: 5,
+  LEAVE_REMINDER_THRESHOLD_HOURS: 24,
+  SURPLUS_EXPIRY_WARNING_DAYS: 30,
+  PROBATION_ALERT_DAYS: 14,
 } as const;

@@ -478,8 +478,8 @@
   - Mobile: real-time team attendance status view, push notifications for new leave requests and pending flags
   - _Requirements: 3.3, 11.2, 12.1, 12.5, 14.1, 2.5, 22.9_
 
-- [ ] 17. Cron jobs and scheduled tasks
-- [ ] 17.1 Implement the daily cron job for end-of-day attendance checks and flag generation
+- [x] 17. Cron jobs and scheduled tasks
+- [x] 17.1 Implement the daily cron job for end-of-day attendance checks and flag generation
   - Run at 23:55 JST daily
   - Check for unclosed sessions across both teams and flag them for admin review (do NOT auto-close)
   - Check for open breaks and flag them for admin review
@@ -487,12 +487,12 @@
   - Generate daily shortfall flags for employees who worked but fell below daily minimum (respecting pre-approvals)
   - _Requirements: 20.1, 7.7, 7.8_
 
-- [ ] 17.2 (P) Implement the weekly and monthly cron jobs
+- [x] 17.2 (P) Implement the weekly and monthly cron jobs
   - Weekly (Monday 00:15 JST): generate weekly shortfall summary flags for both teams
   - Monthly (1st 00:30 JST): generate monthly summary and payroll calculations; process surplus expiry (forfeit entries older than 12 months); run leave accrual (add days per policy); generate monthly shortfall flags
   - _Requirements: 20.2, 20.3_
 
-- [ ] 17.3 (P) Implement reminder and alert cron jobs
+- [x] 17.3 (P) Implement reminder and alert cron jobs
   - Every 4 hours: check for pending leave requests older than 24h, send reminder to approving manager via Slack DM
   - Daily report reminders: send reminder at configurable time per team/group if no report submitted
   - Payment deadline alert: send reminder to admin at configurable days before each team's payment deadline (follows cascading policy for deadline dates)
@@ -500,14 +500,14 @@
   - Probation expiry alert: 14 days before an employee's probation end date, send alert to their manager prompting the mandatory performance review (per contract Article 3.7)
   - _Requirements: 20.4, 20.5, 20.6, 2.5, 10.15, 17.3_
 
-- [ ] 17.4 (P) Implement scheduled salary statement email sending
+- [x] 17.4 (P) Implement scheduled salary statement email sending
   - Auto-send salary statement emails to employees based on configured schedule per cascading policy (company → group → employee)
   - Default: Nepal team on 16th of following month, Japan team at end of following month (configurable)
   - Use the email adapter to render and send the salary breakdown HTML template
   - Log email sends in audit trail
   - _Requirements: 20.7, 10.13_
 
-- [ ] 17.5 Implement the CDK scheduler stack with EventBridge rules
+- [x] 17.5 Implement the CDK scheduler stack with EventBridge rules
   - Create EventBridge rules for each cron schedule: daily (23:55 JST), weekly (Monday 00:15 JST), monthly (1st 00:30 JST), every 4 hours, configurable daily report reminders
   - Create Lambda functions for each cron job type with appropriate IAM roles and timeout configuration
   - Configure environment-specific schedules (dev may run less frequently)

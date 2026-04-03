@@ -81,3 +81,8 @@ export {
   checkDeemedOvertimeThreshold,
   check36AgreementLimits,
 } from "./overtime/calculator.js";
+
+export { CronService } from "./cron/service.js";
+export type { CronDeps, DailyCheckResult, WeeklyCheckResult, MonthlyCheckResult } from "./cron/service.js";
+export { ReminderService } from "./cron/reminders.js";
+export type { ReminderDeps, LeaveReminder, SurplusExpiryWarning, ProbationAlert } from "./cron/reminders.js";
