@@ -3,8 +3,8 @@ import { useApiClient } from "../useApiClient";
 import { queryKeys } from "./keys";
 import {
   API_ATTENDANCE_STATE, API_ATTENDANCE_EVENTS, withQuery,
-} from "@willdesign-hr/types";
-import type { AttendanceStateRecord, AttendanceEvent, AttendanceAction } from "@willdesign-hr/types";
+} from "@hr-attendance-app/types";
+import type { AttendanceStateRecord, AttendanceEvent, AttendanceAction } from "@hr-attendance-app/types";
 
 export function useAttendanceState() {
   const api = useApiClient();

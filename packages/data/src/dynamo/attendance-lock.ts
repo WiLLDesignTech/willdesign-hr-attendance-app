@@ -1,8 +1,8 @@
 import { PutCommand, QueryCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb";
 import type { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import type { AttendanceLock, AttendanceLockScope } from "@willdesign-hr/types";
-import { AttendanceLockScopes } from "@willdesign-hr/types";
-import type { AttendanceLockRepository } from "@willdesign-hr/core";
+import type { AttendanceLock, AttendanceLockScope } from "@hr-attendance-app/types";
+import { AttendanceLockScopes } from "@hr-attendance-app/types";
+import type { AttendanceLockRepository } from "@hr-attendance-app/core";
 import { KEYS } from "./keys.js";
 
 export class DynamoAttendanceLockRepository implements AttendanceLockRepository {

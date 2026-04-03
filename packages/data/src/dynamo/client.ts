@@ -9,7 +9,7 @@ let cachedClient: DynamoDBDocumentClient | null = null;
  * Supports local DynamoDB via DYNAMODB_ENDPOINT env var.
  */
 export function getDocClient(tableName?: string): { client: DynamoDBDocumentClient; tableName: string } {
-  const table = tableName ?? process.env["DYNAMODB_TABLE_NAME"] ?? "willdesign-hr-table";
+  const table = tableName ?? process.env["DYNAMODB_TABLE_NAME"] ?? "hr-attendance-app-table";
 
   if (!cachedClient) {
     const endpoint = process.env["DYNAMODB_ENDPOINT"];

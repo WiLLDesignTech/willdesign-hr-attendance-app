@@ -1,7 +1,7 @@
 import { useState, useCallback, createContext, useContext } from "react";
 import type { ReactNode } from "react";
 import React from "react";
-import { ROLE_PERMISSIONS } from "@willdesign-hr/types";
+import { ROLE_PERMISSIONS } from "@hr-attendance-app/types";
 
 interface AuthState {
   readonly token: string | null;

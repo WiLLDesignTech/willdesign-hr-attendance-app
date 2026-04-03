@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { generateJpHolidays } from "../src/holidays/jp-generator";
-import { Regions } from "@willdesign-hr/types";
+import { Regions } from "@hr-attendance-app/types";
 
 describe("generateJpHolidays", () => {
   it("generates holidays for 2026", () => {

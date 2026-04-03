@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { CronService } from "../src/cron/service";
-import { FlagLevels, AttendanceStates, CRON } from "@willdesign-hr/types";
-import type { AttendanceStateRecord, Employee, Flag, BankEntry } from "@willdesign-hr/types";
+import { FlagLevels, AttendanceStates, CRON } from "@hr-attendance-app/types";
+import type { AttendanceStateRecord, Employee, Flag, BankEntry } from "@hr-attendance-app/types";
 
 function mockEmployee(overrides: Partial<Employee> = {}): Employee {
   return {

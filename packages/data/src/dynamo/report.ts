@@ -1,7 +1,7 @@
 import { PutCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import type { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import type { DailyReport } from "@willdesign-hr/types";
-import type { ReportRepository } from "@willdesign-hr/core";
+import type { DailyReport } from "@hr-attendance-app/types";
+import type { ReportRepository } from "@hr-attendance-app/core";
 import { KEYS } from "./keys.js";
 
 export class DynamoReportRepository implements ReportRepository {

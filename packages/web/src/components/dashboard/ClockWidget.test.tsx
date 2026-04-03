@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { ThemeProvider } from "styled-components";
 import { theme } from "../../theme/theme";
-import { AttendanceActions } from "@willdesign-hr/types";
+import { AttendanceActions } from "@hr-attendance-app/types";
 import "../../i18n/index";
 import { ClockWidget } from "./ClockWidget";
 import type { ReactElement } from "react";

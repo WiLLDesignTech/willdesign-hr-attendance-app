@@ -1,6 +1,6 @@
 import { buildResponse, handleError } from "../middleware/index.js";
 import type { ApiResponse } from "../middleware/index.js";
-import { ErrorCodes } from "@willdesign-hr/types";
+import { ErrorCodes } from "@hr-attendance-app/types";
 
 export type RouteHandler = (params: {
   claims: Record<string, unknown>;

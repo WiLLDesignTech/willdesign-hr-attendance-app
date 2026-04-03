@@ -1,4 +1,4 @@
-import type { SalaryRecord } from "@willdesign-hr/types";
+import type { SalaryRecord } from "@hr-attendance-app/types";
 
 export interface SalaryRepository {
   getHistory(employeeId: string): Promise<readonly SalaryRecord[]>;

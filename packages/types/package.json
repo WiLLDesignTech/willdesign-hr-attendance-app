@@ -1,5 +1,5 @@
 {
-  "name": "@willdesign-hr/types",
+  "name": "@hr-attendance-app/types",
   "version": "0.1.0",
   "private": true,
   "main": "./dist/index.js",

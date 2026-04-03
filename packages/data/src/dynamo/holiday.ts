@@ -1,7 +1,7 @@
 import { PutCommand, QueryCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb";
 import type { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import type { Holiday, Region } from "@willdesign-hr/types";
-import type { HolidayRepository } from "@willdesign-hr/core";
+import type { Holiday, Region } from "@hr-attendance-app/types";
+import type { HolidayRepository } from "@hr-attendance-app/core";
 import { KEYS } from "./keys.js";
 
 export class DynamoHolidayRepository implements HolidayRepository {

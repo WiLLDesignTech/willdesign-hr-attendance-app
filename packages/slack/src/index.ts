@@ -1,4 +1,4 @@
-// @willdesign-hr/slack — Slack integration (Ack Lambda + SQS Processor)
+// @hr-attendance-app/slack — Slack integration (Ack Lambda + SQS Processor)
 
 export {
   classifyChannel,

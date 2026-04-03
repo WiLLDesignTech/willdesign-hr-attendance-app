@@ -5,8 +5,8 @@ import {
   AttendanceActions, ErrorCodes,
   API_ATTENDANCE_STATE, API_ATTENDANCE_EVENTS,
   todayDate, nowMs,
-} from "@willdesign-hr/types";
-import type { ClockActionBody, AttendanceEventsQueryParams } from "@willdesign-hr/types";
+} from "@hr-attendance-app/types";
+import type { ClockActionBody, AttendanceEventsQueryParams } from "@hr-attendance-app/types";
 
 export function attendanceRoutes(deps: AppDeps): RouteDefinition[] {
   return [

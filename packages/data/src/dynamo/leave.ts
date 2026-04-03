@@ -1,7 +1,7 @@
 import { PutCommand, QueryCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import type { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import type { LeaveRequest } from "@willdesign-hr/types";
-import type { LeaveRepository, LeaveQueryOptions } from "@willdesign-hr/core";
+import type { LeaveRequest } from "@hr-attendance-app/types";
+import type { LeaveRepository, LeaveQueryOptions } from "@hr-attendance-app/core";
 import { KEYS } from "./keys.js";
 
 export class DynamoLeaveRepository implements LeaveRepository {

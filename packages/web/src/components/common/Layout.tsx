@@ -2,8 +2,8 @@ import { useState, useMemo } from "react";
 import { Outlet, NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styled, { css } from "styled-components";
-import { Permissions, ROUTES } from "@willdesign-hr/types";
-import type { Permission } from "@willdesign-hr/types";
+import { Permissions, ROUTES } from "@hr-attendance-app/types";
+import type { Permission } from "@hr-attendance-app/types";
 import { useAuth } from "../../hooks/useAuth";
 
 interface NavItemConfig {
@@ -208,7 +208,7 @@ export function Layout() {
       <Sidebar $open={sidebarOpen}>
         <SidebarHeader>
           <LogoLink to={ROUTES.DASHBOARD}>
-            <LogoText>WiLL Design HR</LogoText>
+            <LogoText>{t("app.title")}</LogoText>
           </LogoLink>
         </SidebarHeader>
         <SidebarNav>

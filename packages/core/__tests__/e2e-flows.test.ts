@@ -7,8 +7,8 @@ import { calculatePayrollBreakdown } from "../src/payroll/calculator";
 import {
   AttendanceStates, AttendanceActions, Roles, FlagLevels, FlagResolutions,
   EmployeeStatuses, EmploymentTypes, LeaveTypes, LeaveRequestStatuses, HOURS, Currencies,
-} from "@willdesign-hr/types";
-import type { LeaveBalance } from "@willdesign-hr/types";
+} from "@hr-attendance-app/types";
+import type { LeaveBalance } from "@hr-attendance-app/types";
 
 describe("E2E Flow: Slack Attendance → Hours → Flag", () => {
   let attendanceService: AttendanceService;
@@ -121,7 +121,7 @@ describe("E2E Flow: Onboarding → First Clock-In", () => {
       employeeRepo: employeeRepo as never, salaryRepo: salaryRepo as never,
       authProvider: authProvider as never, auditRepo: auditRepo as never,
     }).onboard({
-      name: "New Hire", email: "new@willdesign.com", slackId: "U_NEW",
+      name: "New Hire", email: "new@example.com", slackId: "U_NEW",
       employmentType: EmploymentTypes.JP_FULL_TIME, region: "JP", timezone: "Asia/Tokyo",
       languagePreference: "ja", managerId: "EMP#MGR", joinDate: "2026-04-01",
       probationEndDate: "2026-07-01", monthlySalary: 300000, currency: Currencies.JPY, role: Roles.EMPLOYEE,

@@ -1,4 +1,4 @@
-import type { Holiday, Region } from "@willdesign-hr/types";
+import type { Holiday, Region } from "@hr-attendance-app/types";
 
 export interface HolidayRepository {
   findByRegionAndYear(region: Region, year: number): Promise<readonly Holiday[]>;

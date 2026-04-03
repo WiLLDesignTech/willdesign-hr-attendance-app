@@ -1,4 +1,4 @@
-import { CRON } from "@willdesign-hr/types";
+import { CRON } from "@hr-attendance-app/types";
 import type { EmployeeRepository } from "../repositories/employee.js";
 import type { LeaveRepository } from "../repositories/leave.js";
 import type { BankRepository } from "../repositories/bank.js";

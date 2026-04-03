@@ -1,8 +1,8 @@
 import { PutCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import type { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import type { BankEntry } from "@willdesign-hr/types";
-import { todayDate } from "@willdesign-hr/types";
-import type { BankRepository, BankQueryOptions } from "@willdesign-hr/core";
+import type { BankEntry } from "@hr-attendance-app/types";
+import { todayDate } from "@hr-attendance-app/types";
+import type { BankRepository, BankQueryOptions } from "@hr-attendance-app/core";
 import { KEYS } from "./keys.js";
 
 export class DynamoBankRepository implements BankRepository {

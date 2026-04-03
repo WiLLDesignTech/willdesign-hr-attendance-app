@@ -1,5 +1,5 @@
-import type { FlagLevel, FlagResolution } from "@willdesign-hr/types";
-import { FlagLevels, FlagResolutions, BANKING, FORCE_MAJEURE } from "@willdesign-hr/types";
+import type { FlagLevel, FlagResolution } from "@hr-attendance-app/types";
+import { FlagLevels, FlagResolutions, BANKING, FORCE_MAJEURE } from "@hr-attendance-app/types";
 
 // ─── Flag Generation (9.1) ───
 

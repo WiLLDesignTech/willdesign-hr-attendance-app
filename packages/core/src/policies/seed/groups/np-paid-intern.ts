@@ -1,4 +1,4 @@
-import type { RawPolicy } from "@willdesign-hr/types";
+import type { RawPolicy } from "@hr-attendance-app/types";
 import { deepMergePolicy } from "../../resolver.js";
 import { npBasePolicy } from "./np-base.js";
 

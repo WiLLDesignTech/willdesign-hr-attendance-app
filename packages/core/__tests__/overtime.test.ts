@@ -5,7 +5,7 @@ import {
   checkDeemedOvertimeThreshold,
   check36AgreementLimits,
 } from "../src/overtime/calculator.js";
-import { JP_LABOR } from "@willdesign-hr/types";
+import { JP_LABOR } from "@hr-attendance-app/types";
 
 describe("Overtime Hours Calculation", () => {
   it("calculates overtime as hours exceeding threshold", () => {

@@ -1,4 +1,4 @@
-import type { LeavePolicy } from "@willdesign-hr/types";
+import type { LeavePolicy } from "@hr-attendance-app/types";
 
 export interface AccrualInput {
   readonly policy: LeavePolicy;

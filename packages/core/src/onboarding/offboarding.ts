@@ -1,9 +1,9 @@
-import type { TerminationType, LegalObligation } from "@willdesign-hr/types";
+import type { TerminationType, LegalObligation } from "@hr-attendance-app/types";
 import {
   EmployeeStatuses, TerminationTypes, AuditActions, AuditTargetTypes, AuditSources, AuditActorIds,
   LegalObligationTypes, PAYMENT, LEGAL_OBLIGATIONS, KeyPatterns,
   nowIso, timestampId, dateToDateStr, dateToIso, isoToYearMonth, formatYearMonth, daysInMonth, addDays, addMonths, addYears,
-} from "@willdesign-hr/types";
+} from "@hr-attendance-app/types";
 import type { EmployeeRepository } from "../repositories/employee.js";
 import type { SalaryRepository } from "../repositories/salary.js";
 import type { AuthProviderAdapter } from "../repositories/auth-provider-adapter.js";

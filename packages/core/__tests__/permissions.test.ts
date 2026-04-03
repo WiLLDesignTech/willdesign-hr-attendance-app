@@ -6,8 +6,8 @@ import {
   hasPermission,
   authorize,
 } from "../src/permissions/engine.js";
-import type { AuthContext, ResourceContext } from "@willdesign-hr/types";
-import { Roles, SensitivityLevels, Permissions, ROLE_PERMISSIONS } from "@willdesign-hr/types";
+import type { AuthContext, ResourceContext } from "@hr-attendance-app/types";
+import { Roles, SensitivityLevels, Permissions, ROLE_PERMISSIONS } from "@hr-attendance-app/types";
 
 describe("RBAC — Role hierarchy", () => {
   it("defines 5 default roles in order", () => {

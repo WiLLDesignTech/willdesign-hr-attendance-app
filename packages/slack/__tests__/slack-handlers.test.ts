@@ -6,7 +6,7 @@ import {
   buildGuidebookMessage,
   CHANNEL_PURPOSES,
 } from "../src/events/handlers.js";
-import { AttendanceActions, AttendanceStates } from "@willdesign-hr/types";
+import { AttendanceActions, AttendanceStates } from "@hr-attendance-app/types";
 
 describe("Channel Classification (14.1)", () => {
   it("classifies attendance channel", () => {

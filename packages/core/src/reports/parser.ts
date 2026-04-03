@@ -1,5 +1,5 @@
-import type { ReportReference, DailyReport } from "@willdesign-hr/types";
-import { ReferenceTypes, nowIso } from "@willdesign-hr/types";
+import type { ReportReference, DailyReport } from "@hr-attendance-app/types";
+import { ReferenceTypes, nowIso } from "@hr-attendance-app/types";
 
 const JIRA_PATTERN = /\b([A-Z][A-Z0-9]{1,9}-\d+)\b/g;
 const GITHUB_PATTERN = /\b([\w.-]+(?:\/[\w.-]+)?#\d+)\b/g;

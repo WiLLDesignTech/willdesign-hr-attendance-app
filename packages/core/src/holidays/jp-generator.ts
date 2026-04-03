@@ -1,5 +1,5 @@
-import type { Holiday } from "@willdesign-hr/types";
-import { Regions, KeyPatterns } from "@willdesign-hr/types";
+import type { Holiday } from "@hr-attendance-app/types";
+import { Regions, KeyPatterns } from "@hr-attendance-app/types";
 
 const SUNDAY = 0;
 

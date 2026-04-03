@@ -1,4 +1,4 @@
-import type { Flag, FlagLevel, FlagStatus } from "@willdesign-hr/types";
+import type { Flag, FlagLevel, FlagStatus } from "@hr-attendance-app/types";
 
 export interface FlagQueryOptions {
   readonly level?: FlagLevel;

@@ -1,4 +1,4 @@
-import type { AuditEntry } from "@willdesign-hr/types";
+import type { AuditEntry } from "@hr-attendance-app/types";
 import type { AuditRepository } from "../repositories/audit.js";
 
 export interface AuditServiceDeps {

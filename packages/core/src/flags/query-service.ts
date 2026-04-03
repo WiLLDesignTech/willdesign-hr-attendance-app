@@ -1,4 +1,4 @@
-import type { Flag, FlagStatus } from "@willdesign-hr/types";
+import type { Flag, FlagStatus } from "@hr-attendance-app/types";
 import type { FlagRepository } from "../repositories/flag.js";
 
 export interface FlagQueryServiceDeps {

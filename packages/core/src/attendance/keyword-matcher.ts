@@ -1,5 +1,5 @@
-import type { AttendanceAction } from "@willdesign-hr/types";
-import { AttendanceActions } from "@willdesign-hr/types";
+import type { AttendanceAction } from "@hr-attendance-app/types";
+import { AttendanceActions } from "@hr-attendance-app/types";
 
 export interface KeywordConfig {
   readonly language: "en" | "ja";

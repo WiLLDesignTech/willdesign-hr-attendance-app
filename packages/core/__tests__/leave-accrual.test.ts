@@ -5,8 +5,8 @@ import {
   getNpAccrualDays,
   getMandatoryLeaveStatus,
 } from "../src/leave/accrual.js";
-import { TerminationHandlings, JP_LABOR } from "@willdesign-hr/types";
-import type { LeavePolicy } from "@willdesign-hr/types";
+import { TerminationHandlings, JP_LABOR } from "@hr-attendance-app/types";
+import type { LeavePolicy } from "@hr-attendance-app/types";
 
 const jpLeavePolicy: LeavePolicy = {
   accrualSchedule: [

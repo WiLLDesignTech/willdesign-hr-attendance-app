@@ -1,4 +1,4 @@
-import type { RoleDefinition } from "@willdesign-hr/types";
+import type { RoleDefinition } from "@hr-attendance-app/types";
 
 export interface RoleRepository {
   findByName(name: string): Promise<RoleDefinition | null>;

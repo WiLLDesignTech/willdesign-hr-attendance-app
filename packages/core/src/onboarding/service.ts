@@ -1,5 +1,5 @@
-import type { Role, Currency, LanguagePreference, Region, SalaryRecord } from "@willdesign-hr/types";
-import { SalaryChangeTypes, SalaryTypes, AuditActions, AuditTargetTypes, AuditSources, AuditActorIds, EmployeeStatuses, KeyPatterns, nowIso, nowMs, timestampId } from "@willdesign-hr/types";
+import type { Role, Currency, LanguagePreference, Region, SalaryRecord } from "@hr-attendance-app/types";
+import { SalaryChangeTypes, SalaryTypes, AuditActions, AuditTargetTypes, AuditSources, AuditActorIds, EmployeeStatuses, KeyPatterns, nowIso, nowMs, timestampId } from "@hr-attendance-app/types";
 import type { EmployeeRepository, CreateEmployeeInput } from "../repositories/employee.js";
 import type { SalaryRepository } from "../repositories/salary.js";
 import type { AuthProviderAdapter } from "../repositories/auth-provider-adapter.js";

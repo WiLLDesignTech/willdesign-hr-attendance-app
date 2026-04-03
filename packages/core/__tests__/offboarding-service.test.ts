@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { OffboardingService } from "../src/onboarding/offboarding";
-import { TerminationTypes, EmployeeStatuses, LegalObligationTypes, PAYMENT } from "@willdesign-hr/types";
-import type { Employee } from "@willdesign-hr/types";
+import { TerminationTypes, EmployeeStatuses, LegalObligationTypes, PAYMENT } from "@hr-attendance-app/types";
+import type { Employee } from "@hr-attendance-app/types";
 
 function mockEmployee(overrides: Partial<Employee> = {}): Employee {
   return {

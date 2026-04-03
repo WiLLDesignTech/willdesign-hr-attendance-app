@@ -1,7 +1,7 @@
 import { PutCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import type { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import type { AuditEntry } from "@willdesign-hr/types";
-import type { AuditRepository, AuditQueryOptions } from "@willdesign-hr/core";
+import type { AuditEntry } from "@hr-attendance-app/types";
+import type { AuditRepository, AuditQueryOptions } from "@hr-attendance-app/core";
 import { KEYS } from "./keys.js";
 
 export class DynamoAuditRepository implements AuditRepository {

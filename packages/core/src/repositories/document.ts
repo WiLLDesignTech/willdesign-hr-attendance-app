@@ -1,4 +1,4 @@
-import type { Document } from "@willdesign-hr/types";
+import type { Document } from "@hr-attendance-app/types";
 
 export interface DocumentRepository {
   save(metadata: Document): Promise<Document>;

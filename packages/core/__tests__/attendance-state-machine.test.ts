@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { validateTransition } from "../src/attendance/state-machine.js";
-import { AttendanceActions, AttendanceStates } from "@willdesign-hr/types";
+import { AttendanceActions, AttendanceStates } from "@hr-attendance-app/types";
 
 describe("Attendance State Machine", () => {
   const ts = "2024-01-15T09:00:00Z";

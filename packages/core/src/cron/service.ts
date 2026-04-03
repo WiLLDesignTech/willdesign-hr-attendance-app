@@ -1,5 +1,5 @@
-import type { Flag, AttendanceEvent } from "@willdesign-hr/types";
-import { FlagLevels, FlagStatuses, AttendanceStates, AttendanceActions, CRON, KeyPatterns, nowIso, nowMs, todayDate } from "@willdesign-hr/types";
+import type { Flag, AttendanceEvent } from "@hr-attendance-app/types";
+import { FlagLevels, FlagStatuses, AttendanceStates, AttendanceActions, CRON, KeyPatterns, nowIso, nowMs, todayDate } from "@hr-attendance-app/types";
 import type { EmployeeRepository } from "../repositories/employee.js";
 import type { AttendanceRepository } from "../repositories/attendance.js";
 import type { FlagRepository } from "../repositories/flag.js";

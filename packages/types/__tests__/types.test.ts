@@ -7,14 +7,14 @@ import type {
   AuditEntry, Role, AuthContext, ResourceContext, SensitivityLevel,
   EffectivePolicy, Override, OverridePeriod, Document, DocumentVerificationStatus,
   TerminationType, OffboardingRecord, Result,
-} from "@willdesign-hr/types";
+} from "@hr-attendance-app/types";
 import {
   Roles, SensitivityLevels, EmploymentTypes, EmployeeStatuses, Regions,
   AttendanceActions, AttendanceStates, LeaveTypes, LeaveRequestStatuses,
   SalaryTypes, SalaryChangeTypes, Currencies, FlagLevels, FlagResolutions,
   TerminationTypes, DocumentVerificationStatuses, AuditActions, ReferenceTypes,
   WorkArrangements, TimeTypes, TerminationHandlings, JP_LABOR, HOURS, PROBATION, PAYMENT,
-} from "@willdesign-hr/types";
+} from "@hr-attendance-app/types";
 
 describe("Employee types", () => {
   it("should define all employment types for JP and NP", () => {
@@ -44,7 +44,7 @@ describe("Employee types", () => {
     const emp: Employee = {
       id: "EMP#001",
       name: "Taro Yamada",
-      email: "taro@willdesign.com",
+      email: "taro@example.com",
       slackId: "U12345",
       employmentType: EmploymentTypes.JP_FULL_TIME,
       region: Regions.JP,
@@ -177,7 +177,7 @@ describe("Report types", () => {
       blockers: "None",
       references: [
         { type: ReferenceTypes.JIRA, id: "HR-123" },
-        { type: ReferenceTypes.GITHUB_PR, id: "willdesign/hr#45" },
+        { type: ReferenceTypes.GITHUB_PR, id: "example/hr#45" },
       ],
       version: 1,
       slackMessageTs: "1705312000.000100",

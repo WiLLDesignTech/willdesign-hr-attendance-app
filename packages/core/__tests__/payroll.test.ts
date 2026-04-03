@@ -7,8 +7,8 @@ import {
   calculateDeficitDeduction,
   calculatePayrollBreakdown,
 } from "../src/payroll/calculator.js";
-import { SalaryTypes, SalaryChangeTypes, Currencies, JP_LABOR, AllowanceTypes } from "@willdesign-hr/types";
-import type { SalaryRecord, AllowanceItem } from "@willdesign-hr/types";
+import { SalaryTypes, SalaryChangeTypes, Currencies, JP_LABOR, AllowanceTypes } from "@hr-attendance-app/types";
+import type { SalaryRecord, AllowanceItem } from "@hr-attendance-app/types";
 
 function makeSalary(overrides: Partial<SalaryRecord> & { amount: number; effectiveFrom: string }): SalaryRecord {
   return {

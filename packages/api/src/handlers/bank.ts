@@ -1,9 +1,9 @@
 import type { RouteDefinition } from "./router.js";
 import type { AppDeps } from "../composition.js";
 import { parseAuthContext, buildResponse, handleError } from "../middleware/index.js";
-import { hasPermission } from "@willdesign-hr/core";
-import { ErrorCodes, ErrorMessages, Permissions, API_BANK, API_BANK_APPROVE } from "@willdesign-hr/types";
-import type { BankApproveBody, BankQueryParams } from "@willdesign-hr/types";
+import { hasPermission } from "@hr-attendance-app/core";
+import { ErrorCodes, ErrorMessages, Permissions, API_BANK, API_BANK_APPROVE } from "@hr-attendance-app/types";
+import type { BankApproveBody, BankQueryParams } from "@hr-attendance-app/types";
 
 export function bankRoutes(deps: AppDeps): RouteDefinition[] {
   return [

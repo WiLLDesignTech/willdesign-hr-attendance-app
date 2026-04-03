@@ -1,14 +1,15 @@
 import { describe, it, expect } from "vitest";
 import { PWA_CONFIG } from "./config";
+import { AppBranding } from "@hr-attendance-app/types";
 
 describe("PWA Configuration", () => {
   it("has correct app name and short name", () => {
-    expect(PWA_CONFIG.name).toBe("WillDesign HR");
-    expect(PWA_CONFIG.short_name).toBe("WD HR");
+    expect(PWA_CONFIG.name).toBe(AppBranding.appName);
+    expect(PWA_CONFIG.short_name).toBe(AppBranding.appShortName);
   });
 
-  it("uses WillDesign brand colors", () => {
-    expect(PWA_CONFIG.theme_color).toBe("#58C2D9");
+  it("uses brand colors", () => {
+    expect(PWA_CONFIG.theme_color).toBe(AppBranding.themeColor);
     expect(PWA_CONFIG.background_color).toBe("#FFFFFF");
   });
 

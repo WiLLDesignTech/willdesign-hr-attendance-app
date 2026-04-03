@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { renderSalaryStatementHtml } from "../src/ses/salary-template.js";
-import { Currencies, AllowanceTypes } from "@willdesign-hr/types";
-import type { PayrollBreakdown } from "@willdesign-hr/types";
+import { AppBranding, Currencies, AllowanceTypes } from "@hr-attendance-app/types";
+import type { PayrollBreakdown } from "@hr-attendance-app/types";
 
 describe("Salary Statement Template", () => {
   const jpBreakdown: PayrollBreakdown = {
@@ -33,7 +33,7 @@ describe("Salary Statement Template", () => {
     expect(html).toContain("Overtime Pay");
     expect(html).toContain("Transportation");
     expect(html).toContain("Net Amount");
-    expect(html).toContain("WiLL Design");
+    expect(html).toContain(AppBranding.salaryStatementTitle);
   });
 
   it("renders NP salary with exchange rate and deficit", () => {

@@ -1,9 +1,9 @@
 import type { RouteDefinition } from "./router.js";
 import type { AppDeps } from "../composition.js";
 import { parseAuthContext, buildResponse, handleError } from "../middleware/index.js";
-import { hasPermission } from "@willdesign-hr/core";
-import { ErrorCodes, ErrorMessages, Permissions, API_ONBOARD, API_OFFBOARD, API_AUDIT } from "@willdesign-hr/types";
-import type { OnboardingInput, OffboardingInput } from "@willdesign-hr/core";
+import { hasPermission } from "@hr-attendance-app/core";
+import { ErrorCodes, ErrorMessages, Permissions, API_ONBOARD, API_OFFBOARD, API_AUDIT } from "@hr-attendance-app/types";
+import type { OnboardingInput, OffboardingInput } from "@hr-attendance-app/core";
 
 export function adminRoutes(deps: AppDeps): RouteDefinition[] {
   return [

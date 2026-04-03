@@ -1,13 +1,13 @@
 import type { RouteDefinition } from "./router.js";
 import type { AppDeps } from "../composition.js";
 import { parseAuthContext, buildResponse, handleError } from "../middleware/index.js";
-import { hasPermission } from "@willdesign-hr/core";
+import { hasPermission } from "@hr-attendance-app/core";
 import {
   ErrorCodes, ErrorMessages, Permissions,
   AttendanceLockScopes, YEAR_MONTH_PATTERN,
   API_ATTENDANCE_LOCK,
-} from "@willdesign-hr/types";
-import type { AttendanceLockScope, CreateAttendanceLockBody, AttendanceLockQueryParams } from "@willdesign-hr/types";
+} from "@hr-attendance-app/types";
+import type { AttendanceLockScope, CreateAttendanceLockBody, AttendanceLockQueryParams } from "@hr-attendance-app/types";
 
 function isValidScope(scope: string): scope is AttendanceLockScope {
   return Object.values(AttendanceLockScopes).includes(scope as AttendanceLockScope);

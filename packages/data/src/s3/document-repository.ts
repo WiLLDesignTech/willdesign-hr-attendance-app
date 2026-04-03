@@ -3,9 +3,9 @@ import type { S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { PutCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import type { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import type { Document } from "@willdesign-hr/types";
-import { S3_PREFIXES } from "@willdesign-hr/types";
-import type { DocumentRepository } from "@willdesign-hr/core";
+import type { Document } from "@hr-attendance-app/types";
+import { S3_PREFIXES } from "@hr-attendance-app/types";
+import type { DocumentRepository } from "@hr-attendance-app/core";
 import { KEYS } from "../dynamo/keys.js";
 
 const PRESIGN_EXPIRY_SECONDS = 900; // 15 minutes

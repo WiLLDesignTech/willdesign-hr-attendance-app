@@ -1,7 +1,7 @@
 import { PutCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import type { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import type { Flag } from "@willdesign-hr/types";
-import type { FlagRepository, FlagQueryOptions } from "@willdesign-hr/core";
+import type { Flag } from "@hr-attendance-app/types";
+import type { FlagRepository, FlagQueryOptions } from "@hr-attendance-app/core";
 import { KEYS } from "./keys.js";
 
 export class DynamoFlagRepository implements FlagRepository {

@@ -1,4 +1,4 @@
-// @willdesign-hr/api — REST API Lambda handlers (composition root)
+// @hr-attendance-app/api — REST API Lambda handlers (composition root)
 
 export { parseAuthContext, validateBody, handleError, buildResponse } from "./middleware/index.js";
 export type { ApiResponse } from "./middleware/index.js";

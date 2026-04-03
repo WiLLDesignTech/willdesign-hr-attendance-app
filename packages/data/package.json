@@ -1,5 +1,5 @@
 {
-  "name": "@willdesign-hr/data",
+  "name": "@hr-attendance-app/data",
   "version": "0.1.0",
   "private": true,
   "main": "./dist/index.js",
@@ -11,8 +11,8 @@
     "@aws-sdk/client-ses": "^3.1023.0",
     "@aws-sdk/lib-dynamodb": "^3.1022.0",
     "@aws-sdk/s3-request-presigner": "^3.1023.0",
-    "@willdesign-hr/core": "*",
-    "@willdesign-hr/types": "*"
+    "@hr-attendance-app/core": "*",
+    "@hr-attendance-app/types": "*"
   },
   "scripts": {
     "build": "tsc --build",

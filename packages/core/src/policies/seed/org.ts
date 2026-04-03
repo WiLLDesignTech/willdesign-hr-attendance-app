@@ -1,4 +1,4 @@
-import type { RawPolicy } from "@willdesign-hr/types";
+import type { RawPolicy } from "@hr-attendance-app/types";
 import {
   WorkArrangements,
   TimeTypes,
@@ -10,7 +10,7 @@ import {
   HOURS,
   PROBATION,
   PAYMENT,
-} from "@willdesign-hr/types";
+} from "@hr-attendance-app/types";
 
 /**
  * Company-wide defaults (org level).

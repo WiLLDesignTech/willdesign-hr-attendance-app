@@ -1,6 +1,6 @@
 import { SendEmailCommand } from "@aws-sdk/client-ses";
 import type { SESClient } from "@aws-sdk/client-ses";
-import type { EmailAdapter } from "@willdesign-hr/core";
+import type { EmailAdapter } from "@hr-attendance-app/core";
 
 export class SESEmailAdapter implements EmailAdapter {
   constructor(

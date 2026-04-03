@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { AttendanceService } from "../src/attendance/service.js";
-import { AttendanceActions, AttendanceStates, AttendanceLockScopes, ErrorMessages } from "@willdesign-hr/types";
-import type { AttendanceLock } from "@willdesign-hr/types";
+import { AttendanceActions, AttendanceStates, AttendanceLockScopes, ErrorMessages } from "@hr-attendance-app/types";
+import type { AttendanceLock } from "@hr-attendance-app/types";
 import type { AttendanceRepository, AuditRepository, AttendanceLockRepository, EmployeeRepository } from "../src/repositories/index.js";
 
 function createMockRepos() {

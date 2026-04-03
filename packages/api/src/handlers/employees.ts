@@ -1,12 +1,12 @@
 import type { RouteDefinition } from "./router.js";
 import type { AppDeps } from "../composition.js";
 import { parseAuthContext, buildResponse, handleError } from "../middleware/index.js";
-import { hasPermission } from "@willdesign-hr/core";
+import { hasPermission } from "@hr-attendance-app/core";
 import {
   ErrorCodes, ErrorMessages, Permissions,
   API_EMPLOYEES_ME, API_EMPLOYEES_BY_ID, API_EMPLOYEES,
-} from "@willdesign-hr/types";
-import type { EmployeesQueryParams } from "@willdesign-hr/types";
+} from "@hr-attendance-app/types";
+import type { EmployeesQueryParams } from "@hr-attendance-app/types";
 
 export function employeeRoutes(deps: AppDeps): RouteDefinition[] {
   return [

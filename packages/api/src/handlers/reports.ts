@@ -1,8 +1,8 @@
 import type { RouteDefinition } from "./router.js";
 import type { AppDeps } from "../composition.js";
 import { parseAuthContext, buildResponse, handleError } from "../middleware/index.js";
-import { ErrorCodes, API_REPORTS, todayDate } from "@willdesign-hr/types";
-import type { CreateReportBody, ReportsQueryParams } from "@willdesign-hr/types";
+import { ErrorCodes, API_REPORTS, todayDate } from "@hr-attendance-app/types";
+import type { CreateReportBody, ReportsQueryParams } from "@hr-attendance-app/types";
 
 export function reportRoutes(deps: AppDeps): RouteDefinition[] {
   return [

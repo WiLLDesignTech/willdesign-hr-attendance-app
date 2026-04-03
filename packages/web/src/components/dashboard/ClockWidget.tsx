@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import styled, { css } from "styled-components";
-import type { AttendanceAction, AttendanceState } from "@willdesign-hr/types";
-import { AttendanceStates, AttendanceActions } from "@willdesign-hr/types";
+import type { AttendanceAction, AttendanceState } from "@hr-attendance-app/types";
+import { AttendanceStates, AttendanceActions } from "@hr-attendance-app/types";
 import { ButtonAccent, ButtonDanger, ButtonSecondary } from "../../theme/primitives";
 
 interface ClockWidgetProps {

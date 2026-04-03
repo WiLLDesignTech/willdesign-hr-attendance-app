@@ -1,4 +1,4 @@
-import type { AuditAction, AuditEntry } from "@willdesign-hr/types";
+import type { AuditAction, AuditEntry } from "@hr-attendance-app/types";
 
 export interface AuditQueryOptions {
   readonly from?: string;

@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { Card, PageLayout, SectionTitle, FormField } from "../../theme/primitives";
 import { isoToLocalMonth } from "../../utils/date";
-import { nowIso } from "@willdesign-hr/types";
+import { nowIso } from "@hr-attendance-app/types";
 import { LoadingSpinner } from "../common/LoadingSpinner";
 import { usePayroll } from "../../hooks/queries/usePayroll";
 import { formatAmount } from "../../utils/currency";

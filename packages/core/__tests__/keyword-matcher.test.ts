@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { matchKeyword, matchCommand, DEFAULT_KEYWORD_CONFIGS } from "../src/attendance/keyword-matcher.js";
-import { AttendanceActions } from "@willdesign-hr/types";
+import { AttendanceActions } from "@hr-attendance-app/types";
 
 describe("Keyword Matcher", () => {
   describe("English keywords", () => {

@@ -1,7 +1,7 @@
 import { GetCommand, PutCommand } from "@aws-sdk/lib-dynamodb";
 import type { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import type { Override, OverridePeriod } from "@willdesign-hr/types";
-import type { OverrideRepository } from "@willdesign-hr/core";
+import type { Override, OverridePeriod } from "@hr-attendance-app/types";
+import type { OverrideRepository } from "@hr-attendance-app/core";
 import { KEYS } from "./keys.js";
 
 export class DynamoOverrideRepository implements OverrideRepository {

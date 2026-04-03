@@ -1,4 +1,4 @@
-import type { RawPolicy } from "@willdesign-hr/types";
+import type { RawPolicy } from "@hr-attendance-app/types";
 
 export interface PolicyRepository {
   getCompanyPolicy(): Promise<RawPolicy>;

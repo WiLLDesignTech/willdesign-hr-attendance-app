@@ -1,8 +1,8 @@
 import { GetCommand, PutCommand, QueryCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import type { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import type { Employee, EmployeeStatus } from "@willdesign-hr/types";
-import { nowIso, timestampId } from "@willdesign-hr/types";
-import type { EmployeeRepository, CreateEmployeeInput, UpdateEmployeeInput } from "@willdesign-hr/core";
+import type { Employee, EmployeeStatus } from "@hr-attendance-app/types";
+import { nowIso, timestampId } from "@hr-attendance-app/types";
+import type { EmployeeRepository, CreateEmployeeInput, UpdateEmployeeInput } from "@hr-attendance-app/core";
 import { KEYS } from "./keys.js";
 
 export class DynamoEmployeeRepository implements EmployeeRepository {

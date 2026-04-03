@@ -1,5 +1,5 @@
-import type { RawPolicy } from "@willdesign-hr/types";
-import { HOURS } from "@willdesign-hr/types";
+import type { RawPolicy } from "@hr-attendance-app/types";
+import { HOURS } from "@hr-attendance-app/types";
 
 /** JP intern — reduced hours, no bonus, no overtime. */
 export const jpInternPolicy: RawPolicy = {

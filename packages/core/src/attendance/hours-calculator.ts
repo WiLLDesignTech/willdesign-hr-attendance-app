@@ -1,5 +1,5 @@
-import type { AttendanceEvent, AttendanceSession, BreakPeriod } from "@willdesign-hr/types";
-import { AttendanceActions } from "@willdesign-hr/types";
+import type { AttendanceEvent, AttendanceSession, BreakPeriod } from "@hr-attendance-app/types";
+import { AttendanceActions } from "@hr-attendance-app/types";
 
 export interface HoursBreakdown {
   readonly workedHours: number;

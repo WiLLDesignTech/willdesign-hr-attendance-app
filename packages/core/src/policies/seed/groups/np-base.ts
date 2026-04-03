@@ -1,5 +1,5 @@
-import type { RawPolicy } from "@willdesign-hr/types";
-import { WorkArrangements, LeaveTypes, TerminationHandlings, PAYMENT } from "@willdesign-hr/types";
+import type { RawPolicy } from "@hr-attendance-app/types";
+import { WorkArrangements, LeaveTypes, TerminationHandlings, PAYMENT } from "@hr-attendance-app/types";
 
 /** Shared Nepal contractor policy base — remote, FORFEIT leave, flat rates. */
 export const npBasePolicy: RawPolicy = {

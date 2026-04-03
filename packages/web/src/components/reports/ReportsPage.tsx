@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { Card, PageLayout, SectionTitle, TextMuted, FormField, FormLayout, ButtonAccent } from "../../theme/primitives";
-import { nowIso } from "@willdesign-hr/types";
+import { nowIso } from "@hr-attendance-app/types";
 import { LoadingSpinner } from "../common/LoadingSpinner";
 import { useReports, useSubmitReport } from "../../hooks/queries/useReports";
 import { formatDate, isoToLocalDate } from "../../utils/date";

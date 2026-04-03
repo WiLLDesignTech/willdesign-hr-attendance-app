@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { ReminderService } from "../src/cron/reminders";
-import { CRON, PROBATION, PAYMENT } from "@willdesign-hr/types";
-import type { Employee, LeaveRequest, BankEntry } from "@willdesign-hr/types";
+import { CRON, PROBATION, PAYMENT } from "@hr-attendance-app/types";
+import type { Employee, LeaveRequest, BankEntry } from "@hr-attendance-app/types";
 
 function mockEmployee(overrides: Partial<Employee> = {}): Employee {
   return {

@@ -1,5 +1,5 @@
-import type { AuthContext, AuthorizationResult, Permission, ResourceContext, Role } from "@willdesign-hr/types";
-import { Roles, SensitivityLevels, ROLE_PERMISSIONS } from "@willdesign-hr/types";
+import type { AuthContext, AuthorizationResult, Permission, ResourceContext, Role } from "@hr-attendance-app/types";
+import { Roles, SensitivityLevels, ROLE_PERMISSIONS } from "@hr-attendance-app/types";
 
 export const ROLE_HIERARCHY: readonly Role[] = [
   Roles.EMPLOYEE,

@@ -1,9 +1,9 @@
 import type { RouteDefinition } from "./router.js";
 import type { AppDeps } from "../composition.js";
 import { parseAuthContext, buildResponse, handleError } from "../middleware/index.js";
-import { hasPermission } from "@willdesign-hr/core";
-import { ErrorCodes, ErrorMessages, Permissions, API_HOLIDAYS, API_HOLIDAY_DELETE, currentYear, yearFromDate } from "@willdesign-hr/types";
-import type { Region, HolidaysQueryParams, CreateHolidayBody } from "@willdesign-hr/types";
+import { hasPermission } from "@hr-attendance-app/core";
+import { ErrorCodes, ErrorMessages, Permissions, API_HOLIDAYS, API_HOLIDAY_DELETE, currentYear, yearFromDate } from "@hr-attendance-app/types";
+import type { Region, HolidaysQueryParams, CreateHolidayBody } from "@hr-attendance-app/types";
 
 export function holidayRoutes(deps: AppDeps): RouteDefinition[] {
   return [

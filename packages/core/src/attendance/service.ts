@@ -1,5 +1,5 @@
-import type { AttendanceAction, AttendanceEvent, AttendanceSource, AttendanceStateRecord, AttendanceLock, AttendanceLockScope, Result, WorkLocation } from "@willdesign-hr/types";
-import { AuditActions, ATTENDANCE, AttendanceLockScopes, ErrorMessages, KeyPatterns, KeyPrefixes, dateToIso, dateToDateStr, isoToYearMonth, nowIso } from "@willdesign-hr/types";
+import type { AttendanceAction, AttendanceEvent, AttendanceSource, AttendanceStateRecord, AttendanceLock, AttendanceLockScope, Result, WorkLocation } from "@hr-attendance-app/types";
+import { AuditActions, ATTENDANCE, AttendanceLockScopes, ErrorMessages, KeyPatterns, KeyPrefixes, dateToIso, dateToDateStr, isoToYearMonth, nowIso } from "@hr-attendance-app/types";
 import type { AttendanceRepository, AuditRepository, AttendanceLockRepository, EmployeeRepository } from "../repositories/index.js";
 import { validateTransition } from "./state-machine.js";
 

@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useApiClient } from "../useApiClient";
 import { queryKeys } from "./keys";
-import { API_PAYROLL, apiPath } from "@willdesign-hr/types";
-import type { PayrollBreakdown } from "@willdesign-hr/types";
+import { API_PAYROLL, apiPath } from "@hr-attendance-app/types";
+import type { PayrollBreakdown } from "@hr-attendance-app/types";
 
 export function usePayroll(yearMonth: string) {
   const api = useApiClient();

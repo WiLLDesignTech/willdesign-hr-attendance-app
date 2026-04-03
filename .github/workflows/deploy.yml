@@ -39,7 +39,7 @@ jobs:
         run: npm test
 
       - name: Build web
-        run: npm run build --workspace=@willdesign-hr/web
+        run: npm run build --workspace=@hr-attendance-app/web
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4

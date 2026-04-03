@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import { AttendanceStates } from "@willdesign-hr/types";
+import { AttendanceStates } from "@hr-attendance-app/types";
 import { ClockWidget } from "./ClockWidget";
 import { Card, PageLayout, TextMuted } from "../../theme/primitives";
 import { LoadingSpinner } from "../common/LoadingSpinner";

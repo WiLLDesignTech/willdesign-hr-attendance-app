@@ -1,15 +1,15 @@
 import type { RouteDefinition } from "./router.js";
 import type { AppDeps } from "../composition.js";
 import { parseAuthContext, buildResponse, handleError } from "../middleware/index.js";
-import { hasPermission } from "@willdesign-hr/core";
+import { hasPermission } from "@hr-attendance-app/core";
 import {
   ErrorCodes, ErrorMessages, Permissions,
   API_LEAVE_REQUESTS, API_LEAVE_REQUEST_BY_ID, API_LEAVE_BALANCE,
-} from "@willdesign-hr/types";
+} from "@hr-attendance-app/types";
 import type {
   LeaveType, CreateLeaveBody, LeaveActionBody,
   LeaveRequestsQueryParams, LeaveBalanceQueryParams,
-} from "@willdesign-hr/types";
+} from "@hr-attendance-app/types";
 
 export function leaveRoutes(deps: AppDeps): RouteDefinition[] {
   return [

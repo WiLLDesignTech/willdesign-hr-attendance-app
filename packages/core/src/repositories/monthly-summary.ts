@@ -1,4 +1,4 @@
-import type { MonthlySummary } from "@willdesign-hr/types";
+import type { MonthlySummary } from "@hr-attendance-app/types";
 
 export interface MonthlySummaryRepository {
   findByEmployeeAndMonth(employeeId: string, yearMonth: string): Promise<MonthlySummary | null>;

@@ -5,7 +5,7 @@ import {
   createNewVersion,
   hasMissingReferences,
 } from "../src/reports/parser.js";
-import { ReferenceTypes } from "@willdesign-hr/types";
+import { ReferenceTypes } from "@hr-attendance-app/types";
 
 describe("Reference Extraction", () => {
   it("extracts JIRA ticket IDs", () => {
@@ -15,8 +15,8 @@ describe("Reference Extraction", () => {
   });
 
   it("extracts GitHub PR references", () => {
-    const refs = extractReferences("Reviewed willdesign/hr#45 and core#12");
-    expect(refs).toContainEqual({ type: ReferenceTypes.GITHUB_PR, id: "willdesign/hr#45" });
+    const refs = extractReferences("Reviewed example/hr#45 and core#12");
+    expect(refs).toContainEqual({ type: ReferenceTypes.GITHUB_PR, id: "example/hr#45" });
     expect(refs).toContainEqual({ type: ReferenceTypes.GITHUB_PR, id: "core#12" });
   });
 

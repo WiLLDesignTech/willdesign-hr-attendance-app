@@ -8,7 +8,7 @@ import type { AppDeps } from "./composition.js";
 import {
   COGNITO, ErrorCodes,
   API_DEV_AUTH_EMPLOYEES, API_DEV_AUTH_LOGIN,
-} from "@willdesign-hr/types";
+} from "@hr-attendance-app/types";
 
 export function devAuthRoutes(deps: AppDeps): RouteDefinition[] {
   if (process.env["NODE_ENV"] === "production") return [];

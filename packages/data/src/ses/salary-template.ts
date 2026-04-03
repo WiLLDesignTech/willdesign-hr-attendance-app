@@ -1,5 +1,5 @@
-import type { PayrollBreakdown } from "@willdesign-hr/types";
-import { Currencies } from "@willdesign-hr/types";
+import type { PayrollBreakdown } from "@hr-attendance-app/types";
+import { AppBranding, Currencies } from "@hr-attendance-app/types";
 
 /**
  * Render salary statement HTML email.
@@ -24,7 +24,7 @@ export function renderSalaryStatementHtml(breakdown: PayrollBreakdown, employeeN
 </style></head>
 <body>
   <div class="header">
-    <h1>WiLL Design — Salary Statement</h1>
+    <h1>${AppBranding.salaryStatementTitle}</h1>
   </div>
   <p>Dear <strong>${employeeName}</strong>,</p>
   <p>Here is your salary statement for <strong>${breakdown.yearMonth}</strong>.</p>
@@ -41,7 +41,7 @@ export function renderSalaryStatementHtml(breakdown: PayrollBreakdown, employeeN
     <tr class="total"><td>Net Amount</td><td style="text-align:right">${formatAmount(breakdown.netAmount, breakdown.currency)}</td></tr>
   </table>
   ${breakdown.exchangeRate ? `<p><small>Exchange rate: ${breakdown.exchangeRate} (${breakdown.exchangeRateDate}) — JPY equivalent: ¥${breakdown.jpyEquivalent?.toLocaleString()}</small></p>` : ""}
-  <p style="color: #888; font-size: 12px;">This is an automated statement from WiLL Design HR. Please contact HR for any questions.</p>
+  <p style="color: #888; font-size: 12px;">${AppBranding.salaryStatementFooter}</p>
 </body>
 </html>`.trim();
 }

@@ -1,7 +1,7 @@
 import type { RouteDefinition } from "./router.js";
 import type { AppDeps } from "../composition.js";
 import { parseAuthContext, buildResponse, handleError } from "../middleware/index.js";
-import { ErrorCodes, API_PAYROLL } from "@willdesign-hr/types";
+import { ErrorCodes, API_PAYROLL } from "@hr-attendance-app/types";
 
 export function payrollRoutes(deps: AppDeps): RouteDefinition[] {
   return [

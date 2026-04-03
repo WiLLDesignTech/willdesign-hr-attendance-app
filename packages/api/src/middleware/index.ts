@@ -1,5 +1,5 @@
-import type { AuthContext, Result } from "@willdesign-hr/types";
-import { Roles, ErrorCodes, COGNITO } from "@willdesign-hr/types";
+import type { AuthContext, Result } from "@hr-attendance-app/types";
+import { Roles, ErrorCodes, COGNITO } from "@hr-attendance-app/types";
 
 export { ErrorCodes };
 

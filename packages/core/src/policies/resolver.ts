@@ -1,4 +1,4 @@
-import type { RawPolicy } from "@willdesign-hr/types";
+import type { RawPolicy } from "@hr-attendance-app/types";
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
   if (typeof value !== "object" || value === null || Array.isArray(value)) return false;

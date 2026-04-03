@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useApiClient } from "../useApiClient";
 import { queryKeys } from "./keys";
-import { API_ONBOARD, API_OFFBOARD, apiPath } from "@willdesign-hr/types";
+import { API_ONBOARD, API_OFFBOARD, apiPath } from "@hr-attendance-app/types";
 
 export function useOnboard() {
   const api = useApiClient();

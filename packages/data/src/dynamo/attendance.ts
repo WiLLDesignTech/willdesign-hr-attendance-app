@@ -1,8 +1,8 @@
 import { GetCommand, PutCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import type { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import type { AttendanceEvent, AttendanceStateRecord } from "@willdesign-hr/types";
-import { AttendanceStates } from "@willdesign-hr/types";
-import type { AttendanceRepository } from "@willdesign-hr/core";
+import type { AttendanceEvent, AttendanceStateRecord } from "@hr-attendance-app/types";
+import { AttendanceStates } from "@hr-attendance-app/types";
+import type { AttendanceRepository } from "@hr-attendance-app/core";
 import { KEYS } from "./keys.js";
 
 export class DynamoAttendanceRepository implements AttendanceRepository {

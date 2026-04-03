@@ -1,4 +1,4 @@
-import type { LeaveRequest, LeaveRequestStatus } from "@willdesign-hr/types";
+import type { LeaveRequest, LeaveRequestStatus } from "@hr-attendance-app/types";
 
 export interface LeaveQueryOptions {
   readonly status?: LeaveRequestStatus;

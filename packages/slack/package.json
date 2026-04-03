@@ -1,13 +1,13 @@
 {
-  "name": "@willdesign-hr/slack",
+  "name": "@hr-attendance-app/slack",
   "version": "0.1.0",
   "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@willdesign-hr/types": "*",
-    "@willdesign-hr/core": "*",
-    "@willdesign-hr/data": "*"
+    "@hr-attendance-app/types": "*",
+    "@hr-attendance-app/core": "*",
+    "@hr-attendance-app/data": "*"
   },
   "scripts": {
     "build": "tsc --build",

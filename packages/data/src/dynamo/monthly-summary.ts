@@ -1,7 +1,7 @@
 import { GetCommand, PutCommand } from "@aws-sdk/lib-dynamodb";
 import type { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import type { MonthlySummary } from "@willdesign-hr/types";
-import type { MonthlySummaryRepository } from "@willdesign-hr/core";
+import type { MonthlySummary } from "@hr-attendance-app/types";
+import type { MonthlySummaryRepository } from "@hr-attendance-app/core";
 import { KEYS } from "./keys.js";
 
 export class DynamoMonthlySummaryRepository implements MonthlySummaryRepository {

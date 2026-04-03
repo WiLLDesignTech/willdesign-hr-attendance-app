@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { resolveCascade } from "../src/policies/resolver.js";
-import { TerminationHandlings, SalaryTypes, WorkArrangements } from "@willdesign-hr/types";
+import { TerminationHandlings, SalaryTypes, WorkArrangements } from "@hr-attendance-app/types";
 import {
   orgPolicy,
   jpFulltimePolicy,

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { AttendanceStates } from "@willdesign-hr/types";
+import { AttendanceStates } from "@hr-attendance-app/types";
 import type {
   EmployeeRepository,
   AttendanceRepository,

@@ -1,5 +1,5 @@
-import type { AttendanceAction, AttendanceState } from "@willdesign-hr/types";
-import { AttendanceActions, AttendanceStates } from "@willdesign-hr/types";
+import type { AttendanceAction, AttendanceState } from "@hr-attendance-app/types";
+import { AttendanceActions, AttendanceStates } from "@hr-attendance-app/types";
 
 export type TransitionResult =
   | { success: true; newState: AttendanceState }

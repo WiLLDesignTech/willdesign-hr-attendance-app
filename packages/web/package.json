@@ -1,11 +1,11 @@
 {
-  "name": "@willdesign-hr/web",
+  "name": "@hr-attendance-app/web",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "dependencies": {
     "@tanstack/react-query": "^5.96.1",
-    "@willdesign-hr/types": "*",
+    "@hr-attendance-app/types": "*",
     "i18next": "^26.0.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",

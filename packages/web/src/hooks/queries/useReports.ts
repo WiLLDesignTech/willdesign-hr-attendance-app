@@ -1,8 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useApiClient } from "../useApiClient";
 import { queryKeys } from "./keys";
-import { API_REPORTS, withQuery } from "@willdesign-hr/types";
-import type { DailyReport, CreateReportBody } from "@willdesign-hr/types";
+import { API_REPORTS, withQuery } from "@hr-attendance-app/types";
+import type { DailyReport, CreateReportBody } from "@hr-attendance-app/types";
 
 export function useReports(date: string) {
   const api = useApiClient();

@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import { LeaveTypes, LeaveRequestStatuses } from "@willdesign-hr/types";
+import { LeaveTypes, LeaveRequestStatuses } from "@hr-attendance-app/types";
 import { Card, PageLayout, SectionTitle, TextMuted, FormField, FormLayout, ButtonAccent, ButtonSecondary, ButtonDanger } from "../../theme/primitives";
 import { LoadingSpinner } from "../common/LoadingSpinner";
 import { useLeaveRequests, useCreateLeave, useLeaveBalance, usePendingLeaveRequests, useApproveLeave } from "../../hooks/queries/useLeave";
 import { formatDate } from "../../utils/date";
 import { useHasPermission } from "../../hooks/useRole";
-import { Permissions } from "@willdesign-hr/types";
+import { Permissions } from "@hr-attendance-app/types";
 
 const RequestList = styled.ul`
   list-style: none;

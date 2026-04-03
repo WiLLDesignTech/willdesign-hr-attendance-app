@@ -1,4 +1,4 @@
-import type { Employee, EmployeeStatus } from "@willdesign-hr/types";
+import type { Employee, EmployeeStatus } from "@hr-attendance-app/types";
 
 export interface CreateEmployeeInput {
   readonly name: string;

@@ -1,10 +1,10 @@
 /**
  * Role and permission-based access hooks for conditional UI rendering.
- * Uses permission constants from @willdesign-hr/types.
+ * Uses permission constants from @hr-attendance-app/types.
  */
 import { useAuth } from "./useAuth";
-import { Roles, Permissions } from "@willdesign-hr/types";
-import type { Permission } from "@willdesign-hr/types";
+import { Roles, Permissions } from "@hr-attendance-app/types";
+import type { Permission } from "@hr-attendance-app/types";
 
 export const ROLE_LEVELS: Record<string, number> = {
   [Roles.EMPLOYEE]: 0,

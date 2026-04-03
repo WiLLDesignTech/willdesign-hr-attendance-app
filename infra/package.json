@@ -1,5 +1,5 @@
 {
-  "name": "@willdesign-hr/infra",
+  "name": "@hr-attendance-app/infra",
   "version": "0.1.0",
   "private": true,
   "scripts": {

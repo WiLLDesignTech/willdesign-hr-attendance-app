@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useApiClient } from "../useApiClient";
 import { queryKeys } from "./keys";
-import { API_HOLIDAYS, withQuery } from "@willdesign-hr/types";
-import type { Holiday } from "@willdesign-hr/types";
+import { API_HOLIDAYS, withQuery } from "@hr-attendance-app/types";
+import type { Holiday } from "@hr-attendance-app/types";
 
 export function useHolidays(region: string, year: number) {
   const api = useApiClient();

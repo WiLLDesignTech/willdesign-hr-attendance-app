@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { deepMergePolicy, resolveCascade } from "../src/policies/resolver.js";
-import type { RawPolicy, LeaveType } from "@willdesign-hr/types";
-import { LeaveTypes, JP_LABOR } from "@willdesign-hr/types";
+import type { RawPolicy, LeaveType } from "@hr-attendance-app/types";
+import { LeaveTypes, JP_LABOR } from "@hr-attendance-app/types";
 
 describe("deepMergePolicy", () => {
   it("returns base when override is empty", () => {

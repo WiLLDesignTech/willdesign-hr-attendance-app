@@ -7,8 +7,8 @@ import {
   AdminAddUserToGroupCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
 import type { CognitoIdentityProviderClient } from "@aws-sdk/client-cognito-identity-provider";
-import type { AuthProviderAdapter, CreateAuthUserInput } from "@willdesign-hr/core";
-import { COGNITO } from "@willdesign-hr/types";
+import type { AuthProviderAdapter, CreateAuthUserInput } from "@hr-attendance-app/core";
+import { COGNITO } from "@hr-attendance-app/types";
 
 export class CognitoAuthAdapter implements AuthProviderAdapter {
   constructor(

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { parseAuthContext, validateBody, handleError, buildResponse } from "../src/middleware/index.js";
-import { Roles } from "@willdesign-hr/types";
+import { Roles } from "@hr-attendance-app/types";
 
 describe("Auth Middleware", () => {
   it("extracts auth context from valid claims", () => {

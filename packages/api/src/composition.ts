@@ -14,7 +14,7 @@ import {
   DynamoReportRepository,
   DynamoHolidayRepository,
   DynamoAttendanceLockRepository,
-} from "@willdesign-hr/data";
+} from "@hr-attendance-app/data";
 import {
   AttendanceService,
   LeaveService,
@@ -29,10 +29,10 @@ import {
   BankService,
   ReportService,
   AuditService,
-} from "@willdesign-hr/core";
-import type { AuthProviderAdapter } from "@willdesign-hr/core";
-import type { LeaveBalance } from "@willdesign-hr/types";
-import { LeaveTypes, nowMs } from "@willdesign-hr/types";
+} from "@hr-attendance-app/core";
+import type { AuthProviderAdapter } from "@hr-attendance-app/core";
+import type { LeaveBalance } from "@hr-attendance-app/types";
+import { LeaveTypes, nowMs } from "@hr-attendance-app/types";
 
 export interface AppServices {
   readonly employee: EmployeeService;

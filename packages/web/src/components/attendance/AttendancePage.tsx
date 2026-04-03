@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import { AttendanceStates, nowIso } from "@willdesign-hr/types";
+import { AttendanceStates, nowIso } from "@hr-attendance-app/types";
 import { ClockWidget } from "../dashboard/ClockWidget";
 import { Card, PageLayout, SectionTitle, TextMuted } from "../../theme/primitives";
 import { LoadingSpinner } from "../common/LoadingSpinner";

@@ -1,5 +1,5 @@
-import type { RawPolicy } from "@willdesign-hr/types";
-import { JP_LABOR } from "@willdesign-hr/types";
+import type { RawPolicy } from "@hr-attendance-app/types";
+import { JP_LABOR } from "@hr-attendance-app/types";
 
 /** 契約社員 — JP contract employee. Deemed overtime 45h. */
 export const jpContractPolicy: RawPolicy = {

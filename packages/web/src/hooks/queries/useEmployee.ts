@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useApiClient } from "../useApiClient";
 import { queryKeys } from "./keys";
-import { API_EMPLOYEES_ME, API_EMPLOYEES } from "@willdesign-hr/types";
-import type { Employee } from "@willdesign-hr/types";
+import { API_EMPLOYEES_ME, API_EMPLOYEES } from "@hr-attendance-app/types";
+import type { Employee } from "@hr-attendance-app/types";
 
 export function useCurrentUser() {
   const api = useApiClient();

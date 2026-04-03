@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { Roles, ROUTES } from "@willdesign-hr/types";
-import { Permissions } from "@willdesign-hr/types";
-import type { Permission } from "@willdesign-hr/types";
+import { Roles, ROUTES } from "@hr-attendance-app/types";
+import { Permissions } from "@hr-attendance-app/types";
+import type { Permission } from "@hr-attendance-app/types";
 import { useHasMinimumRole, useHasPermission } from "../../hooks/useRole";
 
 interface RoleGuardProps {

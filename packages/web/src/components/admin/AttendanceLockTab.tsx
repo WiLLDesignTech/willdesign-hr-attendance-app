@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { Button, TextMuted } from "../../theme/primitives";
 import { useAttendanceLocks, useCreateLock, useDeleteLock } from "../../hooks/queries";
-import { AttendanceLockScopes, isoToYearMonth, nowIso } from "@willdesign-hr/types";
+import { AttendanceLockScopes, isoToYearMonth, nowIso } from "@hr-attendance-app/types";
 
 const LockContainer = styled.div`
   display: flex;

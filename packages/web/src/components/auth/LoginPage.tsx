@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { useAuth } from "../../hooks/useAuth";
 import { ButtonAccent } from "../../theme/primitives";
-import { API_DEV_AUTH_EMPLOYEES, API_DEV_AUTH_LOGIN, ROUTES } from "@willdesign-hr/types";
+import { API_DEV_AUTH_EMPLOYEES, API_DEV_AUTH_LOGIN, ROUTES } from "@hr-attendance-app/types";
 
 interface DevEmployee {
   readonly id: string;
@@ -102,7 +102,7 @@ export function LoginPage() {
     <LoginContainer>
       <LoginCard>
         <Logo>
-          WiLL Design <span>HR</span>
+          {t("app.title")}
         </Logo>
         <p style={{ marginBottom: "16px", color: "#888" }}>
           {t("auth.selectEmployee")}

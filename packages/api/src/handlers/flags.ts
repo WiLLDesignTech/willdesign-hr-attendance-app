@@ -1,9 +1,9 @@
 import type { RouteDefinition } from "./router.js";
 import type { AppDeps } from "../composition.js";
 import { parseAuthContext, buildResponse, handleError } from "../middleware/index.js";
-import { hasPermission, resolveFlag } from "@willdesign-hr/core";
-import { ErrorCodes, ErrorMessages, Permissions, API_FLAGS, API_FLAG_BY_ID } from "@willdesign-hr/types";
-import type { FlagResolution, FlagsQueryParams, ResolveFlagBody } from "@willdesign-hr/types";
+import { hasPermission, resolveFlag } from "@hr-attendance-app/core";
+import { ErrorCodes, ErrorMessages, Permissions, API_FLAGS, API_FLAG_BY_ID } from "@hr-attendance-app/types";
+import type { FlagResolution, FlagsQueryParams, ResolveFlagBody } from "@hr-attendance-app/types";
 
 export function flagRoutes(deps: AppDeps): RouteDefinition[] {
   return [

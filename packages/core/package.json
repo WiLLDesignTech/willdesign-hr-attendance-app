@@ -1,11 +1,11 @@
 {
-  "name": "@willdesign-hr/core",
+  "name": "@hr-attendance-app/core",
   "version": "0.1.0",
   "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@willdesign-hr/types": "*"
+    "@hr-attendance-app/types": "*"
   },
   "scripts": {
     "build": "tsc --build",

@@ -1,4 +1,4 @@
-import type { PayrollBreakdown, SalaryRecord } from "@willdesign-hr/types";
+import type { PayrollBreakdown, SalaryRecord } from "@hr-attendance-app/types";
 import type { SalaryRepository } from "../repositories/salary.js";
 import { getEffectiveSalary, calculatePayrollBreakdown } from "./calculator.js";
 

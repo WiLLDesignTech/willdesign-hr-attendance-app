@@ -1,5 +1,5 @@
-import type { Holiday, Region } from "@willdesign-hr/types";
-import { yearFromDate } from "@willdesign-hr/types";
+import type { Holiday, Region } from "@hr-attendance-app/types";
+import { yearFromDate } from "@hr-attendance-app/types";
 import type { HolidayRepository } from "../repositories/holiday.js";
 import { generateJpHolidays } from "./jp-generator.js";
 

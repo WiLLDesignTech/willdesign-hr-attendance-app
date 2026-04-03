@@ -1,4 +1,4 @@
-// @willdesign-hr/core — Business logic, services, repository interfaces (ports)
+// @hr-attendance-app/core — Business logic, services, repository interfaces (ports)
 // Zero AWS dependencies — pure TypeScript
 
 export type {

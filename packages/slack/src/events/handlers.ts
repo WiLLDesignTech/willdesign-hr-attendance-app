@@ -1,5 +1,5 @@
-import type { AttendanceAction, AttendanceState } from "@willdesign-hr/types";
-import { AttendanceActions } from "@willdesign-hr/types";
+import type { AttendanceAction, AttendanceState } from "@hr-attendance-app/types";
+import { AppBranding, AttendanceActions } from "@hr-attendance-app/types";
 
 export const CHANNEL_PURPOSES = {
   ATTENDANCE: "attendance",
@@ -81,7 +81,7 @@ export function buildErrorReply(input: ErrorReplyInput): string {
 export function buildGuidebookMessage(language: string): string {
   if (language === "ja") {
     return [
-      "📖 *WillDesign HR ガイドブック*",
+      `📖 *${AppBranding.appName} ガイドブック*`,
       "",
       "*出退勤キーワード:*",
       "• 出勤: `おはよう`, `出勤`",
@@ -100,7 +100,7 @@ export function buildGuidebookMessage(language: string): string {
   }
 
   return [
-    "📖 *WillDesign HR Guidebook*",
+    `📖 *${AppBranding.appName} Guidebook*`,
     "",
     "*Attendance Keywords:*",
     "• Clock in: `hello`, `hi`, `good morning`",

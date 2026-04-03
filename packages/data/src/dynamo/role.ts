@@ -1,7 +1,7 @@
 import { GetCommand, PutCommand, QueryCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb";
 import type { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import type { RoleDefinition } from "@willdesign-hr/types";
-import type { RoleRepository } from "@willdesign-hr/core";
+import type { RoleDefinition } from "@hr-attendance-app/types";
+import type { RoleRepository } from "@hr-attendance-app/core";
 import { KEYS } from "./keys.js";
 
 export class DynamoRoleRepository implements RoleRepository {

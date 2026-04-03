@@ -8,7 +8,7 @@ import {
   API_LEAVE_REQUESTS, API_LEAVE_BALANCE,
   API_PAYROLL, API_FLAGS, API_BANK, API_BANK_APPROVE,
   API_REPORTS, API_HOLIDAYS, API_AUDIT,
-} from "@willdesign-hr/types";
+} from "@hr-attendance-app/types";
 
 /** Sub-key constants for cache scoping within query key arrays. */
 const SCOPE = {

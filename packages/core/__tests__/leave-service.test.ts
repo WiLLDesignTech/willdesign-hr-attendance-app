@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from "vitest";
 import { LeaveService } from "../src/leave/service.js";
-import { LeaveTypes, LeaveRequestStatuses } from "@willdesign-hr/types";
+import { LeaveTypes, LeaveRequestStatuses } from "@hr-attendance-app/types";
 import type { LeaveRepository, AuditRepository } from "../src/repositories/index.js";
-import type { LeaveBalance } from "@willdesign-hr/types";
+import type { LeaveBalance } from "@hr-attendance-app/types";
 
 function createMockRepos(balance: Partial<LeaveBalance> = {}) {
   const leaveRepo: LeaveRepository = {

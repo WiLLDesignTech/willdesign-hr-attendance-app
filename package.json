@@ -1,8 +1,8 @@
 {
-  "name": "willdesign-hr",
+  "name": "hr-attendance-app",
   "version": "0.1.0",
   "private": true,
-  "description": "WillDesign HR Platform — Monorepo",
+  "description": "HR Attendance App — Monorepo",
   "workspaces": [
     "packages/types",
     "packages/core",
@@ -14,9 +14,9 @@
   ],
   "scripts": {
     "build": "npm run build --workspaces --if-present",
-    "dev": "concurrently -n db,api,web -c blue,green,cyan \"docker compose up dynamodb\" \"sleep 3 && npx tsx scripts/setup-local.ts && npm run dev -w @willdesign-hr/api\" \"sleep 5 && npm run dev -w @willdesign-hr/web\"",
-    "dev:web": "npm run dev --workspace=@willdesign-hr/web",
-    "dev:api": "npm run dev --workspace=@willdesign-hr/api",
+    "dev": "concurrently -n db,api,web -c blue,green,cyan \"docker compose up dynamodb\" \"sleep 3 && npx tsx scripts/setup-local.ts && npm run dev -w @hr-attendance-app/api\" \"sleep 5 && npm run dev -w @hr-attendance-app/web\"",
+    "dev:web": "npm run dev --workspace=@hr-attendance-app/web",
+    "dev:api": "npm run dev --workspace=@hr-attendance-app/api",
     "dev:setup": "npx tsx scripts/setup-local.ts",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -28,9 +28,9 @@
     "typecheck": "tsc --build",
     "typecheck:watch": "tsc --build --watch",
     "clean": "npm run clean --workspaces --if-present && rm -rf node_modules",
-    "cdk:synth": "npm run synth --workspace=@willdesign-hr/infra",
-    "cdk:deploy": "npm run deploy --workspace=@willdesign-hr/infra",
-    "cdk:diff": "npm run diff --workspace=@willdesign-hr/infra"
+    "cdk:synth": "npm run synth --workspace=@hr-attendance-app/infra",
+    "cdk:deploy": "npm run deploy --workspace=@hr-attendance-app/infra",
+    "cdk:diff": "npm run diff --workspace=@hr-attendance-app/infra"
   },
   "engines": {
     "node": ">=20.0.0"

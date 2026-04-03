@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { calculateDailyHours } from "../src/attendance/hours-calculator.js";
-import { AttendanceActions } from "@willdesign-hr/types";
-import type { AttendanceEvent } from "@willdesign-hr/types";
+import { AttendanceActions } from "@hr-attendance-app/types";
+import type { AttendanceEvent } from "@hr-attendance-app/types";
 
 function makeEvent(action: string, timestamp: string): AttendanceEvent {
   return {

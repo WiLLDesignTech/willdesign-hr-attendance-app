@@ -3,8 +3,8 @@ import { useApiClient } from "../useApiClient";
 import { queryKeys } from "./keys";
 import {
   API_LEAVE_REQUESTS, API_LEAVE_BALANCE, apiPath, API_LEAVE_REQUEST_BY_ID,
-} from "@willdesign-hr/types";
-import type { LeaveRequest, LeaveBalance, CreateLeaveBody } from "@willdesign-hr/types";
+} from "@hr-attendance-app/types";
+import type { LeaveRequest, LeaveBalance, CreateLeaveBody } from "@hr-attendance-app/types";
 
 export function useLeaveRequests() {
   const api = useApiClient();

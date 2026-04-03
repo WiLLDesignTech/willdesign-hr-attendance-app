@@ -1,4 +1,4 @@
-import type { AttendanceEvent, AttendanceStateRecord } from "@willdesign-hr/types";
+import type { AttendanceEvent, AttendanceStateRecord } from "@hr-attendance-app/types";
 
 export interface AttendanceRepository {
   getState(employeeId: string): Promise<AttendanceStateRecord>;

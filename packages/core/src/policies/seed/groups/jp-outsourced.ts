@@ -1,5 +1,5 @@
-import type { RawPolicy } from "@willdesign-hr/types";
-import { LeaveTypes, TerminationHandlings } from "@willdesign-hr/types";
+import type { RawPolicy } from "@hr-attendance-app/types";
+import { LeaveTypes, TerminationHandlings } from "@hr-attendance-app/types";
 
 /** 業務委託 — JP outsourced contractor. No overtime tracking, no leave. */
 export const jpOutsourcedPolicy: RawPolicy = {

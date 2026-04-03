@@ -1,7 +1,7 @@
 import { PutCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import type { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import type { SalaryRecord } from "@willdesign-hr/types";
-import type { SalaryRepository } from "@willdesign-hr/core";
+import type { SalaryRecord } from "@hr-attendance-app/types";
+import type { SalaryRepository } from "@hr-attendance-app/core";
 import { KEYS } from "./keys.js";
 
 export class DynamoSalaryRepository implements SalaryRepository {

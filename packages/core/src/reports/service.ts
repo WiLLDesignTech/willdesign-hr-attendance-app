@@ -1,5 +1,5 @@
-import type { DailyReport } from "@willdesign-hr/types";
-import { KeyPatterns, todayDate, nowIso } from "@willdesign-hr/types";
+import type { DailyReport } from "@hr-attendance-app/types";
+import { KeyPatterns, todayDate, nowIso } from "@hr-attendance-app/types";
 import type { ReportRepository } from "../repositories/report.js";
 import { parseReport } from "./parser.js";
 

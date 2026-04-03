@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { screen } from "@testing-library/react";
 import { renderWithProviders } from "../../test/render";
 import { AttendancePage } from "./AttendancePage";
-import { AttendanceStates } from "@willdesign-hr/types";
+import { AttendanceStates } from "@hr-attendance-app/types";
 
 vi.mock("../../hooks/queries/useAttendance", () => ({
   useAttendanceState: () => ({

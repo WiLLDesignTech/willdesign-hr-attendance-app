@@ -1,8 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useApiClient } from "../useApiClient";
 import { queryKeys } from "./keys";
-import { API_FLAGS, API_FLAG_BY_ID, apiPath } from "@willdesign-hr/types";
-import type { Flag, ResolveFlagBody } from "@willdesign-hr/types";
+import { API_FLAGS, API_FLAG_BY_ID, apiPath } from "@hr-attendance-app/types";
+import type { Flag, ResolveFlagBody } from "@hr-attendance-app/types";
 
 export function useFlags() {
   const api = useApiClient();

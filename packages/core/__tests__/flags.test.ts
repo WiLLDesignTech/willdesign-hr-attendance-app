@@ -9,7 +9,7 @@ import {
   validateQuotaPlan,
   calculateForceMajeureAdjustment,
 } from "../src/flags/service.js";
-import { FlagLevels, FlagResolutions, HOURS } from "@willdesign-hr/types";
+import { FlagLevels, FlagResolutions, HOURS } from "@hr-attendance-app/types";
 
 describe("Flag Generation (9.1)", () => {
   it("generates daily flag when hours below minimum and no leave", () => {

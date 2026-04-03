@@ -1,5 +1,5 @@
-import type { LeaveRequest, LeaveBalance, LeaveType, Result } from "@willdesign-hr/types";
-import { LeaveTypes, LeaveRequestStatuses, AuditActions, AuditSources, KeyPatterns, KeyPrefixes, nowIso } from "@willdesign-hr/types";
+import type { LeaveRequest, LeaveBalance, LeaveType, Result } from "@hr-attendance-app/types";
+import { LeaveTypes, LeaveRequestStatuses, AuditActions, AuditSources, KeyPatterns, KeyPrefixes, nowIso } from "@hr-attendance-app/types";
 import type { LeaveRepository, AuditRepository } from "../repositories/index.js";
 
 export interface CreateLeaveRequestInput {

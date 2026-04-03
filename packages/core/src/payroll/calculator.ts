@@ -1,5 +1,5 @@
-import type { SalaryRecord, SalaryType, AllowanceItem, PayrollBreakdown, BlendingDetails, Currency } from "@willdesign-hr/types";
-import { SalaryTypes, Currencies, HOURS } from "@willdesign-hr/types";
+import type { SalaryRecord, SalaryType, AllowanceItem, PayrollBreakdown, BlendingDetails, Currency } from "@hr-attendance-app/types";
+import { SalaryTypes, Currencies, HOURS } from "@hr-attendance-app/types";
 
 /**
  * Get the effective salary for a given month from history.

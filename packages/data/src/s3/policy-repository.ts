@@ -1,7 +1,7 @@
 import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import type { S3Client } from "@aws-sdk/client-s3";
-import type { RawPolicy } from "@willdesign-hr/types";
-import type { PolicyRepository } from "@willdesign-hr/core";
+import type { RawPolicy } from "@hr-attendance-app/types";
+import type { PolicyRepository } from "@hr-attendance-app/core";
 
 const S3_KEYS = {
   COMPANY: "policies/org.json",

@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { HolidayService } from "../src/holidays/service";
 import { generateJpHolidays } from "../src/holidays/jp-generator";
-import { Regions } from "@willdesign-hr/types";
-import type { Holiday } from "@willdesign-hr/types";
+import { Regions } from "@hr-attendance-app/types";
+import type { Holiday } from "@hr-attendance-app/types";
 
 describe("HolidayService", () => {
   let service: HolidayService;

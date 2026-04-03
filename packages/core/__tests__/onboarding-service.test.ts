@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { OnboardingService } from "../src/onboarding/service";
-import { Roles, SalaryChangeTypes, EmployeeStatuses } from "@willdesign-hr/types";
-import type { Employee } from "@willdesign-hr/types";
+import { Roles, SalaryChangeTypes, EmployeeStatuses } from "@hr-attendance-app/types";
+import type { Employee } from "@hr-attendance-app/types";
 
 describe("OnboardingService", () => {
   let service: OnboardingService;
@@ -65,7 +65,7 @@ describe("OnboardingService", () => {
   it("creates employee record with all fields", async () => {
     const input = {
       name: "Taro Yamada",
-      email: "taro@willdesign.com",
+      email: "taro@example.com",
       slackId: "U_TARO",
       employmentType: "FULL_TIME" as const,
       region: "JP" as const,
@@ -84,7 +84,7 @@ describe("OnboardingService", () => {
     expect(result.success).toBe(true);
     expect(employeeRepo.create).toHaveBeenCalledWith(expect.objectContaining({
       name: "Taro Yamada",
-      email: "taro@willdesign.com",
+      email: "taro@example.com",
       slackId: "U_TARO",
       region: "JP",
     }));
@@ -93,7 +93,7 @@ describe("OnboardingService", () => {
   it("creates Cognito user account", async () => {
     const input = {
       name: "Taro Yamada",
-      email: "taro@willdesign.com",
+      email: "taro@example.com",
       slackId: "U_TARO",
       employmentType: "FULL_TIME" as const,
       region: "JP" as const,
@@ -110,7 +110,7 @@ describe("OnboardingService", () => {
     await service.onboard(input);
 
     expect(authProvider.createUser).toHaveBeenCalledWith(expect.objectContaining({
-      email: "taro@willdesign.com",
+      email: "taro@example.com",
       role: Roles.EMPLOYEE,
     }));
   });

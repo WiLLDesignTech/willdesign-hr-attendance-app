@@ -1,4 +1,4 @@
-import type { BankApprovalStatus, BankEntry } from "@willdesign-hr/types";
+import type { BankApprovalStatus, BankEntry } from "@hr-attendance-app/types";
 
 export interface BankQueryOptions {
   readonly approvalStatus?: BankApprovalStatus;

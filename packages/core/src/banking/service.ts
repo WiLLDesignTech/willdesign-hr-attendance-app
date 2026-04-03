@@ -1,4 +1,4 @@
-import type { BankEntry, BankApprovalStatus } from "@willdesign-hr/types";
+import type { BankEntry, BankApprovalStatus } from "@hr-attendance-app/types";
 import type { BankRepository } from "../repositories/bank.js";
 
 export interface BankServiceDeps {

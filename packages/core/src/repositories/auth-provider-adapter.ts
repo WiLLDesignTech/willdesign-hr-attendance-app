@@ -1,4 +1,4 @@
-import type { LanguagePreference, Role } from "@willdesign-hr/types";
+import type { LanguagePreference, Role } from "@hr-attendance-app/types";
 
 export interface CreateAuthUserInput {
   readonly email: string;
