@@ -542,14 +542,14 @@
   - Write tests for holiday seeding, CRUD, and hour reduction calculations
   - _Requirements: 15.1, 15.2, 15.3, 15.4, 5.9_
 
-- [ ] 19. CDK web hosting stack and CI/CD pipeline
-- [ ] 19.1 Implement the CDK web hosting stack with S3 and CloudFront
+- [x] 19. CDK web hosting stack and CI/CD pipeline
+- [x] 19.1 Implement the CDK web hosting stack with S3 and CloudFront
   - Create S3 bucket for static site hosting with appropriate bucket policy
   - Configure CloudFront distribution with custom domain support, HTTPS, and caching headers
   - Set up environment-specific deployments (dev-hr.willdesign.com, hr.willdesign.com)
   - _Requirements: 19.3, 19.6_
 
-- [ ] 19.2 (P) Set up the GitHub Actions CI/CD pipeline for automated testing and deployment
+- [x] 19.2 (P) Set up the GitHub Actions CI/CD pipeline for automated testing and deployment
   - CI workflow (on PR): run lint, typecheck, and all tests across all packages
   - Deploy-dev workflow (on push to develop): build and deploy all stacks to dev environment
   - Deploy-prod workflow (on push to main): build and deploy all stacks to prod environment
