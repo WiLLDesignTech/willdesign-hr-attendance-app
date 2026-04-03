@@ -52,6 +52,7 @@ Kiro-style Spec Driven Development implementation on AI-DLC (AI Development Life
 - Never use magic strings or numbers in code — always use named constants from `@willdesign-hr/types` constants module
 - Always use styled-components for frontend styling — never create CSS files. Use `theme.ts` for design tokens, `primitives.ts` for shared components (Card, Button, FormField, etc.), and co-located styled components for page-specific styles
 - Never display raw ISO strings to users — use `utils/date.ts` functions: `formatDate`/`formatDateTime` for display, `localDateToIso`/`isoToLocalDate` for form input conversion. All dates stored as ISO UTC, displayed in user's locale
+- All user-facing text must use i18n `t()` calls — never hardcode strings in JSX. Keys go in `i18n/en.json`, `ja.json`, `ne.json` with structure `section.key` (e.g. `t("leave.newRequest")`)
 - Prefer querying NotebookLM MCP for requirement, design, or contract lookups to save context tokens — fall back to reading spec files directly only when NotebookLM is unavailable
 
 ## Steering Configuration
