@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { HolidayService, JP_NATIONAL_HOLIDAYS_2026 } from "../src/holidays/service";
+import { HolidayService } from "../src/holidays/service";
+import { generateJpHolidays } from "../src/holidays/jp-generator";
 import { Regions } from "@willdesign-hr/types";
 import type { Holiday } from "@willdesign-hr/types";
 
@@ -28,20 +29,21 @@ describe("HolidayService", () => {
       expect(result.seededCount).toBeGreaterThan(0);
     });
 
-    it("includes substitute holidays (振替休日)", () => {
-      const substitute = JP_NATIONAL_HOLIDAYS_2026.filter(h => h.isSubstitute);
-      expect(substitute.length).toBeGreaterThanOrEqual(0);
+    it("works for any supported year (2025-2099)", async () => {
+      const result = await service.seedJpHolidays(2030);
+      expect(result.seededCount).toBeGreaterThan(0);
     });
 
-    it("all seeded holidays have JP region", () => {
-      for (const h of JP_NATIONAL_HOLIDAYS_2026) {
+    it("generated holidays include substitute holidays", () => {
+      const holidays = generateJpHolidays(2026);
+      const substitute = holidays.filter(h => h.isSubstitute);
+      expect(substitute.length).toBeGreaterThanOrEqual(1);
+    });
+
+    it("all generated holidays have JP region", () => {
+      const holidays = generateJpHolidays(2026);
+      for (const h of holidays) {
         expect(h.region).toBe(Regions.JP);
-      }
-    });
-
-    it("all seeded holidays have year 2026", () => {
-      for (const h of JP_NATIONAL_HOLIDAYS_2026) {
-        expect(h.year).toBe(2026);
       }
     });
   });

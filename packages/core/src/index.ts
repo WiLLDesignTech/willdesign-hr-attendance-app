@@ -92,5 +92,6 @@ export type { OnboardingDeps, OnboardingInput, OnboardingResult } from "./onboar
 export { OffboardingService } from "./onboarding/offboarding.js";
 export type { OffboardingDeps, OffboardingInput, OffboardingResult, SettlementPreview } from "./onboarding/offboarding.js";
 
-export { HolidayService, JP_NATIONAL_HOLIDAYS_2026 } from "./holidays/service.js";
+export { HolidayService } from "./holidays/service.js";
 export type { HolidayServiceDeps, SeedResult } from "./holidays/service.js";
+export { generateJpHolidays } from "./holidays/jp-generator.js";
