@@ -1,7 +1,17 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { screen } from "@testing-library/react";
 import { renderWithProviders } from "../../test/render";
 import { PayrollPage } from "./PayrollPage";
+
+vi.mock("../../hooks/queries/usePayroll", () => ({
+  usePayroll: () => ({
+    data: {
+      baseSalary: 300000, overtimePay: 0, allowances: [],
+      deficitDeduction: 0, netAmount: 300000, currency: "JPY",
+    },
+    isLoading: false,
+  }),
+}));
 
 describe("PayrollPage", () => {
   it("renders payroll breakdown section", () => {

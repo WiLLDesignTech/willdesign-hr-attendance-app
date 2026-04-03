@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "styled-components";
 import { AuthProvider } from "./hooks/useAuth";
+import { AuthGuard } from "./components/auth/AuthGuard";
+import { LoginPage } from "./components/auth/LoginPage";
 import { Layout } from "./components/common/Layout";
 import { theme } from "./theme/theme";
 import { GlobalStyle } from "./theme/GlobalStyle";
@@ -32,15 +34,18 @@ export function App() {
           <BrowserRouter>
             <Suspense fallback={<div>Loading...</div>}>
               <Routes>
-                <Route element={<Layout />}>
-                  <Route index element={<DashboardPage />} />
-                  <Route path="attendance" element={<AttendancePage />} />
-                  <Route path="leave" element={<LeavePage />} />
-                  <Route path="reports" element={<ReportsPage />} />
-                  <Route path="payroll" element={<PayrollPage />} />
-                  <Route path="team" element={<TeamPage />} />
-                  <Route path="admin" element={<AdminPage />} />
-                  <Route path="settings" element={<SettingsPage />} />
+                <Route path="login" element={<LoginPage />} />
+                <Route element={<AuthGuard />}>
+                  <Route element={<Layout />}>
+                    <Route index element={<DashboardPage />} />
+                    <Route path="attendance" element={<AttendancePage />} />
+                    <Route path="leave" element={<LeavePage />} />
+                    <Route path="reports" element={<ReportsPage />} />
+                    <Route path="payroll" element={<PayrollPage />} />
+                    <Route path="team" element={<TeamPage />} />
+                    <Route path="admin" element={<AdminPage />} />
+                    <Route path="settings" element={<SettingsPage />} />
+                  </Route>
                 </Route>
               </Routes>
             </Suspense>

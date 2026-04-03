@@ -1,7 +1,22 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { screen } from "@testing-library/react";
 import { renderWithProviders } from "../../test/render";
 import { DashboardPage } from "./DashboardPage";
+import { AttendanceStates } from "@willdesign-hr/types";
+
+vi.mock("../../hooks/queries/useAttendance", () => ({
+  useAttendanceState: () => ({
+    data: { employeeId: "EMP#001", state: AttendanceStates.IDLE, lastEventTimestamp: "" },
+    isLoading: false,
+  }),
+  useClockAction: () => ({ mutate: vi.fn(), isPending: false }),
+}));
+
+vi.mock("../../hooks/queries/useLeave", () => ({
+  useLeaveBalance: () => ({
+    data: { employeeId: "EMP#001", paidLeaveTotal: 10, paidLeaveUsed: 2, paidLeaveRemaining: 8, carryOver: 0, carryOverExpiry: null, lastAccrualDate: null },
+  }),
+}));
 
 describe("DashboardPage", () => {
   it("renders the clock widget section", () => {

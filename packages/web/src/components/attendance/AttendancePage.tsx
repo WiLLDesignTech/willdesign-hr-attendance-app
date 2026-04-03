@@ -1,24 +1,38 @@
-import { useRef, useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import type { AttendanceAction, AttendanceState } from "@willdesign-hr/types";
-import { AttendanceStates } from "@willdesign-hr/types";
+import styled from "styled-components";
+import { AttendanceStates, nowIso } from "@willdesign-hr/types";
 import { ClockWidget } from "../dashboard/ClockWidget";
 import { Card, PageLayout, SectionTitle, TextMuted } from "../../theme/primitives";
+import { LoadingSpinner } from "../common/LoadingSpinner";
+import { useAttendanceState, useAttendanceEvents, useClockAction } from "../../hooks/queries/useAttendance";
+import { formatDateTime, isoToLocalDate } from "../../utils/date";
+
+const EventList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+`;
+
+const EventItem = styled.li`
+  display: flex;
+  justify-content: space-between;
+  padding: ${({ theme }) => theme.space.xs} 0;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  font-size: 0.875rem;
+  &:last-child { border-bottom: none; }
+`;
 
 export function AttendancePage() {
   const { t } = useTranslation();
-  const [status] = useState<AttendanceState>(AttendanceStates.IDLE);
-  const [loading, setLoading] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const [selectedDate] = useState(() => isoToLocalDate(nowIso()));
+  const { data: attState, isLoading: stateLoading } = useAttendanceState();
+  const { data: events, isLoading: eventsLoading } = useAttendanceEvents(selectedDate);
+  const clockAction = useClockAction();
 
-  useEffect(() => {
-    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
-  }, []);
+  if (stateLoading) return <LoadingSpinner />;
 
-  const handleAction = (_action: AttendanceAction) => {
-    setLoading(true);
-    timerRef.current = setTimeout(() => setLoading(false), 500);
-  };
+  const status = attState?.state ?? AttendanceStates.IDLE;
 
   return (
     <PageLayout>
@@ -27,14 +41,27 @@ export function AttendancePage() {
         <ClockWidget
           status={status}
           hoursToday={0}
-          onAction={handleAction}
-          loading={loading}
+          onAction={(action) => clockAction.mutate(action)}
+          loading={clockAction.isPending}
         />
       </Card>
 
       <Card>
         <SectionTitle>{t("attendance.history")}</SectionTitle>
-        <TextMuted>{t("attendance.noRecords")}</TextMuted>
+        {eventsLoading ? (
+          <LoadingSpinner />
+        ) : !events?.length ? (
+          <TextMuted>{t("attendance.noRecords")}</TextMuted>
+        ) : (
+          <EventList>
+            {events.map((e) => (
+              <EventItem key={e.id}>
+                <span>{t(`attendance.action.${e.action}`)}</span>
+                <span>{formatDateTime(e.timestamp)}</span>
+              </EventItem>
+            ))}
+          </EventList>
+        )}
       </Card>
 
       <Card>

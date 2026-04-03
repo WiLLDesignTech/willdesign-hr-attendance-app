@@ -1,10 +1,11 @@
-import { useRef, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import type { AttendanceAction, AttendanceState } from "@willdesign-hr/types";
 import { AttendanceStates } from "@willdesign-hr/types";
 import { ClockWidget } from "./ClockWidget";
 import { Card, PageLayout, TextMuted } from "../../theme/primitives";
+import { LoadingSpinner } from "../common/LoadingSpinner";
+import { useAttendanceState, useClockAction } from "../../hooks/queries/useAttendance";
+import { useLeaveBalance } from "../../hooks/queries/useLeave";
 
 const StatsGrid = styled.div`
   display: grid;
@@ -42,27 +43,21 @@ const PendingTitle = styled.h3`
 
 export function DashboardPage() {
   const { t } = useTranslation();
-  const [status] = useState<AttendanceState>(AttendanceStates.IDLE);
-  const [hoursToday] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const { data: attState, isLoading: attLoading } = useAttendanceState();
+  const clockAction = useClockAction();
+  const { data: balance } = useLeaveBalance();
 
-  useEffect(() => {
-    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
-  }, []);
+  if (attLoading) return <LoadingSpinner />;
 
-  const handleAction = (_action: AttendanceAction) => {
-    setLoading(true);
-    timerRef.current = setTimeout(() => setLoading(false), 500);
-  };
+  const status = attState?.state ?? AttendanceStates.IDLE;
 
   return (
     <PageLayout>
       <ClockWidget
         status={status}
-        hoursToday={hoursToday}
-        onAction={handleAction}
-        loading={loading}
+        hoursToday={0}
+        onAction={(action) => clockAction.mutate(action)}
+        loading={clockAction.isPending}
       />
 
       <StatsGrid>
@@ -80,7 +75,7 @@ export function DashboardPage() {
         </StatCard>
         <StatCard>
           <StatLabel>{t("dashboard.leaveBalance")}</StatLabel>
-          <StatValue>0</StatValue>
+          <StatValue>{balance?.paidLeaveRemaining ?? 0}</StatValue>
         </StatCard>
       </StatsGrid>
 

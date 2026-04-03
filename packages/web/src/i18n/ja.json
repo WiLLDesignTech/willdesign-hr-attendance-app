@@ -1,13 +1,14 @@
 {
   "app": { "title": "WillDesign HR" },
   "nav": { "dashboard": "ダッシュボード", "attendance": "勤怠", "leave": "休暇", "reports": "日報", "payroll": "給与", "team": "チーム", "admin": "管理", "settings": "設定" },
-  "auth": { "login": "ログイン", "logout": "ログアウト", "loading": "読み込み中..." },
+  "auth": { "login": "ログイン", "logout": "ログアウト", "loading": "読み込み中...", "selectEmployee": "ログインする社員を選択", "loginButton": "ログイン" },
+  "common": { "loading": "読み込み中...", "error": "エラーが発生しました", "retry": "再試行", "noData": "データがありません" },
   "dashboard": { "clockIn": "出勤", "clockOut": "退勤", "break": "休憩", "back": "戻り", "hoursToday": "本日の時間", "hoursWeek": "今週", "hoursMonth": "今月", "leaveBalance": "有給残日数", "pending": "未処理", "noPending": "未処理のアクションはありません" },
-  "attendance": { "history": "勤怠履歴", "noRecords": "勤怠記録はまだありません", "teamCalendar": "チームカレンダー", "noLeaves": "予定された休暇はありません" },
-  "leave": { "newRequest": "新規申請", "myRequests": "自分の申請", "noRequests": "休暇申請はありません", "leaveType": "休暇種別", "startDate": "開始日", "endDate": "終了日", "submit": "申請する", "paid": "有給休暇", "unpaid": "無給休暇", "shiftPermission": "シフト許可" },
+  "attendance": { "history": "勤怠履歴", "noRecords": "勤怠記録はまだありません", "teamCalendar": "チームカレンダー", "noLeaves": "予定された休暇はありません", "action": { "CLOCK_IN": "出勤", "CLOCK_OUT": "退勤", "BREAK_START": "休憩開始", "BREAK_END": "休憩終了" } },
+  "leave": { "newRequest": "新規申請", "myRequests": "自分の申請", "noRequests": "休暇申請はありません", "leaveType": "休暇種別", "startDate": "開始日", "endDate": "終了日", "submit": "申請する", "paid": "有給休暇", "unpaid": "無給休暇", "shiftPermission": "シフト許可", "type": { "PAID": "有給休暇", "UNPAID": "無給休暇", "SHIFT_PERMISSION": "シフト許可", "CREDITED_ABSENCE": "振替休日" }, "status": { "PENDING": "申請中", "APPROVED": "承認済み", "REJECTED": "却下" }, "balanceRemaining": "有給残日数" },
   "reports": { "dailyReport": "日報", "yesterday": "昨日", "today": "今日", "blockers": "ブロッカー", "submit": "提出する", "history": "日報履歴", "noReports": "提出された日報はありません", "yesterdayPlaceholder": "昨日何を達成しましたか？", "todayPlaceholder": "今日何に取り組みますか？", "blockersPlaceholder": "ブロッカーはありますか？" },
   "payroll": { "breakdown": "給与明細", "month": "月", "baseSalary": "基本給", "overtime": "残業代", "allowances": "手当", "deductions": "控除", "netAmount": "手取額" },
-  "team": { "overview": "チーム概要", "noMembers": "チームメンバーが読み込まれていません", "flags": "フラグ", "noFlags": "未処理のフラグはありません", "surplusBanking": "余剰バンキング", "noSurplus": "余剰リクエストはありません", "missingReports": "未提出日報", "allSubmitted": "全日報提出済み" },
+  "team": { "overview": "チーム概要", "noMembers": "チームメンバーが読み込まれていません", "flags": "フラグ", "noFlags": "未処理のフラグはありません", "surplusBanking": "余剰バンキング", "noSurplus": "余剰リクエストはありません", "missingReports": "未提出日報", "allSubmitted": "全日報提出済み", "employmentType": { "JP_FULL_TIME": "正社員", "JP_CONTRACT": "契約社員", "JP_OUTSOURCED": "業務委託", "JP_PART_TIME": "パートタイム", "JP_SALES": "セールス", "JP_INTERN": "インターン", "NP_FULL_TIME": "正社員(NP)", "NP_PAID_INTERN": "有給インターン(NP)", "NP_UNPAID_INTERN": "無給インターン(NP)" }, "region": { "JP": "日本", "NP": "ネパール" } },
   "admin": { "onboarding": "入社手続き", "onboardingDesc": "新規社員レコード作成", "offboarding": "退社手続き", "offboardingDesc": "退社処理", "policies": "ポリシー", "policiesDesc": "ポリシー設定管理", "roles": "ロール", "rolesDesc": "カスタムロールと権限の管理", "holidays": "祝日", "holidaysDesc": "地域別祝日カレンダー管理" },
   "settings": { "profile": "プロフィール", "profileDesc": "アカウント情報", "preferences": "設定", "language": "言語" }
 }

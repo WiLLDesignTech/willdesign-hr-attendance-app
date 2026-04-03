@@ -1,7 +1,17 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { screen } from "@testing-library/react";
 import { renderWithProviders } from "../../test/render";
 import { AttendancePage } from "./AttendancePage";
+import { AttendanceStates } from "@willdesign-hr/types";
+
+vi.mock("../../hooks/queries/useAttendance", () => ({
+  useAttendanceState: () => ({
+    data: { employeeId: "EMP#001", state: AttendanceStates.IDLE, lastEventTimestamp: "" },
+    isLoading: false,
+  }),
+  useAttendanceEvents: () => ({ data: [], isLoading: false }),
+  useClockAction: () => ({ mutate: vi.fn(), isPending: false }),
+}));
 
 describe("AttendancePage", () => {
   it("renders attendance history section", () => {
