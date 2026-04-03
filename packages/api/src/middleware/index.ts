@@ -1,6 +1,7 @@
 import type { AuthContext, Result } from "@willdesign-hr/types";
-import { Roles } from "@willdesign-hr/types";
-import { COGNITO } from "@willdesign-hr/types";
+import { Roles, ErrorCodes, COGNITO } from "@willdesign-hr/types";
+
+export { ErrorCodes };
 
 export interface ApiResponse {
   readonly statusCode: number;
@@ -9,12 +10,12 @@ export interface ApiResponse {
 }
 
 const ERROR_STATUS_MAP: Record<string, number> = {
-  NOT_FOUND: 404,
-  FORBIDDEN: 403,
-  VALIDATION: 400,
-  CONFLICT: 409,
-  UNPROCESSABLE: 422,
-  UNAUTHORIZED: 401,
+  [ErrorCodes.NOT_FOUND]: 404,
+  [ErrorCodes.FORBIDDEN]: 403,
+  [ErrorCodes.VALIDATION]: 400,
+  [ErrorCodes.CONFLICT]: 409,
+  [ErrorCodes.UNPROCESSABLE]: 422,
+  [ErrorCodes.UNAUTHORIZED]: 401,
 };
 
 const CORS_HEADERS = {

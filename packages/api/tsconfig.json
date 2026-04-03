@@ -2,9 +2,11 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "types": ["node"]
   },
   "include": ["src"],
+  "exclude": ["src/dev-server.ts"],
   "references": [
     { "path": "../types" },
     { "path": "../core" },

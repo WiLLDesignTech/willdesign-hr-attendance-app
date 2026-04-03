@@ -1,5 +1,6 @@
 import { buildResponse, handleError } from "../middleware/index.js";
 import type { ApiResponse } from "../middleware/index.js";
+import { ErrorCodes } from "@willdesign-hr/types";
 
 export type RouteHandler = (params: {
   claims: Record<string, unknown>;
@@ -40,14 +41,15 @@ export function createRouter(routes: readonly RouteDefinition[]) {
     );
 
     if (!route) {
-      return handleError("NOT_FOUND", `No handler for ${event.httpMethod} ${event.path}`);
+      return handleError(ErrorCodes.NOT_FOUND, `No handler for ${event.httpMethod} ${event.path}`);
     }
 
     try {
       const body = event.body ? JSON.parse(event.body) as unknown : null;
+      const pathParams = event.pathParameters ?? extractPathParams(route.path, event.path);
       return await route.handler({
         claims,
-        pathParams: event.pathParameters ?? {},
+        pathParams,
         queryParams: event.queryStringParameters ?? {},
         body,
       });
@@ -67,4 +69,23 @@ function matchPath(pattern: string, actual: string): boolean {
     if (part.startsWith(":")) return true;
     return part === actualParts[i];
   });
+}
+
+/**
+ * Extract path parameters from a matched route pattern.
+ * Used when running outside API Gateway (local dev server).
+ */
+function extractPathParams(pattern: string, actual: string): Record<string, string> {
+  const patternParts = pattern.split("/");
+  const actualParts = actual.split("/");
+  const params: Record<string, string> = {};
+
+  for (let i = 0; i < patternParts.length; i++) {
+    const part = patternParts[i];
+    if (part?.startsWith(":")) {
+      params[part.slice(1)] = actualParts[i] ?? "";
+    }
+  }
+
+  return params;
 }
