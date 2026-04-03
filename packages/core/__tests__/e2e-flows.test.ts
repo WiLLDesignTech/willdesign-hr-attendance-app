@@ -6,7 +6,7 @@ import { shouldGenerateFlag, resolveFlag, applyBankOffset } from "../src/flags/s
 import { calculatePayrollBreakdown } from "../src/payroll/calculator";
 import {
   AttendanceStates, AttendanceActions, Roles, FlagLevels, FlagResolutions,
-  EmployeeStatuses, LeaveTypes, LeaveRequestStatuses, HOURS, Currencies,
+  EmployeeStatuses, EmploymentTypes, LeaveTypes, LeaveRequestStatuses, HOURS, Currencies,
 } from "@willdesign-hr/types";
 import type { LeaveBalance } from "@willdesign-hr/types";
 
@@ -71,7 +71,10 @@ describe("E2E Flow: Leave Request → Approval", () => {
       update: vi.fn().mockImplementation((_id, updates) => Promise.resolve({ id: "LEAVE#001", ...updates })),
     };
     const auditRepo = { append: vi.fn(), findByTarget: vi.fn().mockResolvedValue([]), findByActor: vi.fn().mockResolvedValue([]) };
-    const getBalance = vi.fn().mockResolvedValue({ paidLeaveRemaining: 10, unpaidLeaveUsed: 0 } as LeaveBalance);
+    const getBalance = vi.fn().mockResolvedValue({
+      employeeId: "EMP#001", paidLeaveTotal: 10, paidLeaveUsed: 0,
+      paidLeaveRemaining: 10, carryOver: 0, carryOverExpiry: null, lastAccrualDate: null,
+    } satisfies LeaveBalance);
 
     const leaveService = new LeaveService(leaveRepo as never, auditRepo as never, getBalance);
 
@@ -115,7 +118,7 @@ describe("E2E Flow: Onboarding → First Clock-In", () => {
       authProvider: authProvider as never, auditRepo: auditRepo as never,
     }).onboard({
       name: "New Hire", email: "new@willdesign.com", slackId: "U_NEW",
-      employmentType: "FULL_TIME", region: "JP", timezone: "Asia/Tokyo",
+      employmentType: EmploymentTypes.JP_FULL_TIME, region: "JP", timezone: "Asia/Tokyo",
       languagePreference: "ja", managerId: "EMP#MGR", joinDate: "2026-04-01",
       probationEndDate: "2026-07-01", monthlySalary: 300000, currency: Currencies.JPY, role: Roles.EMPLOYEE,
     });
@@ -161,9 +164,9 @@ describe("E2E Flow: Payroll Calculation", () => {
       employeeId: "EMP#001", yearMonth: "2026-03",
       baseSalary: 300000, currency: Currencies.JPY,
       overtimeHours: 10, overtimeRate: 1.25, hourlyRateForOvertime: 1875,
-      allowances: [{ type: "TRANSPORTATION", name: "Transport", amount: 15000 }],
+      allowances: [{ type: "TRANSPORTATION", name: "Transport", amount: 15000, currency: Currencies.JPY }],
       bonus: 0, commission: 0, deficitHours: 0, monthlyHourlyRate: 1875,
-      proRataDays: null, totalDays: 31, exchangeRate: null, transferFees: 0,
+      proRataDays: null, totalDays: 31, exchangeRate: null, exchangeRateDate: null, transferFees: 0,
     });
 
     expect(result.baseSalary).toBe(300000);

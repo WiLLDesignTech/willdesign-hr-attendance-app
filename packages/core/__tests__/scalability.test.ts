@@ -1,10 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { resolveCascade, deepMergePolicy } from "../src/policies/resolver";
+import { deepMergePolicy } from "../src/policies/resolver";
 import { generateJpHolidays } from "../src/holidays/jp-generator";
-import { ROLE_HIERARCHY, hasMinimumRole, hasPermission } from "../src/permissions/engine";
-import {
-  Roles, Regions, EmploymentTypes, EmployeeStatuses,
-} from "@willdesign-hr/types";
+import { ROLE_HIERARCHY, hasPermission } from "../src/permissions/engine";
+import { Regions } from "@willdesign-hr/types";
 
 describe("Scalability: 100+ Users", () => {
   it("DynamoDB key patterns support unlimited employees", () => {
