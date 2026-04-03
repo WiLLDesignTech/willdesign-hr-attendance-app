@@ -78,7 +78,9 @@ Both attendance messages and daily report messages follow this async pattern.
 - **Services** (`packages/core/src/*/service.ts`) — Business logic: validation, calculations, audit logging, orchestration
 - **Repositories** (`packages/data/src/dynamo/`) — Data access: DynamoDB reads/writes, key construction
 - **Handlers NEVER call repositories directly** — always go through a service
-- Services: EmployeeService, AttendanceService, LeaveService, PayrollService, FlagQueryService, BankService, ReportService, AuditService, OnboardingService, OffboardingService, HolidayService, CronService, ReminderService
+- Services: EmployeeService, AttendanceService (with lock enforcement), LeaveService, PayrollService, FlagQueryService, BankService, ReportService, AuditService, OnboardingService, OffboardingService, HolidayService, CronService, ReminderService
+- Permission enforcement: `hasPermission(auth, Permissions.X)` — granular permission checks replace `hasMinimumRole`. Permissions defined in `packages/types/src/permissions.ts`, mapped cumulatively per role via `ROLE_PERMISSIONS`
+- Attendance locking: `AttendanceService.processEvent` checks locks (employee → group → company scope) before processing. Admin locks/unlocks via `POST/DELETE /api/attendance/lock` gated by `Permissions.ATTENDANCE_LOCK`
 
 ## Shared API Contract
 - **`packages/types/src/api-routes.ts`** — Single source of truth for all API endpoints, typed request/response bodies, query params, and frontend routes

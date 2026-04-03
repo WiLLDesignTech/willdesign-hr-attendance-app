@@ -13,13 +13,14 @@ willdesign-hr/
 │   │   │   ├── overtime/        # OvertimeCalculator (deemed, 36 Agreement)
 │   │   │   ├── reports/         # ReportParser (JIRA/GitHub references)
 │   │   │   ├── policies/        # PolicyResolver (3-level cascade), seed data (9 groups)
-│   │   │   ├── permissions/     # RBAC+ABAC engine (5-level hierarchy)
+│   │   │   ├── permissions/     # RBAC (role→permission) + ABAC engine
 │   │   │   ├── onboarding/      # OnboardingService, OffboardingService (settlement, legal)
 │   │   │   ├── holidays/        # HolidayService, JP holiday generator (1980-2099)
 │   │   │   ├── cron/            # CronService (daily/weekly/monthly), ReminderService
 │   │   │   ├── repositories/    # Repository INTERFACES (ports) — no AWS deps
 │   │   │   │   ├── employee.ts
 │   │   │   │   ├── attendance.ts
+│   │   │   │   ├── attendance-lock.ts
 │   │   │   │   ├── leave.ts
 │   │   │   │   ├── salary.ts
 │   │   │   │   ├── report.ts
@@ -60,6 +61,7 @@ willdesign-hr/
 │   │   │   │   ├── client.ts    # Shared DynamoDBDocumentClient
 │   │   │   │   ├── employee.ts
 │   │   │   │   ├── attendance.ts
+│   │   │   │   ├── attendance-lock.ts
 │   │   │   │   ├── leave.ts
 │   │   │   │   ├── salary.ts
 │   │   │   │   ├── report.ts
@@ -103,6 +105,7 @@ willdesign-hr/
 │   │   │   ├── handlers/        # One file per resource
 │   │   │   │   ├── employees.ts
 │   │   │   │   ├── attendance.ts
+│   │   │   │   ├── attendance-lock.ts
 │   │   │   │   ├── leave.ts
 │   │   │   │   ├── payroll.ts
 │   │   │   │   ├── reports.ts
@@ -146,7 +149,7 @@ willdesign-hr/
 │       │   │   ├── reports/       # ReportsPage
 │       │   │   ├── payroll/       # PayrollPage
 │       │   │   ├── team/          # TeamPage (manager view)
-│       │   │   ├── admin/         # AdminPage (tabbed: onboard/offboard/policy/roles/holidays)
+│       │   │   ├── admin/         # AdminPage (tabbed: onboard/offboard/policy/roles/holidays/locks)
 │       │   │   └── settings/      # SettingsPage (i18n language selector)
 │       │   ├── hooks/
 │       │   │   ├── useAuth.ts     # JWT in memory, AuthProvider context
