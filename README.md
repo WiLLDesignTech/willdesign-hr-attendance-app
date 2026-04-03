@@ -1,119 +1,191 @@
 # HR Attendance App
 
-Full-stack HR management platform for the organization, serving both Japan-based employees and Nepal-based contractors. Replaces the existing Google Apps Script Slack bot with a proper web application backed by AWS infrastructure, while keeping Slack as the primary daily interface for attendance and reporting.
+Open-source, self-hosted HR attendance platform built on AWS. Supports single-tenant (one company) and multi-tenant (managed cloud) deployments with configurable regions, policies, and branding.
 
-## Overview
+## Features
 
-| | |
-|---|---|
-| **Japan Team** | ~10 members: full-time, contract, part-time, sales, interns (Japanese labor law) |
-| **Nepal Team** | ~15 members: independent contractors, paid/unpaid interns (Nepal Contract Act 2056) |
-| **Slack** | Message-based attendance (clock in/out, breaks) + daily reporting |
-| **Web App** | Dashboard, leave management, payroll, admin, policy builder |
-| **Deployment** | AWS free tier (~$0-5/month) |
+- **Slack Attendance** — Message-based clock in/out, breaks, daily reports. Bilingual (EN/JA/NE).
+- **Web Dashboard** — Leave management, payroll, admin panel, policy builder. PWA-ready.
+- **Multi-Region** — Configurable regions with country-specific labor laws, overtime rules, leave accrual, holidays, currencies.
+- **Multi-Tenant** — Single-tenant (self-hosted) or multi-tenant (managed). Tenant isolation at the data layer.
+- **Policy Engine** — 4-level cascade: Region defaults → Company → Group → Employee. Policy-as-data, not code.
+- **RBAC + ABAC** — 5-level role hierarchy with attribute-based access control.
+- **Overtime Tracking** — Deemed overtime, actual pay, 36 Agreement limits (JP), configurable per region.
+- **Audit Trail** — Append-only logging for every state change.
+- **One-Command Setup** — Interactive CLI wizard generates config, deploys to AWS.
+
+## Quick Start
+
+### Local Development (5 minutes)
+
+```bash
+# Clone and install
+git clone <repo-url> && cd hr-attendance-app
+npm install
+
+# Start local stack (DynamoDB + API + Web)
+npm run dev
+
+# Or use Docker
+docker compose up
+```
+
+The app will be available at:
+- Web: http://localhost:5173
+- API: http://localhost:3001
+- DynamoDB Local: http://localhost:8000
+
+### Deploy to AWS
+
+```bash
+# Interactive setup wizard
+npx hr-app init
+
+# Deploy (requires AWS credentials)
+npx hr-app deploy
+
+# Check deployment health
+npx hr-app status
+```
+
+See [docs/getting-started/deployment.md](docs/getting-started/deployment.md) for the full walkthrough.
+
+## Architecture
+
+```
+┌─────────────┐     ┌──────────────┐     ┌─────────────┐
+│  React PWA  │────▶│  API Gateway │────▶│   Lambda    │
+│  (S3 + CF)  │     │              │     │  (Express)  │
+└─────────────┘     └──────────────┘     └──────┬──────┘
+                                                │
+┌─────────────┐     ┌──────────────┐     ┌──────▼──────┐
+│  Slack Bot  │────▶│     SQS      │────▶│  DynamoDB   │
+│  (Lambda)   │     │  (async)     │     │ (single tbl)│
+└─────────────┘     └──────────────┘     └─────────────┘
+                                                │
+                    ┌──────────────┐     ┌──────▼──────┐
+                    │ EventBridge  │────▶│  Cognito    │
+                    │   (cron)     │     │  (auth)     │
+                    └──────────────┘     └─────────────┘
+```
+
+**Hexagonal Architecture**: Handler → Service → Repository (ports in `core/`, adapters in `data/`)
 
 ## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Runtime | Node.js 20+ (TypeScript, strict mode) |
-| Frontend | React 18 + Vite |
-| Backend | AWS Lambda + API Gateway |
-| Database | DynamoDB or RDS Postgres (free tier) |
+| Runtime | Node.js 20+, TypeScript (strict mode) |
+| Frontend | React 19, Vite, styled-components, react-i18next |
+| Backend | AWS Lambda, API Gateway, Express (dev) |
+| Database | DynamoDB (single-table design) |
 | Auth | AWS Cognito |
-| Hosting | S3 + CloudFront |
-| Queue | SQS (Slack async processing) |
-| Scheduler | EventBridge (cron jobs) |
-| i18n | react-i18next (English, Japanese, Nepali) |
+| Hosting | S3 + CloudFront (PWA) |
+| Queue | SQS (Slack async pattern) |
+| Scheduler | EventBridge (daily/weekly/monthly cron) |
+| IaC | AWS CDK (TypeScript) |
 | CI/CD | GitHub Actions |
-| IaC | AWS CDK or SAM |
-| Testing | Vitest + Testing Library (TDD) |
+| Testing | Vitest (421+ tests) |
 
 ## Monorepo Structure
 
 ```
 hr-attendance-app/
+├── config.yaml              # Single source of truth for deployment config
 ├── packages/
-│   ├── core/          # Shared business logic (policy engine, calculations, permissions)
-│   ├── types/         # Shared TypeScript types
-│   ├── api/           # REST API (Lambda handlers)
-│   ├── slack/         # Slack event handler (Lambda + SQS)
-│   └── web/           # React frontend (S3 + CloudFront)
-├── policies/          # Static policy cascade files (company -> group -> employee)
-├── infra/             # AWS CDK/SAM templates
-├── docs/              # HR policy documentation
-├── .kiro/             # Spec-driven development (requirements, design, tasks)
-└── .github/workflows/ # CI/CD pipelines
+│   ├── types/               # Shared types, constants, Zod schemas, branding
+│   ├── core/                # Business logic (ZERO AWS deps, hexagonal)
+│   │   ├── regions/         # Region strategies (JP, NP, extensible)
+│   │   ├── policies/        # Policy cascade engine
+│   │   ├── attendance/      # Clock in/out state machine
+│   │   ├── leave/           # Leave accrual and management
+│   │   ├── payroll/         # Salary calculations
+│   │   └── ...
+│   ├── data/                # DynamoDB, S3, SES, Cognito adapters
+│   ├── api/                 # REST API Lambda handlers
+│   ├── slack/               # Slack bot message templates
+│   ├── web/                 # React frontend (Vite, PWA)
+│   └── cli/                 # Setup wizard and deployment CLI
+├── infra/                   # AWS CDK stacks
+├── scripts/                 # Seed data, local setup
+├── docs/                    # Full documentation
+└── .github/workflows/       # CI/CD pipelines
 ```
 
-## Key Features
+## Configuration
 
-- **Slack Attendance** --- Message-based (not slash commands). User types "hello" to clock in, "break" to start break, "bye" to clock out. Bilingual responses (EN/JA) based on user preference.
-- **Cascading Policy Engine** --- 3-level cascade: Company defaults -> Group overrides -> Employee overrides. Static JSON files initially, swappable to DB later.
-- **RBAC + ABAC Permissions** --- Role-based (Employee, Manager, HR, Admin, Super Admin) combined with attribute-based rules (reporting chain, resource ownership).
-- **Multi-Region** --- Japan (JST) and Nepal (NPT) teams with different labor laws, leave rules, overtime rules, currencies (JPY/NPR).
-- **Overtime Tracking** --- Deemed overtime (minashi zangyou), actual overtime pay, 36 Agreement limit tracking.
-- **Daily Reports via Slack** --- Append-only log with JIRA/GitHub reference extraction. Edit tracking for future LLM analysis.
-- **Audit Trail** --- Every mutation logged with timestamp, actor, source (slack/web/system), before/after values.
+All settings live in `config.yaml`:
 
-## Environments
+```yaml
+app:
+  appName: "Acme Corp HR"
+  appShortName: "Acme HR"
+  themeColor: "#58C2D9"
 
-| Environment | Branch | Purpose |
-|-------------|--------|---------|
-| dev | `develop` | Development and testing |
-| prod | `main` | Production |
+deployment:
+  mode: single              # single | multi
+  awsRegion: ap-northeast-1
+  accountingCurrency: JPY   # company-wide home currency
+
+regions:
+  - name: "US Office"
+    code: US
+    timezone: America/New_York
+    currency: USD
+  - name: "India Office"
+    code: IN
+    timezone: Asia/Kolkata
+    currency: INR
+```
+
+See [docs/reference/config.md](docs/reference/config.md) for the full schema.
+
+## Adding a New Region
+
+1. Create a region module in `packages/core/src/regions/<code>/index.ts`
+2. Implement the strategy interfaces: `OvertimeStrategy`, `LeaveAccrualStrategy`, `HolidayGeneratorStrategy`, `PayrollDeductionStrategy`
+3. Register with `regionRegistry.register(config)`
+4. Add policy seed files for employment types
+5. Add to `config.yaml` regions list
+
+See [docs/contributing/adding-a-region.md](docs/contributing/adding-a-region.md) for a step-by-step tutorial.
+
+## CLI Commands
+
+| Command | Description |
+|---------|-------------|
+| `hr-app init` | Interactive setup wizard — generates config.yaml |
+| `hr-app dev` | Start local development stack |
+| `hr-app deploy` | Deploy to AWS (validates config first) |
+| `hr-app destroy` | Tear down all AWS stacks |
+| `hr-app status` | Check CloudFormation stack health |
+| `hr-app seed` | Load sample data |
 
 ## Development
 
 ```bash
-# Install dependencies
-npm install
-
-# Run tests (TDD - tests first)
-npm test
-
-# Lint + typecheck
-npm run lint
-npm run typecheck
-
-# Deploy to dev
-npm run deploy:dev
-
-# Deploy to prod
-npm run deploy:prod
+npm install          # Install all dependencies
+npm run dev          # Start DynamoDB + API + Web locally
+npm test             # Run all 421+ tests
+npm run typecheck    # TypeScript strict checking
+npm run lint         # ESLint
 ```
-
-## Spec-Driven Development
-
-This project uses a spec-driven workflow managed in `.kiro/`:
-
-```
-.kiro/
-├── steering/              # Project context
-│   ├── product.md         # What, who, why
-│   ├── tech.md            # Stack and architecture decisions
-│   └── structure.md       # Monorepo layout and package dependencies
-└── specs/
-    └── hr-platform/
-        ├── spec.json      # Phase tracking
-        └── requirements.md # 90+ EARS requirements
-```
-
-Workflow: Requirements -> Design -> Tasks -> Implementation (human review at each phase).
-
-## Scripts
-
-| Script | Purpose |
-|--------|---------|
-| `sync-to-drive.sh` | Syncs all `.md` files to Google Drive for NotebookLM integration. Flattens paths into filenames (e.g., `docs/JAPAN_HR_POLICY.md` becomes `docs_JAPAN_HR_POLICY.md`). Run after updating specs to keep NotebookLM in sync. Usage: `./sync-to-drive.sh [target-folder-name]` (default: `hr-attendance-app`). |
 
 ## Documentation
 
-| File | Description |
-|------|-------------|
-| `docs/JAPAN_HR_POLICY.md` | Japan-side HR policies: employment types, overtime, leave, holidays, compensation |
-| `docs/NEPAL_HR_POLICY_ADDITIONS.md` | Nepal-side additions: unpaid interns, holiday calendar |
-| `.kiro/specs/hr-platform/requirements.md` | Complete requirements specification (90+ EARS requirements) |
-| `.kiro/steering/product.md` | Product context and business rules for both regions |
-| `.kiro/steering/tech.md` | Technical architecture and constraints |
-| `.kiro/steering/structure.md` | Detailed monorepo structure with all packages and files |
+| Guide | Description |
+|-------|-------------|
+| [Quickstart](docs/getting-started/quickstart.md) | 5-minute local setup with Docker |
+| [Deployment](docs/getting-started/deployment.md) | Full AWS deployment guide |
+| [Slack Setup](docs/getting-started/slack-app-setup.md) | Creating and configuring the Slack app |
+| [Branding](docs/guides/branding.md) | Customizing look and feel |
+| [Regions](docs/guides/regions.md) | Adding and configuring regions |
+| [Policies](docs/guides/policies.md) | Policy cascade reference |
+| [Multi-Tenant](docs/guides/multi-tenant.md) | Multi-tenant setup and management |
+| [Config Reference](docs/reference/config.md) | config.yaml schema reference |
+| [CLI Reference](docs/reference/cli.md) | CLI command reference |
+| [Architecture](docs/contributing/architecture.md) | System architecture for contributors |
+
+## License
+
+MIT — see [LICENSE](LICENSE) for details.

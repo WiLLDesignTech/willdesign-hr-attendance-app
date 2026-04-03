@@ -38,14 +38,20 @@ jobs:
       - name: Test
         run: npm test
 
-      - name: Build web
-        run: npm run build --workspace=@hr-attendance-app/web
+      - name: Read AWS region from config
+        id: config
+        run: |
+          REGION=$(node -e "const yaml=require('yaml'); const fs=require('fs'); const c=yaml.parse(fs.readFileSync('config.yaml','utf-8')); console.log(c.deployment?.awsRegion ?? 'ap-northeast-1');")
+          echo "aws_region=$REGION" >> "$GITHUB_OUTPUT"
+
+      - name: Build all packages
+        run: npm run build
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: ap-northeast-1
+          aws-region: ${{ steps.config.outputs.aws_region }}
 
       - name: CDK Deploy
         working-directory: infra

@@ -30,3 +30,6 @@ jobs:
 
       - name: Test
         run: npm test
+
+      - name: Validate config
+        run: node -e "const {parseAppConfig}=require('@hr-attendance-app/types'); const yaml=require('yaml'); const fs=require('fs'); parseAppConfig(yaml.parse(fs.readFileSync('config.yaml','utf-8'))); console.log('config.yaml valid');"
