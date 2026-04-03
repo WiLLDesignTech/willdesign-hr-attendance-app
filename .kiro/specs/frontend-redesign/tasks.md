@@ -85,38 +85,38 @@
 
 ## Phase 3: New Query Hooks
 
-- [ ] 3. Create missing React Query hooks for new features
-- [ ] 3.1 (P) Create policy query and mutation hooks
+- [x] 3. Create missing React Query hooks for new features
+- [x] 3.1 (P) Create policy query and mutation hooks
   - Add `usePolicies(groupName)` query hook calling GET /api/policies/:groupName
   - Add `useUpdatePolicy()` mutation hook calling PUT /api/policies/:groupName
   - Register query keys in the existing queryKeys factory
   - Invalidate policy queries on successful mutation
   - _Requirements: 5.1, 5.4_
 
-- [ ] 3.2 (P) Create holiday mutation hooks
+- [x] 3.2 (P) Create holiday mutation hooks
   - Add `useCreateHoliday()` mutation hook calling POST /api/holidays
   - Add `useDeleteHoliday()` mutation hook calling DELETE /api/holidays/:region/:date
   - Invalidate holiday queries on successful mutations
   - _Requirements: 6.3, 6.4_
 
-- [ ] 3.3 (P) Create bank query and approval hooks
+- [x] 3.3 (P) Create bank query and approval hooks
   - Add `useBank(employeeId?)` query hook calling GET /api/bank
   - Add `useBankApprove()` mutation hook calling POST /api/bank/approve
   - Register bank query keys in the factory
   - _Requirements: 12.1, 12.5_
 
-- [ ] 3.4 (P) Create audit trail query hook
+- [x] 3.4 (P) Create audit trail query hook
   - Add `useAudit(targetId)` query hook calling GET /api/audit/:targetId
   - Register audit query keys in the factory
   - _Requirements: 15.1_
 
-- [ ] 3.5 (P) Create roles query and mutation hooks
+- [x] 3.5 (P) Create roles query and mutation hooks
   - Add `useRoles()` query hook calling GET /api/roles
   - Add `useUpdateRole()` mutation hook calling PUT /api/roles/:name
   - Register role query keys in the factory
   - _Requirements: 7.1, 7.3_
 
-- [ ] 3.6 (P) Create document management hooks
+- [x] 3.6 (P) Create document management hooks
   - Add `useDocuments(employeeId)` query hook calling GET /api/documents
   - Add `useUploadDocument()` mutation hook calling POST /api/documents/upload-url for pre-signed URL, then uploading to S3
   - Add `useVerifyDocument()` mutation hook calling PATCH /api/documents/:id

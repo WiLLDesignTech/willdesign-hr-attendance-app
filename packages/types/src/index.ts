@@ -176,6 +176,9 @@ export {
   API_HOLIDAYS, API_HOLIDAY_DELETE,
   API_ATTENDANCE_LOCK,
   API_POLICIES,
+  API_ROLES, API_ROLE_BY_NAME,
+  API_DOCUMENTS, API_DOCUMENT_BY_ID, API_DOCUMENT_UPLOAD_URL,
+  API_QUOTAS,
   API_DEV_AUTH_EMPLOYEES, API_DEV_AUTH_LOGIN,
   ROUTE_SEGMENTS, ROUTES,
   apiPath, withQuery,
@@ -191,6 +194,9 @@ export type {
   CreateAttendanceLockBody,
   DeleteAttendanceLockParams,
   AttendanceLockQueryParams,
+  RoleBody,
+  DocumentsQueryParams, CreateDocumentBody, DocumentVerifyBody,
+  QuotaRedistributionBody,
 } from "./api-routes.js";
 
 export { KeyPrefixes, KeyPatterns } from "./key-patterns.js";

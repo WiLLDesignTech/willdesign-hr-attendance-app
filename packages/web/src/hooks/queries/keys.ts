@@ -8,6 +8,7 @@ import {
   API_LEAVE_REQUESTS, API_LEAVE_BALANCE,
   API_PAYROLL, API_FLAGS, API_BANK, API_BANK_APPROVE,
   API_REPORTS, API_HOLIDAYS, API_AUDIT,
+  API_POLICIES, API_ROLES, API_DOCUMENTS,
 } from "@hr-attendance-app/types";
 
 /** Sub-key constants for cache scoping within query key arrays. */
@@ -47,6 +48,7 @@ export const queryKeys = {
   bank: {
     all: [API_BANK] as const,
     list: () => [API_BANK, SCOPE.LIST] as const,
+    byEmployee: (employeeId: string) => [API_BANK, employeeId] as const,
     approve: () => [API_BANK_APPROVE] as const,
   },
   reports: {
@@ -62,10 +64,22 @@ export const queryKeys = {
     byRegion: (region: string, year: number) => [API_HOLIDAYS, region, year] as const,
   },
   audit: {
+    all: [API_AUDIT] as const,
     byTarget: (targetId: string) => [API_AUDIT, targetId] as const,
   },
   locks: {
     all: [API_ATTENDANCE_LOCK] as const,
     byMonth: (yearMonth: string) => [API_ATTENDANCE_LOCK, yearMonth] as const,
+  },
+  policies: {
+    all: [API_POLICIES] as const,
+    byGroup: (groupName: string) => [API_POLICIES, groupName] as const,
+  },
+  roles: {
+    all: [API_ROLES] as const,
+  },
+  documents: {
+    all: [API_DOCUMENTS] as const,
+    byEmployee: (employeeId: string) => [API_DOCUMENTS, employeeId] as const,
   },
 } as const;
