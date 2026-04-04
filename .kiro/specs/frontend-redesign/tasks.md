@@ -333,13 +333,13 @@
 
 ## Phase 8: Internationalization
 
-- [ ] 18. Expand i18n translation keys for all new features
-- [ ] 18.1 (P) Add translation keys for admin features
+- [x] 18. Expand i18n translation keys for all new features
+- [x] 18.1 (P) Add translation keys for admin features
   - Add keys for onboarding form labels, offboarding form labels, settlement preview, policy editor, holiday calendar, role management, attendance lock scopes
   - Add keys in all 3 locale files: en.json, ja.json, ne.json
   - _Requirements: 16.1, 16.2, 16.3_
 
-- [ ] 18.2 (P) Add translation keys for team and employee features
+- [x] 18.2 (P) Add translation keys for team and employee features
   - Add keys for team overview, approval queue, flags, banking, payroll breakdown line items, reports references, settings, documents, probation, quotas
   - Add keys in all 3 locale files
   - Verify language detection from employee profile with fallback to browser language then English
