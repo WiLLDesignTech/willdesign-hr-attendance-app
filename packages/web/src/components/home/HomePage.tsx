@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styled, { keyframes } from "styled-components";
 import { ROUTES } from "@hr-attendance-app/types";
+import { LanguageSwitcher } from "../common/LanguageSwitcher";
 
 const ClockIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -108,9 +109,12 @@ export const HomePage = () => {
             <AccentDot aria-hidden />
             <LogoText>{t("app.title")}</LogoText>
           </LogoMark>
-          <LoginButton onClick={goToLogin}>
-            {t("home.login")}
-          </LoginButton>
+          <NavActions>
+            <LanguageSwitcher />
+            <LoginButton onClick={goToLogin}>
+              {t("home.login")}
+            </LoginButton>
+          </NavActions>
         </NavInner>
       </Nav>
 
@@ -237,6 +241,12 @@ const LogoText = styled.span`
   font-size: ${({ theme }) => theme.fontSizes.md};
   font-weight: ${({ theme }) => theme.fontWeights.bold};
   color: ${({ theme }) => theme.colors.text};
+`;
+
+const NavActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.space.md};
 `;
 
 const LoginButton = styled.button`

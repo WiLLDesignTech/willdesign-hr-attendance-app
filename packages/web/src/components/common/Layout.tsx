@@ -5,6 +5,7 @@ import styled, { css } from "styled-components";
 import { Permissions, ROUTES } from "@hr-attendance-app/types";
 import type { Permission } from "@hr-attendance-app/types";
 import { useAuth } from "../../hooks/useAuth";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 interface NavItemConfig {
   readonly path: string;
@@ -62,6 +63,9 @@ export const Layout = () => {
             </SidebarNavItem>
           ))}
         </SidebarNav>
+        <SidebarFooter>
+          <LanguageSwitcher />
+        </SidebarFooter>
       </Sidebar>
 
       <Main>
@@ -164,6 +168,11 @@ const SidebarNav = styled.nav`
   display: flex;
   flex-direction: column;
   gap: 2px;
+`;
+
+const SidebarFooter = styled.div`
+  padding: ${({ theme }) => theme.space.sm} ${({ theme }) => theme.space.md};
+  border-top: 1px solid ${({ theme }) => theme.colors.sidebarBorder};
 `;
 
 const NavIcon = styled.span`
