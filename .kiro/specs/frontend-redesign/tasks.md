@@ -299,31 +299,31 @@
 
 ## Phase 7: Supporting Features
 
-- [ ] 14. Build audit log viewer for admin
-- [ ] 14.1 Build audit trail panel with filtering
+- [x] 14. Build audit log viewer for admin
+- [x] 14.1 Build audit trail panel with filtering
   - Chronological list of audit entries: timestamp (formatted via formatDateTime in viewer's local timezone), actor name, source badge (slack/web/system/admin), action description, before/after values
   - Filter controls: date range, action type, source
   - Paginated or infinite scroll for large datasets
   - Accessible from employee detail view "Audit" tab
   - _Requirements: 15.1, 15.2, 15.3, 15.4, 15.5_
 
-- [ ] 15. Build document management panel
-- [ ] 15.1 Build document upload and verification UI
+- [x] 15. Build document management panel
+- [x] 15.1 Build document upload and verification UI
   - Document list: name, type, upload date, verification status badge (for identity documents)
   - Upload: accept PDF and image files (max 5MB), request pre-signed URL from API, upload directly to S3, refresh list
   - Admin verification: Verify/Reject buttons with current status and audit trail (who verified, when)
   - Error handling: display error message with retry option without losing selected file
   - _Requirements: 20.1, 20.2, 20.3, 20.4_
 
-- [ ] 16. Build probation tracking badges and alerts
-- [ ] 16.1 Add probation indicators to team page and dashboard
+- [x] 16. Build probation tracking badges and alerts
+- [x] 16.1 Add probation indicators to team page and dashboard
   - Team page: probation badge on employees in probation showing days remaining
   - Manager dashboard: alert banner when any direct report's probation ends within 14 days
   - Employee settings page: show probation status and end date
   - _Requirements: 21.1, 21.2, 21.3_
 
-- [ ] 17. Build quota redistribution editor for managers
-- [ ] 17.1 Build monthly hours quota editor
+- [x] 17. Build quota redistribution editor for managers
+- [x] 17.1 Build monthly hours quota editor
   - Accessible from employee detail view "Quotas" section
   - Display standard monthly hours and any active redistribution
   - Allow adjusting individual month quotas with running total that must equal standard period total
