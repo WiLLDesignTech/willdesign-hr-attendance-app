@@ -48,6 +48,11 @@ export default defineConfig({
       },
     }),
   ],
+  resolve: {
+    alias: {
+      "@hr-attendance-app/types": new URL("../types/src/index.ts", import.meta.url).pathname,
+    },
+  },
   server: {
     proxy: {
       "/api": {
