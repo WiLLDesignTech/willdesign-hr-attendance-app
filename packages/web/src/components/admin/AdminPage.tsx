@@ -30,7 +30,7 @@ const SECTIONS: readonly SectionConfig[] = [
 const SECTION_CARD_MIN_HEIGHT = "100px";
 const EMPTY_STATE_MIN_HEIGHT = "400px";
 
-function getSectionContent(section: AdminSection): ReactNode {
+const getSectionContent = (section: AdminSection): ReactNode => {
   switch (section) {
     case "onboarding":
       return <OnboardingTab />;
@@ -45,9 +45,9 @@ function getSectionContent(section: AdminSection): ReactNode {
     case "locks":
       return <AttendanceLockTab />;
   }
-}
+};
 
-export function AdminPage() {
+export const AdminPage = () => {
   const { t } = useTranslation();
   const [activeSection, setActiveSection] = useState<AdminSection | null>(null);
 
@@ -133,7 +133,7 @@ export function AdminPage() {
       </AdminShell>
     </PageLayout>
   );
-}
+};
 
 /* ─── Layout Shell ─── */
 

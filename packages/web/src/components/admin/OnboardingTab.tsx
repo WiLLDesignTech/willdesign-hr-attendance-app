@@ -41,7 +41,7 @@ const EMPLOYMENT_TYPE_OPTIONS = [
   EmploymentTypes.NP_UNPAID_INTERN,
 ] as const;
 
-export function OnboardingTab() {
+export const OnboardingTab = () => {
   const { t } = useTranslation();
   const onboard = useOnboard();
   const { data: employees } = useEmployees();
@@ -165,7 +165,7 @@ export function OnboardingTab() {
       />
     </Card>
   );
-}
+};
 
 const FormGrid = styled.div`
   display: grid;

@@ -13,7 +13,26 @@ const BankStatus = {
   APPROVED: "APPROVED" as const,
 };
 
-export function BankPanel() {
+const APPROVAL_LABEL_MAP: Record<string, string> = {
+  [BankStatus.APPROVED]: "bank.approvedStatus",
+  [BankStatus.PENDING]: "bank.awaitingApproval",
+};
+
+const APPROVAL_VARIANT_MAP: Record<string, "success" | "warning" | "info"> = {
+  [BankStatus.APPROVED]: "success",
+  [BankStatus.PENDING]: "warning",
+};
+
+const getApprovalLabel = (status: string, t: (key: string) => string): string => {
+  const key = APPROVAL_LABEL_MAP[status];
+  return key ? t(key) : status;
+};
+
+const getApprovalVariant = (status: string): "success" | "warning" | "info" => {
+  return APPROVAL_VARIANT_MAP[status] ?? "info";
+};
+
+export const BankPanel = () => {
   const { t } = useTranslation();
   const { data: entries, isLoading } = useBank();
 
@@ -51,8 +70,8 @@ export function BankPanel() {
                 <EntryPeriod>{entry.yearMonth}</EntryPeriod>
                 <EntrySurplus>{entry.surplusHours}h {t("bank.surplus")}</EntrySurplus>
                 <Badge
-                  label={entry.approvalStatus === "APPROVED" ? t("bank.approvedStatus") : entry.approvalStatus === "PENDING" ? t("bank.awaitingApproval") : entry.approvalStatus}
-                  variant={entry.approvalStatus === "APPROVED" ? "success" : entry.approvalStatus === "PENDING" ? "warning" : "info"}
+                  label={getApprovalLabel(entry.approvalStatus, t)}
+                  variant={getApprovalVariant(entry.approvalStatus)}
                 />
               </EntryInfo>
               <ExpirySection>
@@ -65,7 +84,7 @@ export function BankPanel() {
       </EntryList>
     </BankContainer>
   );
-}
+};
 
 const BankContainer = styled.div`
   display: flex; flex-direction: column; gap: ${({ theme }) => theme.space.md};

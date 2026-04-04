@@ -12,7 +12,7 @@ interface ModalProps {
 
 const SIZE_MAP = { sm: "420px", md: "560px", lg: "720px" } as const;
 
-export function Modal({ isOpen, onClose, title, size = "md", children }: ModalProps) {
+export const Modal = ({ isOpen, onClose, title, size = "md", children }: ModalProps) => {
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousFocus = useRef<HTMLElement | null>(null);
   const onCloseRef = useRef(onClose);
@@ -82,7 +82,7 @@ export function Modal({ isOpen, onClose, title, size = "md", children }: ModalPr
     </Backdrop>,
     document.body,
   );
-}
+};
 
 const fadeIn = keyframes`
   from { opacity: 0; }

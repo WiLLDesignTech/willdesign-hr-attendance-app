@@ -26,7 +26,7 @@ const ALL_NAV_ITEMS: readonly NavItemConfig[] = [
 
 const BOTTOM_NAV_MAX_ITEMS = 5;
 
-export function Layout() {
+export const Layout = () => {
   const { t } = useTranslation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { permissions } = useAuth();
@@ -97,7 +97,7 @@ export function Layout() {
       </BottomNav>
     </LayoutShell>
   );
-}
+};
 
 const LayoutShell = styled.div`
   display: flex;

@@ -22,7 +22,7 @@ const POLICY_DOMAINS = [
   { key: "salaryStatement", labelKey: "admin.policy.salaryStatement" },
 ] as const;
 
-export function PolicyTab() {
+export const PolicyTab = () => {
   const { t } = useTranslation();
   const toast = useToast();
   const [selectedGroup, setSelectedGroup] = useState<string>(POLICY_GROUPS[0]);
@@ -101,7 +101,7 @@ export function PolicyTab() {
       </PolicyContent>
     </PolicyLayout>
   );
-}
+};
 
 const PolicyLayout = styled.div`
   display: flex;

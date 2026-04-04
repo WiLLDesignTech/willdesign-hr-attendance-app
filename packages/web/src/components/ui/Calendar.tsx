@@ -17,13 +17,13 @@ interface CalendarProps {
   readonly onMonthChange?: (month: Date) => void;
 }
 
-export function Calendar({
+export const Calendar = ({
   selectedDate,
   onDateSelect,
   highlightedDates,
   month,
   onMonthChange,
-}: CalendarProps) {
+}: CalendarProps) => {
   const modifiers = useMemo(() => {
     if (!highlightedDates) return undefined;
     return { highlighted: (date: Date) => highlightedDates.has(dateToDateStr(date)) };
@@ -47,7 +47,7 @@ export function Calendar({
       />
     </CalendarWrapper>
   );
-}
+};
 
 const CalendarWrapper = styled.div`
   .rdp {

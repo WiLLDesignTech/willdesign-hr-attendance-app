@@ -25,7 +25,13 @@ const ALL_LEAVE_TYPES = [
 ] as const;
 
 
-export function LeavePage() {
+const getLeaveStatusVariant = (status: string): "success" | "danger" | "warning" => {
+  if (status === LeaveRequestStatuses.APPROVED) return "success";
+  if (status === LeaveRequestStatuses.REJECTED) return "danger";
+  return "warning";
+};
+
+export const LeavePage = () => {
   const { t } = useTranslation();
   const toast = useToast();
   const [activeTab, setActiveTab] = useState("my");
@@ -101,9 +107,11 @@ export function LeavePage() {
 
           {/* My Requests */}
           <Card>
-            {isLoading ? <LoadingSpinner /> : !requests?.length ? (
+            {isLoading && <LoadingSpinner />}
+            {!isLoading && !requests?.length && (
               <EmptyState message={t("leave.noRequests")} />
-            ) : (
+            )}
+            {!isLoading && !!requests?.length && (
               <RequestList>
                 {requests.map((r) => (
                   <RequestRow key={r.id}>
@@ -113,7 +121,7 @@ export function LeavePage() {
                     </RequestInfo>
                     <Badge
                       label={t(`leave.status.${r.status}`)}
-                      variant={r.status === LeaveRequestStatuses.APPROVED ? "success" : r.status === LeaveRequestStatuses.REJECTED ? "danger" : "warning"}
+                      variant={getLeaveStatusVariant(r.status)}
                     />
                   </RequestRow>
                 ))}
@@ -175,9 +183,9 @@ export function LeavePage() {
       )}
     </PageLayout>
   );
-}
+};
 
-function LeaveCalendarTab({ isManager }: { readonly isManager: boolean }) {
+const LeaveCalendarTab = ({ isManager }: { readonly isManager: boolean }) => {
   const { t } = useTranslation();
   const { data: allLeave } = useLeaveRequests();
 
@@ -210,7 +218,7 @@ function LeaveCalendarTab({ isManager }: { readonly isManager: boolean }) {
       )}
     </Card>
   );
-}
+};
 
 const DateRow = styled.div`
   display: grid;

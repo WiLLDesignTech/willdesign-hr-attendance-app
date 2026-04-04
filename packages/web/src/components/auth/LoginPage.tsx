@@ -58,7 +58,7 @@ const RoleBadge = styled.span`
   margin-left: ${({ theme }) => theme.space.xs};
 `;
 
-export function LoginPage() {
+export const LoginPage = () => {
   const { t } = useTranslation();
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -133,4 +133,4 @@ export function LoginPage() {
       </LoginCard>
     </LoginContainer>
   );
-}
+};

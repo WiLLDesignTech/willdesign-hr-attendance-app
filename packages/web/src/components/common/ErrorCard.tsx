@@ -16,7 +16,7 @@ interface ErrorCardProps {
   readonly onRetry?: () => void;
 }
 
-export function ErrorCard({ error, onRetry }: ErrorCardProps) {
+export const ErrorCard = ({ error, onRetry }: ErrorCardProps) => {
   const { t } = useTranslation();
   return (
     <ErrorWrapper>
@@ -26,4 +26,4 @@ export function ErrorCard({ error, onRetry }: ErrorCardProps) {
       )}
     </ErrorWrapper>
   );
-}
+};

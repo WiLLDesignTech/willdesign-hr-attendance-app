@@ -8,7 +8,7 @@ import { useFlags, useResolveFlag } from "../../hooks/queries";
 import { useIsManager } from "../../hooks/useRole";
 import type { Flag } from "@hr-attendance-app/types";
 
-export function FlagsPanel() {
+export const FlagsPanel = () => {
   const { t } = useTranslation();
   const toast = useToast();
   const { data: flags, isLoading } = useFlags();
@@ -56,9 +56,9 @@ export function FlagsPanel() {
       )}
     </FlagsContainer>
   );
-}
+};
 
-function FlagItem({
+const FlagItem = ({
   flag,
   isManager,
   onResolve,
@@ -66,7 +66,7 @@ function FlagItem({
   readonly flag: Flag;
   readonly isManager: boolean;
   readonly onResolve?: (flagId: string, resolution: string, bankOffset?: number) => void;
-}) {
+}) => {
   const { t } = useTranslation();
   const [resolution, setResolution] = useState("");
   const [bankOffset, setBankOffset] = useState(0);
@@ -118,7 +118,7 @@ function FlagItem({
       )}
     </FlagRow>
   );
-}
+};
 
 const FlagsContainer = styled.div`
   display: flex; flex-direction: column; gap: ${({ theme }) => theme.space.md};

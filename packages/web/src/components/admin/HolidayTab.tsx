@@ -6,7 +6,7 @@ import { useHolidays, useCreateHoliday, useDeleteHoliday } from "../../hooks/que
 import { useToast } from "../ui/Toast";
 import { Regions, currentYear } from "@hr-attendance-app/types";
 
-export function HolidayTab() {
+export const HolidayTab = () => {
   const { t } = useTranslation();
   const toast = useToast();
 
@@ -148,7 +148,7 @@ export function HolidayTab() {
       </Modal>
     </>
   );
-}
+};
 
 const HeaderRow = styled.div`
   display: flex;

@@ -6,7 +6,7 @@ import { useEmployees, useOffboard } from "../../hooks/queries";
 import { useToast } from "../ui/Toast";
 import { TerminationTypes, EmployeeStatuses } from "@hr-attendance-app/types";
 
-export function OffboardingTab() {
+export const OffboardingTab = () => {
   const { t } = useTranslation();
   const { data: employees } = useEmployees();
   const offboard = useOffboard();
@@ -183,7 +183,7 @@ export function OffboardingTab() {
       </Modal>
     </>
   );
-}
+};
 
 const FormSection = styled.div`
   display: flex;

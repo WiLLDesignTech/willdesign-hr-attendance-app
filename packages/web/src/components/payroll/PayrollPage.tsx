@@ -8,7 +8,7 @@ import { usePayroll } from "../../hooks/queries/usePayroll";
 import { formatAmount } from "../../utils/currency";
 import { formatDate, isoToLocalMonth } from "../../utils/date";
 
-export function PayrollPage() {
+export const PayrollPage = () => {
   const { t } = useTranslation();
   const [month, setMonth] = useState(isoToLocalMonth(nowIso()));
   const { data: payroll, isLoading } = usePayroll(month);
@@ -23,9 +23,11 @@ export function PayrollPage() {
       </Card>
 
       <BreakdownCard>
-        {isLoading ? <LoadingSpinner /> : !payroll ? (
+        {isLoading && <LoadingSpinner />}
+        {!isLoading && !payroll && (
           <p>{t("common.noData")}</p>
-        ) : (
+        )}
+        {!isLoading && payroll && (
           <>
             <LineItem>
               <LineLabel>{t("payroll.baseSalary")}</LineLabel>
@@ -110,7 +112,7 @@ export function PayrollPage() {
       </BreakdownCard>
     </PageLayout>
   );
-}
+};
 
 const BreakdownCard = styled(Card)`
   display: flex; flex-direction: column; gap: ${({ theme }) => theme.space.xs};

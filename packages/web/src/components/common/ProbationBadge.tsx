@@ -9,7 +9,7 @@ interface ProbationBadgeProps {
   readonly showAlert?: boolean;
 }
 
-export function ProbationBadge({ probationEndDate, showAlert = false }: ProbationBadgeProps) {
+export const ProbationBadge = ({ probationEndDate, showAlert = false }: ProbationBadgeProps) => {
   const { t } = useTranslation();
 
   if (!probationEndDate) return null;
@@ -33,7 +33,7 @@ export function ProbationBadge({ probationEndDate, showAlert = false }: Probatio
       )}
     </>
   );
-}
+};
 
 const AlertBanner = styled.div`
   padding: ${({ theme }) => theme.space.sm} ${({ theme }) => theme.space.md};

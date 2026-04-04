@@ -20,7 +20,7 @@ export const AUTO_DISMISS_MS = 4000;
 
 let toastCounter = 0;
 
-export function ToastProvider({ children }: { readonly children: ReactNode }) {
+export const ToastProvider = ({ children }: { readonly children: ReactNode }) => {
   const [toasts, setToasts] = useState<readonly ToastItem[]>([]);
 
   const show = useCallback((message: string, variant: ToastVariant = "info") => {
@@ -45,7 +45,7 @@ export function ToastProvider({ children }: { readonly children: ReactNode }) {
       )}
     </ToastContext.Provider>
   );
-}
+};
 
 export function useToast(): ToastContextValue {
   const ctx = useContext(ToastContext);
@@ -55,13 +55,13 @@ export function useToast(): ToastContextValue {
   return ctx;
 }
 
-function ToastEntry({
+const ToastEntry = ({
   toast,
   onDismiss,
 }: {
   readonly toast: ToastItem;
   readonly onDismiss: (id: string) => void;
-}) {
+}) => {
   useEffect(() => {
     const timer = setTimeout(() => onDismiss(toast.id), AUTO_DISMISS_MS);
     return () => clearTimeout(timer);
@@ -75,7 +75,7 @@ function ToastEntry({
       </ToastClose>
     </ToastItemWrapper>
   );
-}
+};
 
 const slideIn = keyframes`
   from { transform: translateX(100%); opacity: 0; }

@@ -10,12 +10,12 @@ interface SearchInputProps {
 
 const DEFAULT_DEBOUNCE = 300;
 
-export function SearchInput({
+export const SearchInput = ({
   value,
   onChange,
   placeholder,
   debounceMs = DEFAULT_DEBOUNCE,
-}: SearchInputProps) {
+}: SearchInputProps) => {
   const [local, setLocal] = useState(value);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
@@ -42,7 +42,7 @@ export function SearchInput({
       />
     </Wrapper>
   );
-}
+};
 
 const Wrapper = styled.div`
   display: flex;

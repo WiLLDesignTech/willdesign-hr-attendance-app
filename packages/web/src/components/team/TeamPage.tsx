@@ -23,7 +23,7 @@ const TEAM_TABS = [
   { key: "reports", label: "team.tab.reports" },
 ] as const;
 
-export function TeamPage() {
+export const TeamPage = () => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("overview");
   const isManager = useIsManager();
@@ -42,11 +42,11 @@ export function TeamPage() {
       {activeTab === "reports" && <TeamReports />}
     </PageLayout>
   );
-}
+};
 
 /* ─── Team Overview ─── */
 
-function TeamOverview() {
+const TeamOverview = () => {
   const { t } = useTranslation();
   const { data: members, isLoading } = useTeamMembers();
 
@@ -72,11 +72,11 @@ function TeamOverview() {
       ))}
     </MemberGrid>
   );
-}
+};
 
 /* ─── Approval Queue ─── */
 
-function ApprovalQueue() {
+const ApprovalQueue = () => {
   const { t } = useTranslation();
   const toast = useToast();
 
@@ -175,11 +175,11 @@ function ApprovalQueue() {
       ))}
     </QueueList>
   );
-}
+};
 
 /* ─── Team Calendar ─── */
 
-function TeamCalendar({ isManager }: { readonly isManager: boolean }) {
+const TeamCalendar = ({ isManager }: { readonly isManager: boolean }) => {
   const { t } = useTranslation();
   const { data: allLeave } = useLeaveRequests();
 
@@ -214,11 +214,11 @@ function TeamCalendar({ isManager }: { readonly isManager: boolean }) {
       </LeaveList>
     </Card>
   );
-}
+};
 
 /* ─── Team Reports ─── */
 
-function TeamReports() {
+const TeamReports = () => {
   const { t } = useTranslation();
   const [date, setDate] = useState(() => todayDate());
 
@@ -266,7 +266,7 @@ function TeamReports() {
       )}
     </Card>
   );
-}
+};
 
 /* ─── Styled Components ─── */
 

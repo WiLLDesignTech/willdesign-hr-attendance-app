@@ -11,7 +11,7 @@ const SUPPORTED_LANGUAGES = [
   { code: "ne", label: "नेपाली" },
 ] as const;
 
-export function SettingsPage() {
+export const SettingsPage = () => {
   const { t, i18n } = useTranslation();
   const { data: user } = useCurrentUser();
   const [pushNotifs, setPushNotifs] = useState(false);
@@ -106,7 +106,7 @@ export function SettingsPage() {
       </Card>
     </PageLayout>
   );
-}
+};
 
 const SectionLabel = styled.h3`
   font-size: ${({ theme }) => theme.fontSizes.md};

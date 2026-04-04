@@ -14,7 +14,7 @@ interface DocumentsPanelProps {
   readonly employeeId: string;
 }
 
-export function DocumentsPanel({ employeeId }: DocumentsPanelProps) {
+export const DocumentsPanel = ({ employeeId }: DocumentsPanelProps) => {
   const { t } = useTranslation();
   const toast = useToast();
   const isAdmin = useIsAdmin();
@@ -115,7 +115,7 @@ export function DocumentsPanel({ employeeId }: DocumentsPanelProps) {
       )}
     </DocContainer>
   );
-}
+};
 
 const DocContainer = styled.div`
   display: flex; flex-direction: column; gap: ${({ theme }) => theme.space.md};

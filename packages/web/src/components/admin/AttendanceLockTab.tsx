@@ -20,7 +20,7 @@ const EMPLOYMENT_GROUPS = [
   "jp-sales", "jp-intern", "np-fulltime", "np-paid-intern", "np-unpaid-intern",
 ] as const;
 
-export function AttendanceLockTab() {
+export const AttendanceLockTab = () => {
   const { t } = useTranslation();
   const toast = useToast();
   const [yearMonth, setYearMonth] = useState(() => isoToYearMonth(nowIso()));
@@ -176,7 +176,7 @@ export function AttendanceLockTab() {
       )}
     </LockContainer>
   );
-}
+};
 
 const LockContainer = styled.div`
   display: flex;

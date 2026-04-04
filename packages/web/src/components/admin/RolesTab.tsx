@@ -16,7 +16,7 @@ const PERMISSION_GROUPS = [
   { domain: "holidays", permissions: [Permissions.HOLIDAY_MANAGE] },
 ] as const;
 
-export function RolesTab() {
+export const RolesTab = () => {
   const { t } = useTranslation();
   const toast = useToast();
   const { data: roles, isLoading } = useRoles();
@@ -117,7 +117,7 @@ export function RolesTab() {
       </PermissionPanel>
     </RolesLayout>
   );
-}
+};
 
 const RolesLayout = styled.div`
   display: flex;

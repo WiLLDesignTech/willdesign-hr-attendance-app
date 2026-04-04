@@ -48,7 +48,7 @@ const ClockButton = styled(ButtonAccent)`${clockButtonOverrides}`;
 const ClockButtonDanger = styled(ButtonDanger)`${clockButtonOverrides}`;
 const ClockButtonSecondary = styled(ButtonSecondary)`${clockButtonOverrides}`;
 
-export function ClockWidget({ status, hoursToday, onAction, loading }: ClockWidgetProps) {
+export const ClockWidget = ({ status, hoursToday, onAction, loading }: ClockWidgetProps) => {
   const { t } = useTranslation();
 
   return (
@@ -92,4 +92,4 @@ export function ClockWidget({ status, hoursToday, onAction, loading }: ClockWidg
       </Actions>
     </Wrapper>
   );
-}
+};

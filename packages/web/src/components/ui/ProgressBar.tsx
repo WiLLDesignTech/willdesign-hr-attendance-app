@@ -7,12 +7,12 @@ interface ProgressBarProps {
   readonly showLabel?: boolean;
 }
 
-export function ProgressBar({
+export const ProgressBar = ({
   value,
   max,
   variant = "accent",
   showLabel = true,
-}: ProgressBarProps) {
+}: ProgressBarProps) => {
   const pct = max > 0 ? Math.min(100, Math.round((value / max) * 100)) : 0;
 
   return (
@@ -23,7 +23,7 @@ export function ProgressBar({
       {showLabel && <Label>{pct}%</Label>}
     </Wrapper>
   );
-}
+};
 
 const VARIANT_COLORS: Record<string, string> = {
   accent: "accent",

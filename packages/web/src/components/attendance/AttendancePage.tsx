@@ -10,7 +10,7 @@ import { useAttendanceLocks } from "../../hooks/queries";
 import { formatDateTime, isoToLocalDate } from "../../utils/date";
 
 
-export function AttendancePage() {
+export const AttendancePage = () => {
   const { t } = useTranslation();
   const toast = useToast();
   const [selectedDate, setSelectedDate] = useState(() => isoToLocalDate(nowIso()));
@@ -122,7 +122,7 @@ export function AttendancePage() {
       </Modal>
     </PageLayout>
   );
-}
+};
 
 const CalendarHeader = styled.div`
   display: flex;

@@ -28,7 +28,7 @@ interface DataTableProps<TData> {
 const DEFAULT_PAGE_SIZE = 10;
 const SKELETON_ROWS = 5;
 
-export function DataTable<TData>({
+export const DataTable = <TData,>({
   data,
   columns,
   searchable = false,
@@ -37,7 +37,7 @@ export function DataTable<TData>({
   onRowClick,
   emptyMessage = "No data found",
   loading = false,
-}: DataTableProps<TData>) {
+}: DataTableProps<TData>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
 
@@ -142,7 +142,7 @@ export function DataTable<TData>({
       )}
     </Wrapper>
   );
-}
+};
 
 const Wrapper = styled.div`
   display: flex;

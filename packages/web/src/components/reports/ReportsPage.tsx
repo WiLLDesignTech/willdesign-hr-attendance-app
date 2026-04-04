@@ -8,7 +8,7 @@ import { LoadingSpinner } from "../common/LoadingSpinner";
 import { useReports, useSubmitReport } from "../../hooks/queries/useReports";
 import { formatDate, formatDateTime, isoToLocalDate } from "../../utils/date";
 
-export function ReportsPage() {
+export const ReportsPage = () => {
   const { t } = useTranslation();
   const toast = useToast();
   const [reportText, setReportText] = useState("");
@@ -59,9 +59,11 @@ export function ReportsPage() {
       {/* History */}
       <Card>
         <HistoryHeader>{t("reports.history")}</HistoryHeader>
-        {isLoading ? <LoadingSpinner /> : !reports?.length ? (
+        {isLoading && <LoadingSpinner />}
+        {!isLoading && !reports?.length && (
           <EmptyState message={t("reports.noReports")} />
-        ) : (
+        )}
+        {!isLoading && !!reports?.length && (
           <ReportList>
             {reports.map((r) => (
               <ReportItem key={r.id}>
@@ -87,7 +89,7 @@ export function ReportsPage() {
       </Card>
     </PageLayout>
   );
-}
+};
 
 const HistoryHeader = styled.h3`
   font-size: ${({ theme }) => theme.fontSizes.md}; font-weight: ${({ theme }) => theme.fontWeights.semibold};

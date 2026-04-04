@@ -28,7 +28,7 @@ const SpinnerText = styled.span`
   font-size: ${({ theme }) => theme.fontSizes.sm};
 `;
 
-export function LoadingSpinner() {
+export const LoadingSpinner = () => {
   const { t } = useTranslation();
   return (
     <SpinnerWrapper>
@@ -36,4 +36,4 @@ export function LoadingSpinner() {
       <SpinnerText>{t("common.loading")}</SpinnerText>
     </SpinnerWrapper>
   );
-}
+};

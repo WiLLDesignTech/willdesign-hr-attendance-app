@@ -10,7 +10,7 @@ interface RoleGuardProps {
 }
 
 /** Route guard that redirects to dashboard if user lacks the required permission or role. */
-export function RoleGuard({ requiredPermission, minRole }: RoleGuardProps) {
+export const RoleGuard = ({ requiredPermission, minRole }: RoleGuardProps) => {
   const hasPermissionResult = useHasPermission(requiredPermission ?? Permissions.EMPLOYEE_LIST_ALL);
   const hasRoleResult = useHasMinimumRole(minRole ?? Roles.EMPLOYEE);
 
@@ -23,4 +23,4 @@ export function RoleGuard({ requiredPermission, minRole }: RoleGuardProps) {
   }
 
   return <Outlet />;
-}
+};

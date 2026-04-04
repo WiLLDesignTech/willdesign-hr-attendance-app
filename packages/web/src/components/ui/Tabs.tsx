@@ -11,7 +11,7 @@ interface TabsProps {
   readonly onChange: (key: string) => void;
 }
 
-export function Tabs({ tabs, activeKey, onChange }: TabsProps) {
+export const Tabs = ({ tabs, activeKey, onChange }: TabsProps) => {
   return (
     <TabBar role="tablist">
       {tabs.map((tab) => (
@@ -27,7 +27,7 @@ export function Tabs({ tabs, activeKey, onChange }: TabsProps) {
       ))}
     </TabBar>
   );
-}
+};
 
 const TabBar = styled.div`
   display: flex;

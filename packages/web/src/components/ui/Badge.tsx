@@ -7,9 +7,9 @@ interface BadgeProps {
   readonly variant?: BadgeVariant;
 }
 
-export function Badge({ label, variant = "info" }: BadgeProps) {
+export const Badge = ({ label, variant = "info" }: BadgeProps) => {
   return <Pill $variant={variant}>{label}</Pill>;
-}
+};
 
 const VARIANT_MAP = {
   info: { bg: "infoLight", text: "info" },

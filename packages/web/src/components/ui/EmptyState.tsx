@@ -7,7 +7,7 @@ interface EmptyStateProps {
   readonly action?: ReactNode;
 }
 
-export function EmptyState({ icon, message, action }: EmptyStateProps) {
+export const EmptyState = ({ icon, message, action }: EmptyStateProps) => {
   return (
     <Wrapper>
       {icon && <IconWrapper>{icon}</IconWrapper>}
@@ -15,7 +15,7 @@ export function EmptyState({ icon, message, action }: EmptyStateProps) {
       {action && <ActionWrapper>{action}</ActionWrapper>}
     </Wrapper>
   );
-}
+};
 
 const Wrapper = styled.div`
   display: flex;

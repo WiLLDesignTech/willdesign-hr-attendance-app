@@ -7,16 +7,16 @@ import { HOURS } from "@hr-attendance-app/types";
 
 const MONTHS_IN_YEAR = 12;
 
-function getMonthName(monthIndex: number, year: number, locale: string): string {
+const getMonthName = (monthIndex: number, year: number, locale: string): string => {
   return new Date(year, monthIndex).toLocaleString(locale, { month: "short" });
-}
+};
 
 interface QuotaEditorProps {
   readonly employeeId: string;
   readonly year: number;
 }
 
-export function QuotaEditor({ year }: QuotaEditorProps) {
+export const QuotaEditor = ({ year }: QuotaEditorProps) => {
   const { t, i18n } = useTranslation();
   const toast = useToast();
 
@@ -90,7 +90,7 @@ export function QuotaEditor({ year }: QuotaEditorProps) {
       </SaveRow>
     </Card>
   );
-}
+};
 
 const QuotaGrid = styled.div`
   display: grid;

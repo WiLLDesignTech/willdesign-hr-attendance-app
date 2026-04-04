@@ -19,11 +19,17 @@ interface FormWizardProps {
   readonly isSubmitting?: boolean;
 }
 
-export function FormWizard({
+const getStepState = (i: number, current: number): "done" | "active" | "pending" => {
+  if (i < current) return "done";
+  if (i === current) return "active";
+  return "pending";
+};
+
+export const FormWizard = ({
   steps,
   onSubmit,
   isSubmitting = false,
-}: FormWizardProps) {
+}: FormWizardProps) => {
   const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -42,7 +48,13 @@ export function FormWizard({
 
   const isLast = currentStep === steps.length - 1;
 
-  async function handleNext() {
+  const getButtonLabel = (): string => {
+    if (isSubmitting) return t("common.submitting");
+    if (isLast) return t("common.submit");
+    return t("common.next");
+  };
+
+  const handleNext = async () => {
     const currentStepData = steps[currentStep];
     if (!currentStepData) return;
     const valid = await form.trigger(currentStepData.fields as string[]);
@@ -53,20 +65,20 @@ export function FormWizard({
     } else {
       setCurrentStep((s) => s + 1);
     }
-  }
+  };
 
-  function handleBack() {
+  const handleBack = () => {
     if (currentStep > 0) {
       setCurrentStep((s) => s - 1);
     }
-  }
+  };
 
   return (
     <FormProvider {...form}>
       <Wrapper>
         <StepIndicator>
           {steps.map((s, i) => (
-            <StepItem key={s.label} $state={i < currentStep ? "done" : i === currentStep ? "active" : "pending"}>
+            <StepItem key={s.label} $state={getStepState(i, currentStep)}>
               <StepNumber>{i + 1}</StepNumber>
               <StepLabel>{s.label}</StepLabel>
             </StepItem>
@@ -84,13 +96,13 @@ export function FormWizard({
             </BackBtn>
           )}
           <NextBtn type="button" onClick={handleNext} disabled={isSubmitting}>
-            {isSubmitting ? t("common.submitting") : isLast ? t("common.submit") : t("common.next")}
+            {getButtonLabel()}
           </NextBtn>
         </Actions>
       </Wrapper>
     </FormProvider>
   );
-}
+};
 
 const Wrapper = styled.div`
   display: flex;

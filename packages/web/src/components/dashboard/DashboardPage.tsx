@@ -12,7 +12,7 @@ import { useIsManager } from "../../hooks/useRole";
 import { formatDate } from "../../utils/date";
 
 
-export function DashboardPage() {
+export const DashboardPage = () => {
   const { t } = useTranslation();
   const { data: attState, isLoading: attLoading } = useAttendanceState();
   const clockAction = useClockAction();
@@ -99,7 +99,7 @@ export function DashboardPage() {
       )}
     </PageLayout>
   );
-}
+};
 
 const ClockSection = styled.div`
   display: flex;

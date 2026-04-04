@@ -20,7 +20,7 @@ const VARIANT_MAP: Record<string, "info" | "success" | "warning" | "danger"> = {
   cron: "info",
 };
 
-export function AuditPanel({ targetId }: AuditPanelProps) {
+export const AuditPanel = ({ targetId }: AuditPanelProps) => {
   const { t } = useTranslation();
   const { data: entries, isLoading } = useAudit(targetId);
   const [sourceFilter, setSourceFilter] = useState("");
@@ -111,7 +111,7 @@ export function AuditPanel({ targetId }: AuditPanelProps) {
       />
     </AuditContainer>
   );
-}
+};
 
 const AuditContainer = styled.div`
   display: flex;
