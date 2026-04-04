@@ -49,6 +49,7 @@ Kiro-style Spec Driven Development implementation on AI-DLC (AI Development Life
 - Never add Co-Authored-By lines to git commit messages
 - Always run /simplify command before committing code
 - Alert when Claude needs more context and compact context to perform a task
+- Always use `const` arrow function pattern for all functions (`export const myFunc = () => { ... }`) — never use `function` declarations. Applies to React components, utility functions, handlers, hooks, backend services, and all code across the monorepo
 - Never use magic strings or numbers in code — always use named constants from `@hr-attendance-app/types` constants module
 - Always use styled-components for frontend styling — never create CSS files. Use `theme.ts` for design tokens, `primitives.ts` for shared components (Card, Button, FormField, etc.), and co-located styled components for page-specific styles
 - Never use inline date operations (`new Date()`, `Date.now()`, `.toISOString()`, `.slice(0,10)`, `.getFullYear()`) — always use shared `date-utils` from `@hr-attendance-app/types`: `nowIso()`, `nowMs()`, `todayDate()`, `isoToDateStr()`, `dateToIso()`, `dateToDateStr()`, `yearFromDate()`, `daysInMonth()`, `formatYearMonth()`, `addDays()`, `addMonths()`, `addYears()`, `timestampId()`. For frontend display, use `packages/web/src/utils/date.ts` (formatDate, formatDateTime, formatRelative) and `packages/web/src/utils/currency.ts` (formatAmount)
