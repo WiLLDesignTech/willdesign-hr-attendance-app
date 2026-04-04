@@ -2,30 +2,23 @@ import { describe, it, expect } from "vitest";
 import { screen } from "@testing-library/react";
 import { renderWithProviders } from "../../test/render";
 import { AdminPage } from "./AdminPage";
+import en from "../../i18n/en.json";
 
 describe("AdminPage", () => {
-  it("renders onboarding tab", () => {
+  it("renders sidebar nav with all section buttons", () => {
     renderWithProviders(<AdminPage />);
-    expect(screen.getByRole("button", { name: "Onboarding" })).toBeInTheDocument();
+    const buttons = screen.getAllByRole("button");
+    const buttonTexts = buttons.map((b) => b.textContent);
+    expect(buttonTexts.some((t) => t?.includes(en.admin.onboarding))).toBe(true);
+    expect(buttonTexts.some((t) => t?.includes(en.admin.offboarding))).toBe(true);
+    expect(buttonTexts.some((t) => t?.includes(en.admin.policies))).toBe(true);
+    expect(buttonTexts.some((t) => t?.includes(en.admin.roles))).toBe(true);
+    expect(buttonTexts.some((t) => t?.includes(en.admin.holidays))).toBe(true);
+    expect(buttonTexts.some((t) => t?.includes(en.admin.locks))).toBe(true);
   });
 
-  it("renders offboarding tab", () => {
+  it("renders empty state when no section selected", () => {
     renderWithProviders(<AdminPage />);
-    expect(screen.getByRole("button", { name: "Offboarding" })).toBeInTheDocument();
-  });
-
-  it("renders policy builder tab", () => {
-    renderWithProviders(<AdminPage />);
-    expect(screen.getByRole("button", { name: "Policies" })).toBeInTheDocument();
-  });
-
-  it("renders role management tab", () => {
-    renderWithProviders(<AdminPage />);
-    expect(screen.getByRole("button", { name: "Roles" })).toBeInTheDocument();
-  });
-
-  it("renders holiday calendar tab", () => {
-    renderWithProviders(<AdminPage />);
-    expect(screen.getByRole("button", { name: "Holidays" })).toBeInTheDocument();
+    expect(screen.getByText(en.admin.selectSection)).toBeInTheDocument();
   });
 });

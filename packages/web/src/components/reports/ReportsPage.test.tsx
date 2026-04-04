@@ -9,15 +9,13 @@ describe("ReportsPage", () => {
     expect(screen.getByText("Daily Report")).toBeInTheDocument();
   });
 
-  it("renders yesterday/today/blockers fields", () => {
-    renderWithProviders(<ReportsPage />);
-    expect(screen.getByLabelText("Yesterday")).toBeInTheDocument();
-    expect(screen.getByLabelText("Today")).toBeInTheDocument();
-    expect(screen.getByLabelText("Blockers")).toBeInTheDocument();
-  });
-
   it("renders report history section", () => {
     renderWithProviders(<ReportsPage />);
     expect(screen.getByText("Report History")).toBeInTheDocument();
+  });
+
+  it("renders date filter", () => {
+    renderWithProviders(<ReportsPage />);
+    expect(screen.getByLabelText("Date")).toBeInTheDocument();
   });
 });

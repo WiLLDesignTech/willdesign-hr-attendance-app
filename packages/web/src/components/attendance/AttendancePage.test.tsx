@@ -13,19 +13,23 @@ vi.mock("../../hooks/queries/useAttendance", () => ({
   useClockAction: () => ({ mutate: vi.fn(), isPending: false }),
 }));
 
+vi.mock("../../hooks/queries", () => ({
+  useAttendanceLocks: () => ({ data: [] }),
+}));
+
 describe("AttendancePage", () => {
-  it("renders attendance history section", () => {
+  it("renders monthly calendar section", () => {
     renderWithProviders(<AttendancePage />);
-    expect(screen.getByText("Attendance History")).toBeInTheDocument();
+    expect(screen.getByText("Monthly Calendar")).toBeInTheDocument();
   });
 
-  it("renders web clock-in controls", () => {
+  it("renders clock widget", () => {
     renderWithProviders(<AttendancePage />);
-    expect(screen.getByTestId("web-clock")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /clock in/i })).toBeInTheDocument();
   });
 
-  it("renders team leave calendar section", () => {
+  it("renders empty state when no events", () => {
     renderWithProviders(<AttendancePage />);
-    expect(screen.getByText("Team Calendar")).toBeInTheDocument();
+    expect(screen.getByText("No attendance records yet")).toBeInTheDocument();
   });
 });

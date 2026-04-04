@@ -4,14 +4,11 @@ import { renderWithProviders } from "../../test/render";
 import { LeavePage } from "./LeavePage";
 
 describe("LeavePage", () => {
-  it("renders leave request form", () => {
+  it("renders tab navigation", () => {
     renderWithProviders(<LeavePage />);
-    expect(screen.getByText("New Request")).toBeInTheDocument();
-  });
-
-  it("renders leave request list", () => {
-    renderWithProviders(<LeavePage />);
-    expect(screen.getByText("My Requests")).toBeInTheDocument();
+    expect(screen.getByText("My Leave")).toBeInTheDocument();
+    expect(screen.getByText("Team Calendar")).toBeInTheDocument();
+    expect(screen.getByText("Balance")).toBeInTheDocument();
   });
 
   it("renders date picker inputs", () => {

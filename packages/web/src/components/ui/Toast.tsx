@@ -16,7 +16,7 @@ interface ToastContextValue {
 
 const ToastContext = createContext<ToastContextValue | null>(null);
 
-const AUTO_DISMISS_MS = 4000;
+export const AUTO_DISMISS_MS = 4000;
 
 let toastCounter = 0;
 

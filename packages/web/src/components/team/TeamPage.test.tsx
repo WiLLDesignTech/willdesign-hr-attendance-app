@@ -4,23 +4,16 @@ import { renderWithProviders } from "../../test/render";
 import { TeamPage } from "./TeamPage";
 
 describe("TeamPage", () => {
-  it("renders team hours overview", () => {
+  it("renders tab navigation", () => {
     renderWithProviders(<TeamPage />);
-    expect(screen.getByText("Team Overview")).toBeInTheDocument();
+    expect(screen.getByText("Overview")).toBeInTheDocument();
+    expect(screen.getByText("Approvals")).toBeInTheDocument();
+    expect(screen.getByText("Calendar")).toBeInTheDocument();
+    expect(screen.getByText("Reports")).toBeInTheDocument();
   });
 
-  it("renders flag management section", () => {
+  it("defaults to overview tab", () => {
     renderWithProviders(<TeamPage />);
-    expect(screen.getByText("Flags")).toBeInTheDocument();
-  });
-
-  it("renders surplus banking section", () => {
-    renderWithProviders(<TeamPage />);
-    expect(screen.getByText("Surplus Banking")).toBeInTheDocument();
-  });
-
-  it("renders missing reports tracker", () => {
-    renderWithProviders(<TeamPage />);
-    expect(screen.getByText("Missing Reports")).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Overview" })).toHaveAttribute("aria-selected", "true");
   });
 });

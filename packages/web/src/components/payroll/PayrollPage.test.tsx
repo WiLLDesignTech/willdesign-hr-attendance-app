@@ -6,19 +6,16 @@ import { PayrollPage } from "./PayrollPage";
 vi.mock("../../hooks/queries/usePayroll", () => ({
   usePayroll: () => ({
     data: {
-      baseSalary: 300000, overtimePay: 0, allowances: [],
-      deficitDeduction: 0, netAmount: 300000, currency: "JPY",
+      baseSalary: 300000, proRataAdjustment: 0, overtimePay: 0, allowances: [],
+      bonus: 0, commission: 0, deficitDeduction: 0, blendingDetails: null,
+      transferFees: 0, netAmount: 300000, currency: "JPY",
+      homeCurrencyEquivalent: null, exchangeRate: null, exchangeRateDate: null,
     },
     isLoading: false,
   }),
 }));
 
 describe("PayrollPage", () => {
-  it("renders payroll breakdown section", () => {
-    renderWithProviders(<PayrollPage />);
-    expect(screen.getByText("Payroll Breakdown")).toBeInTheDocument();
-  });
-
   it("renders month selector", () => {
     renderWithProviders(<PayrollPage />);
     expect(screen.getByLabelText("Month")).toBeInTheDocument();

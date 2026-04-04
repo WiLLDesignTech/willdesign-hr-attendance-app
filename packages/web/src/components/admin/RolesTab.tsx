@@ -46,9 +46,9 @@ export function RolesTab() {
     if (!selectedRole) return;
     const role = roles?.find((r) => r.name === selectedRole);
     updateRole.mutate(
-      { name: selectedRole, description: role?.name ?? "", permissions: [...editPermissions] },
+      { name: selectedRole, description: "", permissions: [...editPermissions] },
       {
-        onSuccess: () => toast.show(t("admin.roles.saved"), "success"),
+        onSuccess: () => toast.show(t("admin.rolesEditor.saved"), "success"),
         onError: (err) => toast.show(err.message, "danger"),
       },
     );
@@ -59,11 +59,11 @@ export function RolesTab() {
   return (
     <RolesLayout>
       <RoleList>
-        <RoleHeader>{t("admin.roles.list")}</RoleHeader>
+        <RoleHeader>{t("admin.rolesEditor.list")}</RoleHeader>
         {isLoading ? (
           <p>{t("common.loading")}</p>
         ) : !roles?.length ? (
-          <EmptyState message={t("admin.roles.none")} />
+          <EmptyState message={t("admin.rolesEditor.none")} />
         ) : (
           roles.map((role) => (
             <RoleButton
@@ -80,17 +80,17 @@ export function RolesTab() {
 
       <PermissionPanel>
         {!selectedRole ? (
-          <EmptyState message={t("admin.roles.selectRole")} />
+          <EmptyState message={t("admin.rolesEditor.selectRole")} />
         ) : (
           <Card>
             <PermissionTitle>
               {selectedRole}
-              {isSuperAdmin && <Badge label={t("admin.roles.locked")} variant="warning" />}
+              {isSuperAdmin && <Badge label={t("admin.rolesEditor.locked")} variant="warning" />}
             </PermissionTitle>
 
             {PERMISSION_GROUPS.map((group) => (
               <PermissionGroup key={group.domain}>
-                <GroupLabel>{t(`admin.roles.domain.${group.domain}`)}</GroupLabel>
+                <GroupLabel>{t(`admin.rolesEditor.domain.${group.domain}`)}</GroupLabel>
                 {group.permissions.map((perm) => (
                   <PermissionRow key={perm}>
                     <Checkbox

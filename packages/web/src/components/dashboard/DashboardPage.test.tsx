@@ -18,12 +18,11 @@ vi.mock("../../hooks/queries/useLeave", () => ({
   }),
 }));
 
-describe("DashboardPage", () => {
-  it("renders the clock widget section", () => {
-    renderWithProviders(<DashboardPage />);
-    expect(screen.getByTestId("clock-widget")).toBeInTheDocument();
-  });
+vi.mock("../../hooks/queries", () => ({
+  useHolidays: () => ({ data: [] }),
+}));
 
+describe("DashboardPage", () => {
   it("renders hours summary cards", () => {
     renderWithProviders(<DashboardPage />);
     expect(screen.getByText("Hours Today")).toBeInTheDocument();
@@ -36,8 +35,10 @@ describe("DashboardPage", () => {
     expect(screen.getByText("Leave Balance")).toBeInTheDocument();
   });
 
-  it("renders pending actions section", () => {
+  it("renders quick action links", () => {
     renderWithProviders(<DashboardPage />);
-    expect(screen.getByText("Pending")).toBeInTheDocument();
+    expect(screen.getByText("New Leave Request")).toBeInTheDocument();
+    expect(screen.getByText("View Reports")).toBeInTheDocument();
+    expect(screen.getByText("View Payroll")).toBeInTheDocument();
   });
 });
