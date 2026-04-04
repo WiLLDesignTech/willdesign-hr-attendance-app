@@ -347,15 +347,15 @@
 
 ## Phase 9: Integration & Testing
 
-- [ ] 19. Wire all new pages into routing and verify end-to-end
-- [ ] 19.1 Update App.tsx routing and lazy imports
+- [x] 19. Wire all new pages into routing and verify end-to-end
+- [x] 19.1 Update App.tsx routing and lazy imports
   - Add lazy imports for all new/redesigned page components
   - Verify RoleGuard permissions are correct for all protected routes
   - Ensure Suspense fallback renders LoadingSpinner or Skeleton
   - Test navigation between all pages at all 3 breakpoints
   - _Requirements: 2.1, 2.6_
 
-- [ ] 19.2 Verify cross-cutting concerns
+- [x] 19.2 Verify cross-cutting concerns
   - Confirm all pages use t() for user-facing text — no hardcoded strings
   - Confirm all dates display via formatDate/formatDateTime — no raw ISO strings
   - Confirm all monetary values display via formatAmount — no raw numbers
@@ -363,8 +363,8 @@
   - Confirm lock indicators appear on attendance pages when periods are locked
   - _Requirements: 16.1, 16.5, 10.5, 8.6_
 
-- [ ] 20. Integration and E2E tests
-- [ ] 20.1* Write unit tests for UI primitives
+- [x] 20. Integration and E2E tests
+- [x] 20.1* Write unit tests for UI primitives
   - Modal: focus trap, escape-to-close, backdrop click
   - DataTable: sorting, filtering, pagination, empty state
   - Calendar: date selection, month navigation, event rendering
@@ -372,7 +372,7 @@
   - Toast: auto-dismiss timing, manual close, variant rendering
   - _Requirements: 1.5_
 
-- [ ] 20.2* Write integration tests for critical flows
+- [x] 20.2* Write integration tests for critical flows
   - Admin onboarding: fill 3 steps → submit → verify API call → verify cache invalidation
   - Leave approval: render approval queue → approve → verify PATCH call
   - Attendance lock: switch scope → toggle lock → verify POST with correct scope/params
@@ -380,7 +380,7 @@
   - Flag resolution: select resolution → set bank offset → submit → verify PATCH
   - _Requirements: 3.4, 9.3, 8.7, 5.4, 11.5_
 
-- [ ] 20.3* Write E2E tests for responsive behavior
+- [x] 20.3* Write E2E tests for responsive behavior
   - Run critical paths at 375px, 768px, and 1440px viewports
   - Admin onboarding flow at all breakpoints
   - Manager approval flow at all breakpoints

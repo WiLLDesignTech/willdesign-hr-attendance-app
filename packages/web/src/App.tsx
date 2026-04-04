@@ -8,6 +8,7 @@ import { RoleGuard } from "./components/auth/RoleGuard";
 import { LoginPage } from "./components/auth/LoginPage";
 import { Permissions, ROUTE_SEGMENTS } from "@hr-attendance-app/types";
 import { Layout } from "./components/common/Layout";
+import { LoadingSpinner } from "./components/common/LoadingSpinner";
 import { ToastProvider } from "./components/ui/Toast";
 import { theme } from "./theme/theme";
 import { GlobalStyle } from "./theme/GlobalStyle";
@@ -36,7 +37,7 @@ export function App() {
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
             <BrowserRouter>
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<LoadingSpinner />}>
                 <Routes>
                   <Route path={ROUTE_SEGMENTS.LOGIN} element={<LoginPage />} />
                   <Route element={<AuthGuard />}>

@@ -24,8 +24,8 @@ const Hours = styled.div`
 `;
 
 const HoursValue = styled.span`
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: ${({ theme }) => theme.fontSizes["2xl"]};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
   font-family: ${({ theme }) => theme.fonts.heading};
   color: ${({ theme }) => theme.colors.text};
 `;
@@ -40,8 +40,8 @@ const Actions = styled.div`
 const clockButtonOverrides = css`
   padding: ${({ theme }) => theme.space.sm} ${({ theme }) => theme.space.lg};
   border-radius: ${({ theme }) => theme.radii.md};
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: ${({ theme }) => theme.fontSizes.base};
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
 `;
 
 const ClockButton = styled(ButtonAccent)`${clockButtonOverrides}`;
