@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { AttendanceStates, ROUTES, HOURS, currentYear } from "@hr-attendance-app/types";
+import { AttendanceStates, ROUTES, HOURS, Regions, currentYear } from "@hr-attendance-app/types";
 import { ClockWidget } from "./ClockWidget";
 import { Card, PageLayout, ProgressBar, Badge } from "../ui";
 import { useAttendanceState, useClockAction } from "../../hooks/queries/useAttendance";
@@ -17,7 +17,7 @@ export function DashboardPage() {
   const { data: attState, isLoading: attLoading } = useAttendanceState();
   const clockAction = useClockAction();
   const { data: balance } = useLeaveBalance();
-  const { data: holidays } = useHolidays("JP", currentYear());
+  const { data: holidays } = useHolidays(Regions.JP, currentYear());
   const isManager = useIsManager();
 
   const status = attState?.state ?? AttendanceStates.IDLE;

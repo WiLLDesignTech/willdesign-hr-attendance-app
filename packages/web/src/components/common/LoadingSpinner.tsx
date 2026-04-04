@@ -25,7 +25,7 @@ const Spinner = styled.div`
 
 const SpinnerText = styled.span`
   color: ${({ theme }) => theme.colors.textMuted};
-  font-size: 0.875rem;
+  font-size: ${({ theme }) => theme.fontSizes.sm};
 `;
 
 export function LoadingSpinner() {

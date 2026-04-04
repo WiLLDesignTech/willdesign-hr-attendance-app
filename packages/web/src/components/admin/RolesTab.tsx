@@ -44,7 +44,6 @@ export function RolesTab() {
 
   const handleSave = useCallback(() => {
     if (!selectedRole) return;
-    const role = roles?.find((r) => r.name === selectedRole);
     updateRole.mutate(
       { name: selectedRole, description: "", permissions: [...editPermissions] },
       {
