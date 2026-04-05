@@ -234,6 +234,12 @@ export const AttendanceLockScopes = {
 export const YEAR_MONTH_PATTERN = /^\d{4}-\d{2}$/;
 
 // ─── Banking ───
+export const BankApprovalStatuses = {
+  PENDING: "PENDING",
+  APPROVED: "APPROVED",
+  REJECTED: "REJECTED",
+} as const;
+
 export const BANKING = {
   EXPIRY_MONTHS: 12,
 } as const;

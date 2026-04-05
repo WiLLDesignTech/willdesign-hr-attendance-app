@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { AttendanceStates, FlagStatuses, ROUTES, currentYear, todayDate } from "@hr-attendance-app/types";
+import { AttendanceStates, EmployeeStatuses, ROUTES, currentYear, todayDate } from "@hr-attendance-app/types";
 import type { Employee, AttendanceStateRecord } from "@hr-attendance-app/types";
 import { ClockWidget } from "./ClockWidget";
 import { Card, PageLayout, ProgressBar, Badge } from "../ui";
@@ -10,13 +10,14 @@ import {
   useAttendanceState, useAttendanceSummary, useAttendanceEvents,
   useClockAction, useTeamAttendanceStates,
 } from "../../hooks/queries/useAttendance";
-import { useLeaveBalance, usePendingLeaveRequests } from "../../hooks/queries/useLeave";
+import { useLeaveBalance } from "../../hooks/queries/useLeave";
 import { useCurrentUser, useEmployees } from "../../hooks/queries/useEmployee";
-import { useTeamMembers, useHolidays, useFlags, useBank } from "../../hooks/queries";
+import { useTeamMembers, useHolidays, usePendingCounts } from "../../hooks/queries";
 import { useIsManager, useIsAdmin } from "../../hooks/useRole";
 import { useToast } from "../ui/Toast";
 import { formatDate } from "../../utils/date";
 import { formatClockError, ATTENDANCE_STATUS_CONFIG } from "../../utils/attendance-status";
+import type { ThemeColorKey } from "../../utils/attendance-status";
 
 
 export const DashboardPage = () => {
@@ -46,7 +47,6 @@ export const DashboardPage = () => {
 
   return (
     <PageLayout>
-      {/* ── Personal Section (all users) ── */}
       <ClockSection>
         <ClockWidget
           status={status}
@@ -99,10 +99,7 @@ export const DashboardPage = () => {
         </Card>
       )}
 
-      {/* ── Team Section (managers+) ── */}
       {isManager && <ManagerSection />}
-
-      {/* ── Org Section (admins+) ── */}
       {isAdmin && <AdminSection />}
     </PageLayout>
   );
@@ -115,9 +112,7 @@ const ManagerSection = () => {
   const { data: members } = useTeamMembers();
   const memberIds = useMemo(() => members?.map((m) => m.id) ?? [], [members]);
   const { data: teamStates } = useTeamAttendanceStates(memberIds);
-  const { data: pendingLeave } = usePendingLeaveRequests({ enabled: true });
-  const { data: flags } = useFlags();
-  const { data: bankEntries } = useBank();
+  const pending = usePendingCounts();
 
   const stateMap = useMemo(() => {
     const map = new Map<string, AttendanceStateRecord>();
@@ -136,11 +131,6 @@ const ManagerSection = () => {
     });
     return { working, onBreak, idle };
   }, [teamStates]);
-
-  const pendingLeaveCount = pendingLeave?.length ?? 0;
-  const pendingFlagCount = flags?.filter((f) => f.status === FlagStatuses.PENDING).length ?? 0;
-  const pendingBankCount = bankEntries?.filter((b) => b.approvalStatus === "PENDING").length ?? 0;
-  const totalPending = pendingLeaveCount + pendingFlagCount + pendingBankCount;
 
   return (
     <>
@@ -186,33 +176,32 @@ const ManagerSection = () => {
         )}
       </Card>
 
-      {/* Pending Actions */}
-      {totalPending > 0 && (
+      {pending.total > 0 && (
         <Card>
           <SectionHeader>
             <SectionTitle>
               {t("dashboard.pendingActions")}
-              <PendingBadge>{totalPending}</PendingBadge>
+              <PendingBadge>{pending.total}</PendingBadge>
             </SectionTitle>
             <ActionLink to={ROUTES.TEAM}>{t("dashboard.viewAll")}</ActionLink>
           </SectionHeader>
           <PendingList>
-            {pendingLeaveCount > 0 && (
+            {pending.leave > 0 && (
               <PendingItem>
                 <Badge label={t("team.approval.leave")} variant="info" />
-                <PendingText>{pendingLeaveCount} {t("dashboard.leaveRequests")}</PendingText>
+                <PendingText>{pending.leave} {t("dashboard.leaveRequests")}</PendingText>
               </PendingItem>
             )}
-            {pendingFlagCount > 0 && (
+            {pending.flag > 0 && (
               <PendingItem>
                 <Badge label={t("team.approval.flag")} variant="warning" />
-                <PendingText>{pendingFlagCount} {t("dashboard.flagsPending")}</PendingText>
+                <PendingText>{pending.flag} {t("dashboard.flagsPending")}</PendingText>
               </PendingItem>
             )}
-            {pendingBankCount > 0 && (
+            {pending.bank > 0 && (
               <PendingItem>
                 <Badge label={t("team.approval.bank")} variant="success" />
-                <PendingText>{pendingBankCount} {t("dashboard.bankPending")}</PendingText>
+                <PendingText>{pending.bank} {t("dashboard.bankPending")}</PendingText>
               </PendingItem>
             )}
           </PendingList>
@@ -228,7 +217,7 @@ const AdminSection = () => {
   const { t } = useTranslation();
   const { data: allEmployees } = useEmployees();
 
-  const activeCount = allEmployees?.filter((e: Employee) => e.status === "ACTIVE").length ?? 0;
+  const activeCount = allEmployees?.filter((e: Employee) => e.status === EmployeeStatuses.ACTIVE).length ?? 0;
 
   return (
     <Card>
@@ -357,11 +346,11 @@ const TeamCount = styled.div`
   gap: 2px;
 `;
 
-const CountValue = styled.span<{ $color: string }>`
+const CountValue = styled.span<{ $color: ThemeColorKey }>`
   font-size: ${({ theme }) => theme.fontSizes["2xl"]};
   font-weight: ${({ theme }) => theme.fontWeights.bold};
   font-family: ${({ theme }) => theme.fonts.heading};
-  color: ${({ theme, $color }) => theme.colors[$color as keyof typeof theme.colors] ?? theme.colors.text};
+  color: ${({ theme, $color }) => theme.colors[$color]};
 `;
 
 const CountLabel = styled.span`

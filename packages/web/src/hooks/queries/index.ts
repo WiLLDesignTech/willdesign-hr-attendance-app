@@ -15,3 +15,4 @@ export { useBank, useBankApprove } from "./useBank";
 export { useAudit } from "./useAudit";
 export { useRoles, useUpdateRole } from "./useRoles";
 export { useDocuments, useUploadDocument, useVerifyDocument } from "./useDocuments";
+export { usePendingCounts } from "./usePendingCounts";

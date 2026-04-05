@@ -137,6 +137,7 @@ export {
   Currencies,
   FlagLevels,
   FlagResolutions,
+  BankApprovalStatuses,
   TerminationTypes,
   DocumentVerificationStatuses,
   AuditActions,

@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import { AttendanceStates, AttendanceActions, isoToDateStr, dateToDateStr, nowIso, todayDate } from "@hr-attendance-app/types";
+import { AttendanceStates, AttendanceActions, isoToDateStr, isoToYearMonth, dateToDateStr, nowIso, todayDate } from "@hr-attendance-app/types";
 import type { AttendanceEvent } from "@hr-attendance-app/types";
 import { ClockWidget } from "../dashboard/ClockWidget";
 import { Card, PageLayout, Calendar, Badge, ProgressBar, Modal, FormField, ButtonAccent, EmptyState } from "../ui";
@@ -30,7 +30,7 @@ export const AttendancePage = () => {
   const [editTimestamp, setEditTimestamp] = useState("");
   const [editAction, setEditAction] = useState("");
   const [editReason, setEditReason] = useState("");
-  const currentMonth = selectedDate.slice(0, 7);
+  const currentMonth = isoToYearMonth(selectedDate + "T00:00:00Z");
 
   const { data: attState } = useAttendanceState();
   const { data: summary } = useAttendanceSummary();
@@ -99,7 +99,6 @@ export const AttendancePage = () => {
 
   return (
     <PageLayout>
-      {/* Clock Widget */}
       <ClockWidget
         status={status}
         hoursToday={hoursToday}
@@ -112,76 +111,38 @@ export const AttendancePage = () => {
         loading={clockAction.isPending}
       />
 
-      {/* Hours Summary */}
       <Card>
         <SummaryTitle>{t("attendance.hoursSummary")}</SummaryTitle>
         <SummaryGrid>
-          <SummaryCard>
-            <SummaryPeriod>{t("attendance.daily")}</SummaryPeriod>
-            <ProgressBar value={hoursToday} max={requiredDaily} variant={surplusDaily > 0 ? "success" : "accent"} />
-            <SummaryRow>
-              <SummaryDetail>
-                <SummaryDetailLabel>{t("attendance.worked")}</SummaryDetailLabel>
-                <SummaryDetailValue>{hoursToday.toFixed(1)}h</SummaryDetailValue>
-              </SummaryDetail>
-              <SummaryDetail>
-                <SummaryDetailLabel>{t("attendance.required")}</SummaryDetailLabel>
-                <SummaryDetailValue>{requiredDaily}h</SummaryDetailValue>
-              </SummaryDetail>
-              <SummaryDetail>
-                <SummaryDetailLabel>{surplusDaily > 0 ? t("attendance.surplus") : t("attendance.remaining")}</SummaryDetailLabel>
-                <SummaryDetailValue $accent={surplusDaily > 0}>
-                  {surplusDaily > 0 ? `+${surplusDaily.toFixed(1)}h` : `${remainingDaily.toFixed(1)}h`}
-                </SummaryDetailValue>
-              </SummaryDetail>
-            </SummaryRow>
-          </SummaryCard>
-
-          <SummaryCard>
-            <SummaryPeriod>{t("attendance.weekly")}</SummaryPeriod>
-            <ProgressBar value={hoursWeek} max={requiredWeekly} variant={surplusWeekly > 0 ? "success" : "accent"} />
-            <SummaryRow>
-              <SummaryDetail>
-                <SummaryDetailLabel>{t("attendance.worked")}</SummaryDetailLabel>
-                <SummaryDetailValue>{hoursWeek.toFixed(1)}h</SummaryDetailValue>
-              </SummaryDetail>
-              <SummaryDetail>
-                <SummaryDetailLabel>{t("attendance.required")}</SummaryDetailLabel>
-                <SummaryDetailValue>{requiredWeekly}h</SummaryDetailValue>
-              </SummaryDetail>
-              <SummaryDetail>
-                <SummaryDetailLabel>{surplusWeekly > 0 ? t("attendance.surplus") : t("attendance.remaining")}</SummaryDetailLabel>
-                <SummaryDetailValue $accent={surplusWeekly > 0}>
-                  {surplusWeekly > 0 ? `+${surplusWeekly.toFixed(1)}h` : `${remainingWeekly.toFixed(1)}h`}
-                </SummaryDetailValue>
-              </SummaryDetail>
-            </SummaryRow>
-          </SummaryCard>
-
-          <SummaryCard>
-            <SummaryPeriod>{t("attendance.monthly")}</SummaryPeriod>
-            <ProgressBar value={hoursMonth} max={requiredMonthly} variant={surplusMonthly > 0 ? "success" : "accent"} />
-            <SummaryRow>
-              <SummaryDetail>
-                <SummaryDetailLabel>{t("attendance.worked")}</SummaryDetailLabel>
-                <SummaryDetailValue>{hoursMonth.toFixed(1)}h</SummaryDetailValue>
-              </SummaryDetail>
-              <SummaryDetail>
-                <SummaryDetailLabel>{t("attendance.required")}</SummaryDetailLabel>
-                <SummaryDetailValue>{requiredMonthly}h</SummaryDetailValue>
-              </SummaryDetail>
-              <SummaryDetail>
-                <SummaryDetailLabel>{surplusMonthly > 0 ? t("attendance.surplus") : t("attendance.remaining")}</SummaryDetailLabel>
-                <SummaryDetailValue $accent={surplusMonthly > 0}>
-                  {surplusMonthly > 0 ? `+${surplusMonthly.toFixed(1)}h` : `${remainingMonthly.toFixed(1)}h`}
-                </SummaryDetailValue>
-              </SummaryDetail>
-            </SummaryRow>
-          </SummaryCard>
+          {[
+            { key: "daily", worked: hoursToday, required: requiredDaily, surplus: surplusDaily, remaining: remainingDaily },
+            { key: "weekly", worked: hoursWeek, required: requiredWeekly, surplus: surplusWeekly, remaining: remainingWeekly },
+            { key: "monthly", worked: hoursMonth, required: requiredMonthly, surplus: surplusMonthly, remaining: remainingMonthly },
+          ].map((item) => (
+            <SummaryCard key={item.key}>
+              <SummaryPeriod>{t(`attendance.${item.key}`)}</SummaryPeriod>
+              <ProgressBar value={item.worked} max={item.required} variant={item.surplus > 0 ? "success" : "accent"} />
+              <SummaryRow>
+                <SummaryDetail>
+                  <SummaryDetailLabel>{t("attendance.worked")}</SummaryDetailLabel>
+                  <SummaryDetailValue>{item.worked.toFixed(1)}h</SummaryDetailValue>
+                </SummaryDetail>
+                <SummaryDetail>
+                  <SummaryDetailLabel>{t("attendance.required")}</SummaryDetailLabel>
+                  <SummaryDetailValue>{item.required}h</SummaryDetailValue>
+                </SummaryDetail>
+                <SummaryDetail>
+                  <SummaryDetailLabel>{item.surplus > 0 ? t("attendance.surplus") : t("attendance.remaining")}</SummaryDetailLabel>
+                  <SummaryDetailValue $accent={item.surplus > 0}>
+                    {item.surplus > 0 ? `+${item.surplus.toFixed(1)}h` : `${item.remaining.toFixed(1)}h`}
+                  </SummaryDetailValue>
+                </SummaryDetail>
+              </SummaryRow>
+            </SummaryCard>
+          ))}
         </SummaryGrid>
       </Card>
 
-      {/* Monthly Calendar */}
       <Card>
         <CalendarHeader>
           <h3>{t("attendance.calendar")}</h3>
@@ -224,7 +185,6 @@ export const AttendancePage = () => {
         {isLocked && <LockNotice>{t("attendance.lockedNotice")}</LockNotice>}
       </Card>
 
-      {/* Edit Modal */}
       <Modal
         isOpen={!!editEvent}
         onClose={() => setEditEvent(null)}

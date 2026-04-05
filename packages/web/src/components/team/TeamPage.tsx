@@ -9,12 +9,12 @@ import { useToast } from "../ui/Toast";
 import {
   useTeamMembers, useFlags, usePendingLeaveRequests, useLeaveRequests,
   useApproveLeave, useResolveFlag, useBank, useBankApprove,
-  useTeamReports, useTeamAttendanceStates,
+  useTeamReports, useTeamAttendanceStates, usePendingCounts,
 } from "../../hooks/queries";
 import { useIsManager } from "../../hooks/useRole";
 import { formatDate, formatDateTime } from "../../utils/date";
 import { ATTENDANCE_STATUS_CONFIG } from "../../utils/attendance-status";
-import { AttendanceStates, FlagResolutions, FlagStatuses, LeaveRequestStatuses, isoToDateStr, todayDate } from "@hr-attendance-app/types";
+import { AttendanceStates, BankApprovalStatuses, FlagResolutions, FlagStatuses, LeaveRequestStatuses, isoToDateStr, todayDate } from "@hr-attendance-app/types";
 import type { AttendanceState, LeaveRequest, Flag, BankEntry, DailyReport } from "@hr-attendance-app/types";
 
 const TEAM_TABS = [
@@ -29,24 +29,15 @@ export const TeamPage = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const isManager = useIsManager();
 
-  const { data: pendingLeave } = usePendingLeaveRequests({ enabled: true });
-  const { data: allFlags } = useFlags();
-  const { data: allBank } = useBank();
-
-  const pendingCount = useMemo(() => {
-    const leave = pendingLeave?.length ?? 0;
-    const flags = allFlags?.filter((f) => f.status === FlagStatuses.PENDING).length ?? 0;
-    const bank = allBank?.filter((b) => b.approvalStatus === "PENDING").length ?? 0;
-    return leave + flags + bank;
-  }, [pendingLeave, allFlags, allBank]);
+  const pending = usePendingCounts();
 
   const localizedTabs = useMemo(
     () => TEAM_TABS.map((tab) => ({
       key: tab.key,
       label: t(tab.label),
-      ...(tab.key === "approvals" ? { badge: pendingCount } : {}),
+      ...(tab.key === "approvals" ? { badge: pending.total } : {}),
     })),
-    [t, pendingCount],
+    [t, pending.total],
   );
 
   return (
@@ -118,8 +109,7 @@ const ApprovalQueue = () => {
   const bankApprove = useBankApprove();
 
   const pendingFlags = useMemo(() => flags?.filter((f) => f.status === FlagStatuses.PENDING) ?? [], [flags]);
-  const BANK_PENDING: BankEntry["approvalStatus"] = "PENDING";
-  const pendingBank = useMemo(() => bankEntries?.filter((b) => b.approvalStatus === BANK_PENDING) ?? [], [bankEntries]);
+  const pendingBank = useMemo(() => bankEntries?.filter((b) => b.approvalStatus === BankApprovalStatuses.PENDING) ?? [], [bankEntries]);
 
   const handleLeaveApprove = useCallback((id: string) => {
     approveLeave.mutate(id, {

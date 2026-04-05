@@ -6,7 +6,7 @@ import { AttendanceStates, AttendanceActions, HOURS, nowMs } from "@hr-attendanc
 import { ButtonAccent, ButtonDanger, ButtonSecondary } from "../../theme/primitives";
 import { ATTENDANCE_STATUS_CONFIG } from "../../utils/attendance-status";
 import type { ThemeColorKey } from "../../utils/attendance-status";
-import { formatElapsed } from "../../utils/date";
+import { formatElapsed, formatTime } from "../../utils/date";
 
 interface ClockWidgetProps {
   readonly status: AttendanceState;
@@ -17,11 +17,6 @@ interface ClockWidgetProps {
   readonly onAction: (action: AttendanceAction) => void;
   readonly loading?: boolean;
 }
-
-const formatTime = (iso: string): string => {
-  const d = new Date(iso);
-  return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
-};
 
 export const ClockWidget = ({
   status,
@@ -344,11 +339,11 @@ const SecondaryAction = styled(ButtonSecondary)`${actionBase}`;
 
 /* ── Timeline ── */
 
-const ACTION_COLORS: Record<string, string> = {
-  CLOCK_IN: "success",
-  CLOCK_OUT: "error",
-  BREAK_START: "warning",
-  BREAK_END: "accent",
+const ACTION_COLORS: Record<string, ThemeColorKey> = {
+  [AttendanceActions.CLOCK_IN]: "success",
+  [AttendanceActions.CLOCK_OUT]: "error",
+  [AttendanceActions.BREAK_START]: "warning",
+  [AttendanceActions.BREAK_END]: "accent",
 };
 
 const Timeline = styled.div`
