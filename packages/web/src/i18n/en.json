@@ -53,7 +53,7 @@
   "admin": {
     "onboarding": "Onboarding", "onboardingDesc": "Create a new employee record",
     "offboarding": "Offboarding", "offboardingDesc": "Process employee exit",
-    "employees": "Employees", "employeesDesc": "View and edit employee details",
+    "employeesTitle": "Employees", "employeesDesc": "View and edit employee details",
     "policies": "Policies", "policiesDesc": "Manage policy configurations",
     "roles": "Roles", "rolesDesc": "Manage custom roles and permissions",
     "holidays": "Holidays", "holidaysDesc": "Manage regional holiday calendars",

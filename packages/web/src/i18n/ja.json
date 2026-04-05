@@ -53,7 +53,7 @@
   "admin": {
     "onboarding": "入社手続き", "onboardingDesc": "新規社員レコード作成",
     "offboarding": "退社手続き", "offboardingDesc": "退社処理",
-    "employees": "社員管理", "employeesDesc": "社員情報の閲覧・編集",
+    "employeesTitle": "社員管理", "employeesDesc": "社員情報の閲覧・編集",
     "policies": "ポリシー", "policiesDesc": "ポリシー設定管理",
     "roles": "ロール", "rolesDesc": "カスタムロールと権限の管理",
     "holidays": "祝日", "holidaysDesc": "地域別祝日カレンダー管理",

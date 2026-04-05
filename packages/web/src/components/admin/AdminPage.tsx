@@ -22,7 +22,7 @@ interface SectionConfig {
 const SECTIONS: readonly SectionConfig[] = [
   { id: "onboarding", labelKey: "admin.onboarding", descKey: "admin.onboardingDesc", icon: "+" },
   { id: "offboarding", labelKey: "admin.offboarding", descKey: "admin.offboardingDesc", icon: "→" },
-  { id: "employees", labelKey: "admin.employees", descKey: "admin.employeesDesc", icon: "⊡" },
+  { id: "employees", labelKey: "admin.employeesTitle", descKey: "admin.employeesDesc", icon: "⊡" },
   { id: "policies", labelKey: "admin.policies", descKey: "admin.policiesDesc", icon: "≡" },
   { id: "roles", labelKey: "admin.roles", descKey: "admin.rolesDesc", icon: "⊕" },
   { id: "holidays", labelKey: "admin.holidays", descKey: "admin.holidaysDesc", icon: "◆" },
