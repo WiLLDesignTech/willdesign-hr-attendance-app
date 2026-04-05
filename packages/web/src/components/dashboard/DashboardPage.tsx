@@ -8,11 +8,13 @@ import { useAttendanceState, useAttendanceSummary, useClockAction } from "../../
 import { useLeaveBalance } from "../../hooks/queries/useLeave";
 import { useHolidays } from "../../hooks/queries";
 import { useIsManager } from "../../hooks/useRole";
+import { useToast } from "../ui/Toast";
 import { formatDate } from "../../utils/date";
 
 
 export const DashboardPage = () => {
   const { t } = useTranslation();
+  const toast = useToast();
   const { data: attState, isLoading: attLoading } = useAttendanceState();
   const { data: summary } = useAttendanceSummary();
   const clockAction = useClockAction();
@@ -40,7 +42,9 @@ export const DashboardPage = () => {
           hoursToday={hoursToday}
           breakMinutesToday={breakMinutesToday}
           lastEventTimestamp={attState?.lastEventTimestamp ?? null}
-          onAction={(action) => clockAction.mutate(action)}
+          onAction={(action) => clockAction.mutate(action, {
+            onError: (err) => toast.show(err instanceof Error ? err.message : t("common.error"), "danger"),
+          })}
           loading={clockAction.isPending || attLoading}
         />
       </ClockSection>

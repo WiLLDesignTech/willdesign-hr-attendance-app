@@ -70,7 +70,9 @@ export const AttendancePage = () => {
           hoursToday={hoursToday}
           breakMinutesToday={breakMinutesToday}
           lastEventTimestamp={attState?.lastEventTimestamp ?? null}
-          onAction={(action) => clockAction.mutate(action)}
+          onAction={(action) => clockAction.mutate(action, {
+            onError: (err) => toast.show(err instanceof Error ? err.message : t("common.error"), "danger"),
+          })}
           loading={clockAction.isPending}
         />
       </Card>
