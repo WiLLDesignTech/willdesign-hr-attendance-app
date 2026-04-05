@@ -73,6 +73,12 @@ export class DynamoLeaveRepository implements LeaveRepository {
       }
     }
 
+    // Update GSI1PK when status changes so findPending/findByStatus queries stay consistent
+    if (updates.status) {
+      expressions.push("GSI1PK = :gsi1pk");
+      values[":gsi1pk"] = this.keys.GSI1.LEAVE_STATUS(updates.status);
+    }
+
     const result = await this.client.send(new UpdateCommand({
       TableName: this.tableName,
       Key: { PK: this.keys.EMP(existing.employeeId), SK: this.keys.LEAVE(id) },

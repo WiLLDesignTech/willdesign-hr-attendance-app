@@ -84,7 +84,7 @@ const TabBadge = styled.span`
   min-width: 18px;
   height: 18px;
   border-radius: ${({ theme }) => theme.radii.full};
-  background: ${({ theme }) => theme.colors.error};
+  background: ${({ theme }) => theme.colors.accent};
   color: ${({ theme }) => theme.colors.textInverse};
   font-size: ${({ theme }) => theme.fontSizes.xxs};
   font-weight: ${({ theme }) => theme.fontWeights.bold};

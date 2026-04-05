@@ -43,14 +43,26 @@ export function useCreateLeave() {
   });
 }
 
-export function useApproveLeave() {
+export const useApproveLeave = () => {
   const api = useApiClient();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (requestId: string) =>
       api.patch<LeaveRequest>(apiPath(API_LEAVE_REQUEST_BY_ID, { id: requestId }), { action: "approve" }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.leave.all });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.leave.all });
     },
   });
-}
+};
+
+export const useRejectLeave = () => {
+  const api = useApiClient();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ requestId, reason }: { requestId: string; reason?: string }) =>
+      api.patch<LeaveRequest>(apiPath(API_LEAVE_REQUEST_BY_ID, { id: requestId }), { action: "reject", reason }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.leave.all });
+    },
+  });
+};

@@ -3,12 +3,12 @@ import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import {
   PageLayout, Card, Tabs, Badge, Calendar, EmptyState,
-  ButtonAccent, FormField,
+  ButtonAccent, ButtonDanger, FormField,
 } from "../ui";
 import { useToast } from "../ui/Toast";
 import {
   useTeamMembers, useFlags, usePendingLeaveRequests, useLeaveRequests,
-  useApproveLeave, useResolveFlag, useBank, useBankApprove,
+  useApproveLeave, useRejectLeave, useResolveFlag, useBank, useBankApprove,
   useTeamReports, useTeamAttendanceStates, usePendingCounts,
 } from "../../hooks/queries";
 import { useIsManager } from "../../hooks/useRole";
@@ -105,6 +105,7 @@ const ApprovalQueue = () => {
   const { data: flags } = useFlags();
   const { data: bankEntries } = useBank();
   const approveLeave = useApproveLeave();
+  const rejectLeave = useRejectLeave();
   const resolveFlag = useResolveFlag();
   const bankApprove = useBankApprove();
 
@@ -116,6 +117,12 @@ const ApprovalQueue = () => {
       onSuccess: () => toast.show(t("team.approval.approved"), "success"),
     });
   }, [approveLeave, toast, t]);
+
+  const handleLeaveReject = useCallback((id: string) => {
+    rejectLeave.mutate({ requestId: id }, {
+      onSuccess: () => toast.show(t("team.approval.rejected"), "success"),
+    });
+  }, [rejectLeave, toast, t]);
 
   const handleFlagResolve = useCallback((flagId: string, resolution: string) => {
     resolveFlag.mutate(
@@ -151,6 +158,9 @@ const ApprovalQueue = () => {
             <ButtonAccent onClick={() => handleLeaveApprove(req.id)} disabled={approveLeave.isPending}>
               {t("leave.approve")}
             </ButtonAccent>
+            <ButtonDanger onClick={() => handleLeaveReject(req.id)} disabled={rejectLeave.isPending}>
+              {t("leave.reject")}
+            </ButtonDanger>
           </QueueActions>
         </QueueItem>
       ))}
