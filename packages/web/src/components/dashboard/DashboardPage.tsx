@@ -1,28 +1,37 @@
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { AttendanceStates, ROUTES, Regions, currentYear, todayDate } from "@hr-attendance-app/types";
+import { AttendanceStates, FlagStatuses, ROUTES, currentYear, todayDate } from "@hr-attendance-app/types";
+import type { Employee, AttendanceStateRecord } from "@hr-attendance-app/types";
 import { ClockWidget } from "./ClockWidget";
 import { Card, PageLayout, ProgressBar, Badge } from "../ui";
-import { useAttendanceState, useAttendanceSummary, useAttendanceEvents, useClockAction } from "../../hooks/queries/useAttendance";
-import { useLeaveBalance } from "../../hooks/queries/useLeave";
-import { useHolidays } from "../../hooks/queries";
-import { useIsManager } from "../../hooks/useRole";
+import {
+  useAttendanceState, useAttendanceSummary, useAttendanceEvents,
+  useClockAction, useTeamAttendanceStates,
+} from "../../hooks/queries/useAttendance";
+import { useLeaveBalance, usePendingLeaveRequests } from "../../hooks/queries/useLeave";
+import { useCurrentUser, useEmployees } from "../../hooks/queries/useEmployee";
+import { useTeamMembers, useHolidays, useFlags, useBank } from "../../hooks/queries";
+import { useIsManager, useIsAdmin } from "../../hooks/useRole";
 import { useToast } from "../ui/Toast";
 import { formatDate } from "../../utils/date";
-import { formatClockError } from "../../utils/attendance-status";
+import { formatClockError, ATTENDANCE_STATUS_CONFIG } from "../../utils/attendance-status";
 
 
 export const DashboardPage = () => {
   const { t } = useTranslation();
   const toast = useToast();
+  const { data: currentUser } = useCurrentUser();
   const { data: attState, isLoading: attLoading } = useAttendanceState();
   const { data: summary } = useAttendanceSummary();
   const { data: todayEvents } = useAttendanceEvents(todayDate());
   const clockAction = useClockAction();
   const { data: balance } = useLeaveBalance();
-  const { data: holidays } = useHolidays(Regions.JP, currentYear());
+  const userRegion = currentUser?.region ?? "JP";
+  const { data: holidays } = useHolidays(userRegion, currentYear());
   const isManager = useIsManager();
+  const isAdmin = useIsAdmin();
 
   const status = attState?.state ?? AttendanceStates.IDLE;
   const hoursToday = summary?.hoursToday ?? 0;
@@ -37,7 +46,7 @@ export const DashboardPage = () => {
 
   return (
     <PageLayout>
-      {/* Clock Widget — primary action */}
+      {/* ── Personal Section (all users) ── */}
       <ClockSection>
         <ClockWidget
           status={status}
@@ -52,7 +61,6 @@ export const DashboardPage = () => {
         />
       </ClockSection>
 
-      {/* Stats Row */}
       <StatsGrid>
         <StatCard>
           <StatLabel>{t("dashboard.hoursToday")}</StatLabel>
@@ -72,7 +80,6 @@ export const DashboardPage = () => {
         </StatCard>
       </StatsGrid>
 
-      {/* Quick Actions */}
       <QuickActions>
         <ActionLink to={ROUTES.LEAVE}>{t("dashboard.newLeave")}</ActionLink>
         <ActionLink to={ROUTES.REPORTS}>{t("dashboard.viewReports")}</ActionLink>
@@ -80,10 +87,9 @@ export const DashboardPage = () => {
         {isManager && <ActionLink to={ROUTES.TEAM}>{t("dashboard.viewTeam")}</ActionLink>}
       </QuickActions>
 
-      {/* Upcoming Holidays */}
       {upcomingHolidays.length > 0 && (
         <Card>
-          <HolidayTitle>{t("dashboard.upcomingHolidays")}</HolidayTitle>
+          <SectionTitle>{t("dashboard.upcomingHolidays")}</SectionTitle>
           {upcomingHolidays.map((h) => (
             <HolidayRow key={`${h.region}-${h.date}`}>
               <span>{formatDate(h.date)}</span>
@@ -92,9 +98,152 @@ export const DashboardPage = () => {
           ))}
         </Card>
       )}
+
+      {/* ── Team Section (managers+) ── */}
+      {isManager && <ManagerSection />}
+
+      {/* ── Org Section (admins+) ── */}
+      {isAdmin && <AdminSection />}
     </PageLayout>
   );
 };
+
+/* ── Manager: Team At-a-Glance + Pending Actions ── */
+
+const ManagerSection = () => {
+  const { t } = useTranslation();
+  const { data: members } = useTeamMembers();
+  const memberIds = useMemo(() => members?.map((m) => m.id) ?? [], [members]);
+  const { data: teamStates } = useTeamAttendanceStates(memberIds);
+  const { data: pendingLeave } = usePendingLeaveRequests({ enabled: true });
+  const { data: flags } = useFlags();
+  const { data: bankEntries } = useBank();
+
+  const stateMap = useMemo(() => {
+    const map = new Map<string, AttendanceStateRecord>();
+    teamStates?.forEach((s) => map.set(s.employeeId, s));
+    return map;
+  }, [teamStates]);
+
+  const counts = useMemo(() => {
+    let working = 0;
+    let onBreak = 0;
+    let idle = 0;
+    teamStates?.forEach((s) => {
+      if (s.state === AttendanceStates.CLOCKED_IN) working++;
+      else if (s.state === AttendanceStates.ON_BREAK) onBreak++;
+      else idle++;
+    });
+    return { working, onBreak, idle };
+  }, [teamStates]);
+
+  const pendingLeaveCount = pendingLeave?.length ?? 0;
+  const pendingFlagCount = flags?.filter((f) => f.status === FlagStatuses.PENDING).length ?? 0;
+  const pendingBankCount = bankEntries?.filter((b) => b.approvalStatus === "PENDING").length ?? 0;
+  const totalPending = pendingLeaveCount + pendingFlagCount + pendingBankCount;
+
+  return (
+    <>
+      <Divider />
+
+      {/* Team Status */}
+      <Card>
+        <SectionHeader>
+          <SectionTitle>{t("dashboard.teamOverview")}</SectionTitle>
+          <ActionLink to={ROUTES.TEAM}>{t("dashboard.viewAll")}</ActionLink>
+        </SectionHeader>
+
+        <TeamCountsRow>
+          <TeamCount>
+            <CountValue $color="accent">{counts.working}</CountValue>
+            <CountLabel>{t("dashboard.working")}</CountLabel>
+          </TeamCount>
+          <TeamCount>
+            <CountValue $color="warning">{counts.onBreak}</CountValue>
+            <CountLabel>{t("dashboard.onBreak")}</CountLabel>
+          </TeamCount>
+          <TeamCount>
+            <CountValue $color="textMuted">{counts.idle}</CountValue>
+            <CountLabel>{t("dashboard.idle")}</CountLabel>
+          </TeamCount>
+        </TeamCountsRow>
+
+        {members && members.length > 0 && (
+          <TeamList>
+            {members.map((m) => {
+              const state = stateMap.get(m.id);
+              const statusKey = state?.state ?? AttendanceStates.IDLE;
+              const config = ATTENDANCE_STATUS_CONFIG[statusKey];
+              return (
+                <TeamMemberRow key={m.id}>
+                  <MemberAvatar>{m.name.charAt(0).toUpperCase()}</MemberAvatar>
+                  <MemberName>{m.name}</MemberName>
+                  <Badge label={t(config.labelKey)} variant={config.variant} />
+                </TeamMemberRow>
+              );
+            })}
+          </TeamList>
+        )}
+      </Card>
+
+      {/* Pending Actions */}
+      {totalPending > 0 && (
+        <Card>
+          <SectionHeader>
+            <SectionTitle>
+              {t("dashboard.pendingActions")}
+              <PendingBadge>{totalPending}</PendingBadge>
+            </SectionTitle>
+            <ActionLink to={ROUTES.TEAM}>{t("dashboard.viewAll")}</ActionLink>
+          </SectionHeader>
+          <PendingList>
+            {pendingLeaveCount > 0 && (
+              <PendingItem>
+                <Badge label={t("team.approval.leave")} variant="info" />
+                <PendingText>{pendingLeaveCount} {t("dashboard.leaveRequests")}</PendingText>
+              </PendingItem>
+            )}
+            {pendingFlagCount > 0 && (
+              <PendingItem>
+                <Badge label={t("team.approval.flag")} variant="warning" />
+                <PendingText>{pendingFlagCount} {t("dashboard.flagsPending")}</PendingText>
+              </PendingItem>
+            )}
+            {pendingBankCount > 0 && (
+              <PendingItem>
+                <Badge label={t("team.approval.bank")} variant="success" />
+                <PendingText>{pendingBankCount} {t("dashboard.bankPending")}</PendingText>
+              </PendingItem>
+            )}
+          </PendingList>
+        </Card>
+      )}
+    </>
+  );
+};
+
+/* ── Admin: Organization Summary ── */
+
+const AdminSection = () => {
+  const { t } = useTranslation();
+  const { data: allEmployees } = useEmployees();
+
+  const activeCount = allEmployees?.filter((e: Employee) => e.status === "ACTIVE").length ?? 0;
+
+  return (
+    <Card>
+      <SectionTitle>{t("dashboard.orgSummary")}</SectionTitle>
+      <OrgStatsRow>
+        <OrgStat>
+          <OrgStatValue>{activeCount}</OrgStatValue>
+          <OrgStatLabel>{t("dashboard.totalEmployees")}</OrgStatLabel>
+        </OrgStat>
+      </OrgStatsRow>
+    </Card>
+  );
+};
+
+/* ── Styled Components ── */
 
 const ClockSection = styled.div`
   display: flex;
@@ -107,7 +256,6 @@ const StatsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: ${({ theme }) => theme.space.sm};
-
   @media (min-width: ${({ theme }) => theme.breakpoints.tabletMin}) {
     grid-template-columns: repeat(4, 1fr);
   }
@@ -155,16 +303,25 @@ const ActionLink = styled(Link)`
   min-height: 44px;
   transition: all ${({ theme }) => theme.transition};
   cursor: pointer;
-
   &:hover {
     border-color: ${({ theme }) => theme.colors.accent};
     color: ${({ theme }) => theme.colors.accent};
   }
 `;
 
-const HolidayTitle = styled.h3`
+const SectionTitle = styled.h3`
   font-size: ${({ theme }) => theme.fontSizes.sm};
   font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  margin-bottom: ${({ theme }) => theme.space.sm};
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.space.sm};
+`;
+
+const SectionHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: ${({ theme }) => theme.space.sm};
 `;
 
@@ -176,4 +333,136 @@ const HolidayRow = styled.div`
   font-size: ${({ theme }) => theme.fontSizes.sm};
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderLight};
   &:last-child { border-bottom: none; }
+`;
+
+const Divider = styled.hr`
+  border: none;
+  border-top: 1px solid ${({ theme }) => theme.colors.borderLight};
+  margin: ${({ theme }) => theme.space.sm} 0;
+`;
+
+/* Team Section */
+
+const TeamCountsRow = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.space.lg};
+  justify-content: center;
+  padding: ${({ theme }) => theme.space.md} 0;
+`;
+
+const TeamCount = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+`;
+
+const CountValue = styled.span<{ $color: string }>`
+  font-size: ${({ theme }) => theme.fontSizes["2xl"]};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
+  font-family: ${({ theme }) => theme.fonts.heading};
+  color: ${({ theme, $color }) => theme.colors[$color as keyof typeof theme.colors] ?? theme.colors.text};
+`;
+
+const CountLabel = styled.span`
+  font-size: ${({ theme }) => theme.fontSizes.xxs};
+  color: ${({ theme }) => theme.colors.textMuted};
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+`;
+
+const TeamList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.space.xs};
+  border-top: 1px solid ${({ theme }) => theme.colors.borderLight};
+  padding-top: ${({ theme }) => theme.space.sm};
+`;
+
+const TeamMemberRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.space.sm};
+  padding: ${({ theme }) => theme.space.xs} 0;
+`;
+
+const MemberAvatar = styled.div`
+  width: 28px;
+  height: 28px;
+  border-radius: ${({ theme }) => theme.radii.full};
+  background: ${({ theme }) => theme.colors.accent};
+  color: ${({ theme }) => theme.colors.textInverse};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
+  flex-shrink: 0;
+`;
+
+const MemberName = styled.span`
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  color: ${({ theme }) => theme.colors.text};
+  flex: 1;
+`;
+
+const PendingBadge = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  border-radius: ${({ theme }) => theme.radii.full};
+  background: ${({ theme }) => theme.colors.error};
+  color: ${({ theme }) => theme.colors.textInverse};
+  font-size: ${({ theme }) => theme.fontSizes.xxs};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
+  padding: 0 6px;
+`;
+
+const PendingList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.space.sm};
+`;
+
+const PendingItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.space.sm};
+`;
+
+const PendingText = styled.span`
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  color: ${({ theme }) => theme.colors.textSecondary};
+`;
+
+/* Admin Section */
+
+const OrgStatsRow = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.space.lg};
+  justify-content: center;
+  padding: ${({ theme }) => theme.space.md} 0;
+`;
+
+const OrgStat = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+`;
+
+const OrgStatValue = styled.span`
+  font-size: ${({ theme }) => theme.fontSizes["2xl"]};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
+  font-family: ${({ theme }) => theme.fonts.heading};
+  color: ${({ theme }) => theme.colors.accent};
+`;
+
+const OrgStatLabel = styled.span`
+  font-size: ${({ theme }) => theme.fontSizes.xxs};
+  color: ${({ theme }) => theme.colors.textMuted};
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 `;
