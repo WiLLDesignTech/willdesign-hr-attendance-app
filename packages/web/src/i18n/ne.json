@@ -46,7 +46,7 @@
     "status": { "idle": "निष्क्रिय", "working": "काम गर्दै", "break": "ब्रेकमा" },
     "approval": { "none": "कुनै पेन्डिङ स्वीकृति छैन", "leave": "बिदा", "flag": "फ्ल्याग", "bank": "बैंक", "deficit": "घाटा", "resolve": "समाधान...", "noPenalty": "दण्ड नभएको", "deductFull": "पूर्ण कटौती", "useBank": "बैंक प्रयोग", "partialBank": "आंशिक बैंक", "discuss": "छलफल", "approved": "स्वीकृत", "rejected": "अस्वीकृत", "resolved": "फ्ल्याग समाधान भयो", "bankApproved": "बैंक अनुरोध स्वीकृत" },
     "calendar": { "noLeave": "यो महिना स्वीकृत बिदा छैन" },
-    "reports": { "date": "मिति", "none": "यो मितिको रिपोर्ट छैन" },
+    "reports": { "date": "मिति", "none": "यो मितिको रिपोर्ट छैन", "noReport": "रिपोर्ट छैन", "workedHours": "{{hours}} घण्टा काम", "viewAttendance": "हाजिरी हेर्नुहोस्", "hideAttendance": "लुकाउनुहोस्" },
     "employmentType": { "JP_FULL_TIME": "पूर्णकालिक (JP)", "JP_CONTRACT": "करार (JP)", "JP_OUTSOURCED": "आउटसोर्स (JP)", "JP_PART_TIME": "अंशकालिक (JP)", "JP_SALES": "बिक्री (JP)", "JP_INTERN": "इन्टर्न (JP)", "NP_FULL_TIME": "पूर्णकालिक (NP)", "NP_PAID_INTERN": "तलबी इन्टर्न (NP)", "NP_UNPAID_INTERN": "बिना तलबी इन्टर्न (NP)" },
     "region": { "JP": "जापान", "NP": "नेपाल" }
   },

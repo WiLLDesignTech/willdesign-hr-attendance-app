@@ -46,7 +46,7 @@
     "status": { "idle": "Not Clocked In", "working": "Working", "break": "On Break" },
     "approval": { "none": "No pending approvals", "leave": "Leave", "flag": "Flag", "bank": "Bank", "deficit": "deficit", "resolve": "Resolve...", "noPenalty": "No Penalty", "deductFull": "Deduct Full", "useBank": "Use Bank", "partialBank": "Partial Bank", "discuss": "Discuss", "approved": "Approved", "rejected": "Rejected", "resolved": "Flag resolved", "bankApproved": "Bank request approved" },
     "calendar": { "noLeave": "No approved leave this month" },
-    "reports": { "date": "Date", "none": "No reports for this date" },
+    "reports": { "date": "Date", "none": "No reports for this date", "noReport": "No report", "workedHours": "{{hours}}h worked", "viewAttendance": "View attendance", "hideAttendance": "Hide" },
     "employmentType": { "JP_FULL_TIME": "Full-Time (JP)", "JP_CONTRACT": "Contract (JP)", "JP_OUTSOURCED": "Outsourced (JP)", "JP_PART_TIME": "Part-Time (JP)", "JP_SALES": "Sales (JP)", "JP_INTERN": "Intern (JP)", "NP_FULL_TIME": "Full-Time (NP)", "NP_PAID_INTERN": "Paid Intern (NP)", "NP_UNPAID_INTERN": "Unpaid Intern (NP)" },
     "region": { "JP": "Japan", "NP": "Nepal" }
   },

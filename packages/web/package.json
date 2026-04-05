@@ -5,6 +5,7 @@
   "type": "module",
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@hr-attendance-app/core": "*",
     "@hr-attendance-app/types": "*",
     "@tanstack/react-query": "^5.96.1",
     "@tanstack/react-table": "^8.21.3",

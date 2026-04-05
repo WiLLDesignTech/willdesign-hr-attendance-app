@@ -10,12 +10,14 @@ import {
   useTeamMembers, useFlags, usePendingLeaveRequests, useLeaveRequests,
   useApproveLeave, useRejectLeave, useResolveFlag, useBank, useBankApprove,
   useTeamReports, useTeamAttendanceStates, usePendingCounts,
+  useEmployeeAttendanceEvents,
 } from "../../hooks/queries";
 import { useIsManager } from "../../hooks/useRole";
-import { formatDate, isoToLocalDate } from "../../utils/date";
+import { calculateDailyHours } from "@hr-attendance-app/core";
+import { formatDate, formatTime, isoToLocalDate } from "../../utils/date";
 import { ATTENDANCE_STATUS_CONFIG } from "../../utils/attendance-status";
-import { AttendanceStates, BankApprovalStatuses, FlagResolutions, FlagStatuses, LeaveRequestStatuses, isoToDateStr, nowIso } from "@hr-attendance-app/types";
-import type { AttendanceState, LeaveRequest, Flag, BankEntry, DailyReport } from "@hr-attendance-app/types";
+import { AttendanceStates, AttendanceActions, BankApprovalStatuses, FlagResolutions, FlagStatuses, LeaveRequestStatuses, isoToDateStr, nowIso } from "@hr-attendance-app/types";
+import type { AttendanceAction, AttendanceState, Employee, LeaveRequest, Flag, BankEntry, DailyReport } from "@hr-attendance-app/types";
 
 const TEAM_TABS = [
   { key: "overview", label: "team.tab.overview" },
@@ -248,59 +250,131 @@ const TeamCalendar = ({ isManager }: { readonly isManager: boolean }) => {
 
 /* ─── Team Reports ─── */
 
+const ACTION_BADGE: Record<AttendanceAction, "success" | "danger" | "warning" | "info"> = {
+  [AttendanceActions.CLOCK_IN]: "success",
+  [AttendanceActions.CLOCK_OUT]: "danger",
+  [AttendanceActions.BREAK_START]: "warning",
+  [AttendanceActions.BREAK_END]: "info",
+};
+
 const TeamReports = () => {
   const { t } = useTranslation();
   const [date, setDate] = useState(() => isoToLocalDate(nowIso()));
   const { data: members } = useTeamMembers();
   const { data: reports, isLoading } = useTeamReports(date);
+  const { data: teamStates } = useTeamAttendanceStates(
+    useMemo(() => members?.map((m) => m.id) ?? [], [members]),
+  );
 
-  const nameMap = useMemo(() => {
-    const map = new Map<string, string>();
-    members?.forEach((m) => map.set(m.id, m.name));
+  // Map reports by employeeId for quick lookup
+  const reportMap = useMemo(() => {
+    const map = new Map<string, DailyReport>();
+    reports?.forEach((r) => map.set(r.employeeId, r));
     return map;
-  }, [members]);
+  }, [reports]);
+
+  // Map states for hours info
+  const stateMap = useMemo(() => {
+    const map = new Map<string, string>();
+    teamStates?.forEach((s) => map.set(s.employeeId, s.state));
+    return map;
+  }, [teamStates]);
 
   return (
     <Card>
       <FilterRow>
         <FormField>
           <label htmlFor="report-date">{t("team.reports.date")}</label>
-          <input
-            id="report-date"
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-          />
+          <input id="report-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
         </FormField>
       </FilterRow>
 
       {isLoading && <p>{t("common.loading")}</p>}
-      {!isLoading && !reports?.length && (
-        <EmptyState message={t("team.reports.none")} />
-      )}
-      {!isLoading && !!reports?.length && (
+      {!isLoading && !members?.length && <EmptyState message={t("team.noMembers")} />}
+      {!isLoading && !!members?.length && (
         <ReportList>
-          {reports.map((report: DailyReport) => (
-            <ReportItem key={report.id}>
-              <ReportHeader>
-                <ReportAuthor>{nameMap.get(report.employeeId) ?? report.employeeId}</ReportAuthor>
-                <ReportDate>{formatDate(report.date)}</ReportDate>
-              </ReportHeader>
-              <ReportBody>{report.yesterday}</ReportBody>
-              {report.references.length > 0 && (
-                <RefList>
-                  {report.references.map((ref, i) => (
-                    <RefBadge key={i}>
-                      <Badge label={`${ref.type}: ${ref.id}`} variant="info" />
-                    </RefBadge>
-                  ))}
-                </RefList>
-              )}
-            </ReportItem>
+          {members.map((member) => (
+            <MemberReportRow
+              key={member.id}
+              member={member}
+              report={reportMap.get(member.id) ?? null}
+              state={stateMap.get(member.id) ?? AttendanceStates.IDLE}
+              date={date}
+              t={t}
+            />
           ))}
         </ReportList>
       )}
     </Card>
+  );
+};
+
+const MemberReportRow = ({
+  member,
+  report,
+  state,
+  date,
+  t,
+}: {
+  readonly member: Employee;
+  readonly report: DailyReport | null;
+  readonly state: string;
+  readonly date: string;
+  readonly t: (key: string, opts?: Record<string, unknown>) => string;
+}) => {
+  const [expanded, setExpanded] = useState(false);
+  const { data: events } = useEmployeeAttendanceEvents(member.id, date, true);
+  const hasWorked = state !== AttendanceStates.IDLE || (events && events.length > 0);
+
+  const hours = useMemo(() => {
+    if (!events || events.length === 0) return null;
+    const breakdown = calculateDailyHours(events, 0);
+    return { worked: breakdown.workedHours, breakMins: Math.round(breakdown.breakHours * 60) };
+  }, [events]);
+
+  return (
+    <ReportItem>
+      <ReportHeader>
+        <ReportAuthor>{member.name}</ReportAuthor>
+        <ReportMeta>
+          {hours && hours.worked > 0 && (
+            <Badge label={t("team.reports.workedHours", { hours: hours.worked })} variant="success" />
+          )}
+          {hours && hours.breakMins > 0 && (
+            <Badge label={`${hours.breakMins}m ${t("dashboard.totalBreak").toLowerCase()}`} variant="warning" />
+          )}
+          {!report && hasWorked && (
+            <Badge label={t("team.reports.noReport")} variant="danger" />
+          )}
+          {report && <Badge label={formatDate(report.date)} variant="info" />}
+        </ReportMeta>
+      </ReportHeader>
+
+      {report && <ReportBody>{report.yesterday}</ReportBody>}
+      {!report && !hasWorked && (
+        <NoActivityText>{t("team.reports.none")}</NoActivityText>
+      )}
+
+      <AttendanceToggle onClick={() => setExpanded((v) => !v)}>
+        {expanded ? t("team.reports.hideAttendance") : t("team.reports.viewAttendance")}
+      </AttendanceToggle>
+
+      {expanded && events && events.length > 0 && (
+        <AttendanceDetail>
+          {events.map((e) => (
+            <AttendanceRow key={e.id}>
+              <AttendanceTime>{formatTime(e.timestamp)}</AttendanceTime>
+              <Badge label={t(`attendance.action.${e.action}`)} variant={ACTION_BADGE[e.action]} />
+            </AttendanceRow>
+          ))}
+        </AttendanceDetail>
+      )}
+      {expanded && (!events || events.length === 0) && (
+        <AttendanceDetail>
+          <NoActivityText>{t("attendance.noRecords")}</NoActivityText>
+        </AttendanceDetail>
+      )}
+    </ReportItem>
   );
 };
 
@@ -506,9 +580,10 @@ const ReportAuthor = styled.span`
   font-family: ${({ theme }) => theme.fonts.mono};
 `;
 
-const ReportDate = styled.span`
-  font-size: ${({ theme }) => theme.fontSizes.xs};
-  color: ${({ theme }) => theme.colors.textMuted};
+const ReportMeta = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.space.xs};
+  align-items: center;
 `;
 
 const ReportBody = styled.p`
@@ -518,11 +593,46 @@ const ReportBody = styled.p`
   white-space: pre-wrap;
 `;
 
-const RefList = styled.div`
-  display: flex;
-  gap: ${({ theme }) => theme.space.xs};
-  flex-wrap: wrap;
-  margin-top: ${({ theme }) => theme.space.sm};
+const AttendanceToggle = styled.button`
+  background: none;
+  border: none;
+  padding: ${({ theme }) => theme.space.xs} 0;
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  color: ${({ theme }) => theme.colors.accent};
+  cursor: pointer;
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  margin-top: ${({ theme }) => theme.space.xs};
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
-const RefBadge = styled.span``;
+const AttendanceDetail = styled.div`
+  margin-top: ${({ theme }) => theme.space.sm};
+  padding: ${({ theme }) => theme.space.sm};
+  background: ${({ theme }) => theme.colors.surface};
+  border-radius: ${({ theme }) => theme.radii.sm};
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.space.xs};
+`;
+
+const AttendanceRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.space.sm};
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+`;
+
+const AttendanceTime = styled.span`
+  font-family: ${({ theme }) => theme.fonts.mono};
+  color: ${({ theme }) => theme.colors.textSecondary};
+  min-width: 50px;
+`;
+
+const NoActivityText = styled.p`
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  color: ${({ theme }) => theme.colors.textMuted};
+  font-style: italic;
+`;

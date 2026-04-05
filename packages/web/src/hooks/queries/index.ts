@@ -1,6 +1,6 @@
 export { queryKeys } from "./keys";
 export { useCurrentUser, useEmployees } from "./useEmployee";
-export { useAttendanceState, useAttendanceEvents, useAttendanceSummary, useClockAction, useEditAttendanceEvent, useTeamAttendanceStates } from "./useAttendance";
+export { useAttendanceState, useAttendanceEvents, useEmployeeAttendanceEvents, useAttendanceSummary, useClockAction, useEditAttendanceEvent, useTeamAttendanceStates } from "./useAttendance";
 export { useLeaveRequests, usePendingLeaveRequests, useLeaveBalance, useCreateLeave, useApproveLeave, useRejectLeave } from "./useLeave";
 export { usePayroll } from "./usePayroll";
 export { useFlags, useResolveFlag } from "./useFlags";

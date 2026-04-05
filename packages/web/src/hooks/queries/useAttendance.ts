@@ -29,6 +29,15 @@ export const useAttendanceEvents = (date: string) => {
   });
 };
 
+export const useEmployeeAttendanceEvents = (employeeId: string, date: string, enabled: boolean) => {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: [...queryKeys.attendance.events(date), employeeId],
+    queryFn: () => api.get<AttendanceEvent[]>(withQuery(API_ATTENDANCE_EVENTS, { employeeId, date })),
+    enabled: enabled && !!employeeId && !!date,
+  });
+};
+
 export const useAttendanceSummary = () => {
   const api = useApiClient();
   return useQuery({

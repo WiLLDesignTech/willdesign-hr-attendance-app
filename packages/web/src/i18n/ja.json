@@ -46,7 +46,7 @@
     "status": { "idle": "待機中", "working": "勤務中", "break": "休憩中" },
     "approval": { "none": "承認待ちはありません", "leave": "休暇", "flag": "フラグ", "bank": "バンク", "deficit": "不足", "resolve": "解決...", "noPenalty": "ペナルティなし", "deductFull": "全額控除", "useBank": "バンク使用", "partialBank": "一部バンク", "discuss": "要相談", "approved": "承認済み", "rejected": "却下済み", "resolved": "フラグ解決済み", "bankApproved": "バンク申請承認済み" },
     "calendar": { "noLeave": "今月の承認済み休暇はありません" },
-    "reports": { "date": "日付", "none": "この日の日報はありません" },
+    "reports": { "date": "日付", "none": "この日の日報はありません", "noReport": "未提出", "workedHours": "{{hours}}h 勤務", "viewAttendance": "勤怠を見る", "hideAttendance": "閉じる" },
     "employmentType": { "JP_FULL_TIME": "正社員", "JP_CONTRACT": "契約社員", "JP_OUTSOURCED": "業務委託", "JP_PART_TIME": "パートタイム", "JP_SALES": "営業", "JP_INTERN": "インターン (JP)", "NP_FULL_TIME": "フルタイム (NP)", "NP_PAID_INTERN": "有給インターン (NP)", "NP_UNPAID_INTERN": "無給インターン (NP)" },
     "region": { "JP": "日本", "NP": "ネパール" }
   },
