@@ -1,8 +1,9 @@
 import type { RouteDefinition } from "./router.js";
 import type { DepsResolver } from "../composition.js";
-import { withAuth, buildResponse, handleError } from "../middleware/index.js";
+import { withAuth, buildResponse, handleError, requireCrossUserAccess } from "../middleware/index.js";
+import { hasPermission } from "@hr-attendance-app/core";
 import {
-  AttendanceActions, AuditSources, ErrorCodes,
+  AttendanceActions, AuditSources, ErrorCodes, ErrorMessages, Permissions,
   API_ATTENDANCE_STATE, API_ATTENDANCE_EVENTS, API_ATTENDANCE_SUMMARY,
   API_ATTENDANCE_EVENT_BY_ID, API_ATTENDANCE_TEAM_STATES,
   todayDate, nowMs,
@@ -28,6 +29,8 @@ export function attendanceRoutes(getDeps: DepsResolver): RouteDefinition[] {
       handler: withAuth(getDeps, async ({ auth, deps, queryParams }) => {
         const query = queryParams as unknown as AttendanceEventsQueryParams;
         const employeeId = query.employeeId ?? auth.actorId;
+        const denied = requireCrossUserAccess(auth, employeeId);
+        if (denied) return denied;
 
         if (query.month) {
           const events = await deps.services.attendance.getEventsForMonth(employeeId, query.month);
@@ -70,6 +73,8 @@ export function attendanceRoutes(getDeps: DepsResolver): RouteDefinition[] {
       handler: withAuth(getDeps, async ({ auth, deps, queryParams }) => {
         const query = queryParams as unknown as AttendanceSummaryQueryParams;
         const employeeId = query.employeeId ?? auth.actorId;
+        const denied = requireCrossUserAccess(auth, employeeId);
+        if (denied) return denied;
         const date = query.date ?? todayDate();
         const summary = await deps.services.attendance.getSummary(employeeId, date);
         return buildResponse(200, summary);
@@ -100,7 +105,10 @@ export function attendanceRoutes(getDeps: DepsResolver): RouteDefinition[] {
     {
       method: "GET",
       path: API_ATTENDANCE_TEAM_STATES,
-      handler: withAuth(getDeps, async ({ deps, queryParams }) => {
+      handler: withAuth(getDeps, async ({ auth, deps, queryParams }) => {
+        if (!hasPermission(auth, Permissions.EMPLOYEE_LIST_ALL)) {
+          return handleError(ErrorCodes.FORBIDDEN, ErrorMessages.INSUFFICIENT_PERMISSIONS);
+        }
         const employeeIds = (queryParams as Record<string, string>).employeeIds?.split(",") ?? [];
         if (employeeIds.length === 0) return buildResponse(200, []);
         const states = await deps.services.attendance.getTeamStates(employeeIds);

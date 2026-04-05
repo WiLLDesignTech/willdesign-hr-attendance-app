@@ -1,6 +1,6 @@
 import type { RouteDefinition } from "./router.js";
 import type { DepsResolver } from "../composition.js";
-import { withAuth, buildResponse, handleError } from "../middleware/index.js";
+import { withAuth, buildResponse, handleError, requireCrossUserAccess } from "../middleware/index.js";
 import { hasPermission } from "@hr-attendance-app/core";
 import {
   ErrorCodes, ErrorMessages, Permissions,
@@ -22,8 +22,11 @@ export function employeeRoutes(getDeps: DepsResolver): RouteDefinition[] {
     {
       method: "GET",
       path: API_EMPLOYEES_BY_ID,
-      handler: withAuth(getDeps, async ({ auth: _auth, deps, pathParams }) => {
-        const emp = await deps.services.employee.findById(pathParams["id"] ?? "");
+      handler: withAuth(getDeps, async ({ auth, deps, pathParams }) => {
+        const requestedId = pathParams["id"] ?? "";
+        const denied = requireCrossUserAccess(auth, requestedId);
+        if (denied) return denied;
+        const emp = await deps.services.employee.findById(requestedId);
         if (!emp) return handleError(ErrorCodes.NOT_FOUND, "Employee not found");
         return buildResponse(200, emp);
       }),

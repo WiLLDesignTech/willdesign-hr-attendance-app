@@ -5,6 +5,7 @@ export const Roles = {
   HR_MANAGER: "HR_MANAGER",
   ADMIN: "ADMIN",
   SUPER_ADMIN: "SUPER_ADMIN",
+  AI_AGENT: "AI_AGENT",
 } as const;
 
 // ─── Sensitivity Levels ───

@@ -1,5 +1,6 @@
 import type { AuthContext, Result } from "@hr-attendance-app/types";
-import { Roles, ErrorCodes, COGNITO, DEFAULT_TENANT_ID } from "@hr-attendance-app/types";
+import { Roles, ErrorCodes, ErrorMessages, Permissions, COGNITO, DEFAULT_TENANT_ID } from "@hr-attendance-app/types";
+import { hasPermission } from "@hr-attendance-app/core";
 import type { AppDeps, DepsResolver } from "../composition.js";
 import type { RouteHandler } from "../handlers/router.js";
 
@@ -104,6 +105,19 @@ export function buildResponse(statusCode: number, body: unknown): ApiResponse {
     headers: { ...CORS_HEADERS },
   };
 }
+
+/**
+ * Guard: if requestedId differs from auth.actorId, caller must have EMPLOYEE_LIST_ALL.
+ * Returns null (allowed) or a 403 ApiResponse (denied).
+ */
+export const requireCrossUserAccess = (
+  auth: AuthContext,
+  requestedEmployeeId: string,
+): ApiResponse | null => {
+  if (requestedEmployeeId === auth.actorId) return null;
+  if (hasPermission(auth, Permissions.EMPLOYEE_LIST_ALL)) return null;
+  return handleError(ErrorCodes.FORBIDDEN, ErrorMessages.INSUFFICIENT_PERMISSIONS);
+};
 
 export interface AuthenticatedParams {
   readonly auth: AuthContext;

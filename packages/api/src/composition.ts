@@ -17,6 +17,7 @@ import {
   DynamoReportRepository,
   DynamoHolidayRepository,
   DynamoAttendanceLockRepository,
+  DynamoRoleRepository,
 } from "@hr-attendance-app/data";
 import {
   AttendanceService,
@@ -32,6 +33,8 @@ import {
   BankService,
   ReportService,
   AuditService,
+  RoleService,
+  DocumentService,
 } from "@hr-attendance-app/core";
 import type { AuthProviderAdapter } from "@hr-attendance-app/core";
 import { nowMs, DEFAULT_TENANT_ID } from "@hr-attendance-app/types";
@@ -50,6 +53,8 @@ export interface AppServices {
   readonly holiday: HolidayService;
   readonly cron: CronService;
   readonly reminder: ReminderService;
+  readonly role: RoleService;
+  readonly document: DocumentService;
 }
 
 export interface AppDeps {
@@ -92,6 +97,7 @@ export function getTenantDeps(tenantId: string): AppDeps {
   const reportRepo = new DynamoReportRepository(client, tableName, tenantId);
   const holidayRepo = new DynamoHolidayRepository(client, tableName, tenantId);
   const lockRepo = new DynamoAttendanceLockRepository(client, tableName, tenantId);
+  const roleRepo = new DynamoRoleRepository(client, tableName, tenantId);
 
   const services: AppServices = {
     employee: new EmployeeService({ employeeRepo }),
@@ -119,6 +125,8 @@ export function getTenantDeps(tenantId: string): AppDeps {
     reminder: new ReminderService({
       employeeRepo, leaveRepo, bankRepo,
     }),
+    role: new RoleService({ roleRepo }),
+    document: new DocumentService({ documentRepo: { findByEmployee: async () => [], getUploadUrl: async () => "", getDownloadUrl: async () => "", save: async (d) => d } }),
   };
 
   const deps = { services };

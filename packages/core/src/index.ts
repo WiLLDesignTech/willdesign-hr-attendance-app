@@ -109,6 +109,10 @@ export { ReportService } from "./reports/service.js";
 export type { ReportServiceDeps } from "./reports/service.js";
 export { AuditService } from "./audit/service.js";
 export type { AuditServiceDeps } from "./audit/service.js";
+export { RoleService } from "./roles/service.js";
+export type { RoleServiceDeps } from "./roles/service.js";
+export { DocumentService } from "./documents/service.js";
+export type { DocumentServiceDeps } from "./documents/service.js";
 
 // ─── Config ───
 export { loadConfigFromObject, getDefaultConfig } from "./config/loader.js";

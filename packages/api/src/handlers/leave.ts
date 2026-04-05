@@ -1,6 +1,6 @@
 import type { RouteDefinition } from "./router.js";
 import type { DepsResolver } from "../composition.js";
-import { withAuth, buildResponse, handleError } from "../middleware/index.js";
+import { withAuth, buildResponse, handleError, requireCrossUserAccess } from "../middleware/index.js";
 import { hasPermission } from "@hr-attendance-app/core";
 import {
   ErrorCodes, ErrorMessages, Permissions,
@@ -38,6 +38,8 @@ export function leaveRoutes(getDeps: DepsResolver): RouteDefinition[] {
       handler: withAuth(getDeps, async ({ auth, deps, queryParams }) => {
         const query = queryParams as unknown as LeaveRequestsQueryParams;
         const employeeId = query.employeeId ?? auth.actorId;
+        const denied = requireCrossUserAccess(auth, employeeId);
+        if (denied) return denied;
 
         if (query.pending === "true" && hasPermission(auth, Permissions.LEAVE_APPROVE)) {
           const pending = await deps.services.leave.findPending();
@@ -81,6 +83,8 @@ export function leaveRoutes(getDeps: DepsResolver): RouteDefinition[] {
       handler: withAuth(getDeps, async ({ auth, deps, queryParams }) => {
         const query = queryParams as unknown as LeaveBalanceQueryParams;
         const employeeId = query.employeeId ?? auth.actorId;
+        const denied = requireCrossUserAccess(auth, employeeId);
+        if (denied) return denied;
         const balance = await deps.services.leave.getLeaveBalance(employeeId);
         return buildResponse(200, balance);
       }),

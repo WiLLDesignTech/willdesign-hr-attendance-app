@@ -6,6 +6,7 @@ export type Role =
   | "HR_MANAGER"
   | "ADMIN"
   | "SUPER_ADMIN"
+  | "AI_AGENT"
   | (string & {});
 
 export type SensitivityLevel = "PUBLIC" | "INTERNAL" | "SENSITIVE" | "CONFIDENTIAL";
@@ -81,10 +82,16 @@ const ADMIN_PERMISSIONS: readonly Permission[] = [
 
 const ALL_PERMISSIONS: readonly Permission[] = Object.values(Permissions);
 
+const AI_AGENT_PERMISSIONS: readonly Permission[] = [
+  Permissions.EMPLOYEE_LIST_ALL,
+  Permissions.EMPLOYEE_UPDATE,
+];
+
 export const ROLE_PERMISSIONS: Record<string, readonly Permission[]> = {
   [Roles.EMPLOYEE]: EMPLOYEE_PERMISSIONS,
   [Roles.MANAGER]: MANAGER_PERMISSIONS,
   [Roles.HR_MANAGER]: HR_MANAGER_PERMISSIONS,
   [Roles.ADMIN]: ADMIN_PERMISSIONS,
   [Roles.SUPER_ADMIN]: ALL_PERMISSIONS,
+  [Roles.AI_AGENT]: AI_AGENT_PERMISSIONS,
 };
