@@ -82,6 +82,14 @@ export function dateToDateStr(date: Date): string {
   return isoToDateStr(date.toISOString());
 }
 
+/** Convert a Date to YYYY-MM-DD using LOCAL time zone. Use for DayPicker/calendar dates. */
+export function dateToLocalDateStr(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
 /** Generate a unique timestamp-based ID component. */
 export function timestampId(): string {
   return String(nowMs());

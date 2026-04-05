@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import { AttendanceStates, AttendanceActions, isoToDateStr, isoToYearMonth, dateToDateStr, nowIso, todayDate } from "@hr-attendance-app/types";
+import { AttendanceStates, AttendanceActions, isoToDateStr, isoToYearMonth, dateToLocalDateStr, nowIso, todayDate } from "@hr-attendance-app/types";
 import type { AttendanceEvent, AttendanceAction } from "@hr-attendance-app/types";
 
 const ACTION_BADGE_VARIANT: Record<AttendanceAction, "success" | "danger" | "warning" | "info"> = {
@@ -71,7 +71,7 @@ export const AttendancePage = () => {
   }, [events]);
 
   const handleDateSelect = (date: Date) => {
-    setSelectedDate(dateToDateStr(date));
+    setSelectedDate(dateToLocalDateStr(date));
   };
 
   const openEditModal = useCallback((event: AttendanceEvent) => {
@@ -156,7 +156,7 @@ export const AttendancePage = () => {
           {isLocked && <Badge label={t("attendance.locked")} variant="danger" />}
         </CalendarHeader>
         <Calendar
-          selectedDate={new Date(selectedDate)}
+          selectedDate={new Date(selectedDate + "T00:00:00")}
           onDateSelect={handleDateSelect}
           highlightedDates={eventDates}
         />

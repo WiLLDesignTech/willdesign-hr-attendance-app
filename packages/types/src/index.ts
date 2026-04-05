@@ -222,6 +222,6 @@ export {
   isoToDateStr, isoToYearMonth, yearFromDate,
   daysInMonth, formatYearMonth,
   addDays, addMonths, addYears,
-  dateToIso, dateToDateStr,
+  dateToIso, dateToDateStr, dateToLocalDateStr,
   timestampId,
 } from "./date-utils.js";
