@@ -81,7 +81,7 @@ describe("AttendanceService", () => {
     expect(attendanceRepo.saveEvent).not.toHaveBeenCalled();
   });
 
-  it("enforces 60-second idempotency window", async () => {
+  it("enforces 10-second idempotency window", async () => {
     const { attendanceRepo, auditRepo, lockRepo, employeeRepo } = createMockRepos();
     vi.mocked(attendanceRepo.getState).mockResolvedValue({
       employeeId: "EMP#001",
@@ -95,7 +95,7 @@ describe("AttendanceService", () => {
     const result = await service.processEvent({
       employeeId: "EMP#001",
       action: AttendanceActions.CLOCK_IN,
-      timestamp: new Date("2024-01-15T09:00:30Z"), // 30s later — within window
+      timestamp: new Date("2024-01-15T09:00:05Z"), // 5s later — within 10s window
       source: "slack",
       actorId: "EMP#001",
     });
@@ -104,7 +104,7 @@ describe("AttendanceService", () => {
     if (!result.success) expect(result.error).toMatch(new RegExp(`^${ErrorMessages.TOO_FAST}\\|\\d+$`));
   });
 
-  it("allows event at exact boundary (60s)", async () => {
+  it("allows event at exact boundary (10s)", async () => {
     const { attendanceRepo, auditRepo, lockRepo, employeeRepo } = createMockRepos();
     vi.mocked(attendanceRepo.getState).mockResolvedValue({
       employeeId: "EMP#001",
@@ -118,7 +118,7 @@ describe("AttendanceService", () => {
     const result = await service.processEvent({
       employeeId: "EMP#001",
       action: AttendanceActions.CLOCK_IN,
-      timestamp: new Date("2024-01-15T09:01:00Z"), // exactly 60s
+      timestamp: new Date("2024-01-15T09:00:10Z"), // exactly 10s
       source: "slack",
       actorId: "EMP#001",
     });

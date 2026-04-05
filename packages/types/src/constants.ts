@@ -221,7 +221,7 @@ export const HOURS = {
 
 // ─── Attendance System ───
 export const ATTENDANCE = {
-  IDEMPOTENCY_WINDOW_MS: 60_000,
+  IDEMPOTENCY_WINDOW_MS: 10_000,
 } as const;
 
 // ─── Attendance Lock ───

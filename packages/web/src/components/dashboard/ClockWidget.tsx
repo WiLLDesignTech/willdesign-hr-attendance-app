@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import styled, { css, keyframes } from "styled-components";
 import type { AttendanceAction, AttendanceState, AttendanceEvent } from "@hr-attendance-app/types";
-import { AttendanceStates, AttendanceActions, HOURS, nowMs } from "@hr-attendance-app/types";
+import { AttendanceStates, AttendanceActions, HOURS, ATTENDANCE, nowMs } from "@hr-attendance-app/types";
 import { ButtonAccent, ButtonDanger, ButtonSecondary } from "../../theme/primitives";
 import { ATTENDANCE_STATUS_CONFIG } from "../../utils/attendance-status";
 import type { ThemeColorKey } from "../../utils/attendance-status";
@@ -48,11 +48,28 @@ export const ClockWidget = ({
     return () => clearInterval(interval);
   }, [isActive, lastEventTimestamp]);
 
+  // Cooldown: disable buttons for IDEMPOTENCY_WINDOW after last event
+  const [cooldownSec, setCooldownSec] = useState(0);
+  useEffect(() => {
+    if (!lastEventTimestamp) return;
+    const windowSec = ATTENDANCE.IDEMPOTENCY_WINDOW_MS / 1000;
+    const tick = () => {
+      const elapsedSec = (nowMs() - new Date(lastEventTimestamp).getTime()) / 1000;
+      const remaining = Math.max(0, Math.ceil(windowSec - elapsedSec));
+      setCooldownSec(remaining);
+    };
+    tick();
+    const interval = setInterval(tick, 1000);
+    return () => clearInterval(interval);
+  }, [lastEventTimestamp]);
+
+  const isCoolingDown = cooldownSec > 0;
+
   const handleAction = useCallback(
     (action: AttendanceAction) => {
-      if (!loading) onAction(action);
+      if (!loading && !isCoolingDown) onAction(action);
     },
-    [loading, onAction],
+    [loading, isCoolingDown, onAction],
   );
 
   const progressPct = HOURS.DAILY_MINIMUM > 0
@@ -107,10 +124,13 @@ export const ClockWidget = ({
 
       {/* Action buttons */}
       <Actions>
+        {isCoolingDown && (
+          <CooldownLabel>{t("dashboard.cooldown", { seconds: cooldownSec })}</CooldownLabel>
+        )}
         {status === AttendanceStates.IDLE && (
           <PrimaryAction
             onClick={() => handleAction(AttendanceActions.CLOCK_IN)}
-            disabled={loading}
+            disabled={loading || isCoolingDown}
           >
             {t("dashboard.clockIn")}
           </PrimaryAction>
@@ -119,13 +139,13 @@ export const ClockWidget = ({
           <>
             <DangerAction
               onClick={() => handleAction(AttendanceActions.CLOCK_OUT)}
-              disabled={loading}
+              disabled={loading || isCoolingDown}
             >
               {t("dashboard.clockOut")}
             </DangerAction>
             <SecondaryAction
               onClick={() => handleAction(AttendanceActions.BREAK_START)}
-              disabled={loading}
+              disabled={loading || isCoolingDown}
             >
               {t("dashboard.break")}
             </SecondaryAction>
@@ -134,7 +154,7 @@ export const ClockWidget = ({
         {status === AttendanceStates.ON_BREAK && (
           <PrimaryAction
             onClick={() => handleAction(AttendanceActions.BREAK_END)}
-            disabled={loading}
+            disabled={loading || isCoolingDown}
           >
             {t("dashboard.back")}
           </PrimaryAction>
@@ -321,6 +341,14 @@ const Actions = styled.div`
   flex-wrap: wrap;
   width: 100%;
   max-width: 280px;
+`;
+
+const CooldownLabel = styled.span`
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  color: ${({ theme }) => theme.colors.warning};
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  text-align: center;
+  width: 100%;
 `;
 
 const actionBase = css`
