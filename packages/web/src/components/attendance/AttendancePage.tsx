@@ -2,7 +2,14 @@ import { useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { AttendanceStates, AttendanceActions, isoToDateStr, isoToYearMonth, dateToDateStr, nowIso, todayDate } from "@hr-attendance-app/types";
-import type { AttendanceEvent } from "@hr-attendance-app/types";
+import type { AttendanceEvent, AttendanceAction } from "@hr-attendance-app/types";
+
+const ACTION_BADGE_VARIANT: Record<AttendanceAction, "success" | "danger" | "warning" | "info"> = {
+  [AttendanceActions.CLOCK_IN]: "success",
+  [AttendanceActions.CLOCK_OUT]: "danger",
+  [AttendanceActions.BREAK_START]: "warning",
+  [AttendanceActions.BREAK_END]: "info",
+};
 import { ClockWidget } from "../dashboard/ClockWidget";
 import { Card, PageLayout, Calendar, Badge, ProgressBar, Modal, FormField, ButtonAccent, EmptyState } from "../ui";
 import { useToast } from "../ui/Toast";
@@ -170,7 +177,7 @@ export const AttendancePage = () => {
               <TimelineItem key={e.id}>
                 <TimelineTime>{formatDateTime(e.timestamp)}</TimelineTime>
                 <TimelineAction>
-                  <Badge label={t(`attendance.action.${e.action}`)} variant={e.action.includes("CLOCK_IN") ? "success" : "info"} />
+                  <Badge label={t(`attendance.action.${e.action}`)} variant={ACTION_BADGE_VARIANT[e.action]} />
                   <SourceBadge>{e.source}</SourceBadge>
                 </TimelineAction>
                 {!isLocked && (
