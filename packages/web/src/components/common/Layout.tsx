@@ -127,7 +127,7 @@ const Sidebar = styled.aside<{ $open: boolean }>`
   top: 0;
   left: 0;
   bottom: 0;
-  z-index: ${({ theme }) => theme.zIndex.overlay};
+  z-index: ${({ theme }) => theme.zIndex.modal};
   transform: translateX(-100%);
   transition: transform ${({ theme }) => theme.transition}, width ${({ theme }) => theme.transition};
 

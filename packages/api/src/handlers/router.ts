@@ -83,7 +83,7 @@ function extractPathParams(pattern: string, actual: string): Record<string, stri
   for (let i = 0; i < patternParts.length; i++) {
     const part = patternParts[i];
     if (part?.startsWith(":")) {
-      params[part.slice(1)] = actualParts[i] ?? "";
+      params[part.slice(1)] = decodeURIComponent(actualParts[i] ?? "");
     }
   }
 
