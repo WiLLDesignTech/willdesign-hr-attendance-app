@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import { AttendanceStates, AttendanceActions, isoToDateStr, dateToDateStr, nowIso } from "@hr-attendance-app/types";
+import { AttendanceStates, AttendanceActions, isoToDateStr, dateToDateStr, nowIso, todayDate } from "@hr-attendance-app/types";
 import type { AttendanceEvent } from "@hr-attendance-app/types";
 import { ClockWidget } from "../dashboard/ClockWidget";
 import { Card, PageLayout, Calendar, Badge, ProgressBar, Modal, FormField, ButtonAccent, EmptyState } from "../ui";
@@ -34,7 +34,9 @@ export const AttendancePage = () => {
 
   const { data: attState } = useAttendanceState();
   const { data: summary } = useAttendanceSummary();
+  const today = todayDate();
   const { data: events, isLoading: eventsLoading } = useAttendanceEvents(selectedDate);
+  const { data: todayEvents } = useAttendanceEvents(today);
   const clockAction = useClockAction();
   const editMutation = useEditAttendanceEvent();
   const { data: locks } = useAttendanceLocks(currentMonth);
@@ -88,18 +90,17 @@ export const AttendancePage = () => {
   return (
     <PageLayout>
       {/* Clock Widget */}
-      <Card>
-        <ClockWidget
-          status={status}
-          hoursToday={hoursToday}
-          breakMinutesToday={breakMinutesToday}
-          lastEventTimestamp={attState?.lastEventTimestamp ?? null}
-          onAction={(action) => clockAction.mutate(action, {
-            onError: (err) => toast.show(formatClockError(err, t), "danger"),
-          })}
-          loading={clockAction.isPending}
-        />
-      </Card>
+      <ClockWidget
+        status={status}
+        hoursToday={hoursToday}
+        breakMinutesToday={breakMinutesToday}
+        lastEventTimestamp={attState?.lastEventTimestamp ?? null}
+        todayEvents={todayEvents ?? []}
+        onAction={(action) => clockAction.mutate(action, {
+          onError: (err) => toast.show(formatClockError(err, t), "danger"),
+        })}
+        loading={clockAction.isPending}
+      />
 
       {/* Monthly Calendar */}
       <Card>
