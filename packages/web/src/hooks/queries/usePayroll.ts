@@ -28,7 +28,7 @@ export const usePayrollReport = (yearMonth: string) => {
 export const useSalaryHistory = (employeeId: string) => {
   const api = useApiClient();
   return useQuery({
-    queryKey: [...queryKeys.payroll.all, "salary", employeeId],
+    queryKey: queryKeys.salary.byEmployee(employeeId),
     queryFn: () => api.get<SalaryRecord[]>(apiPath(API_ADMIN_SALARY, { employeeId })),
     enabled: !!employeeId,
   });
@@ -41,7 +41,7 @@ export const useAddSalaryEntry = () => {
     mutationFn: ({ employeeId, ...body }: CreateSalaryEntryBody & { employeeId: string }) =>
       api.post<SalaryRecord>(apiPath(API_ADMIN_SALARY, { employeeId }), body),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: queryKeys.payroll.all });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.salary.all });
     },
   });
 };

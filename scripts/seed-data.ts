@@ -5,6 +5,7 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { createTenantKeys } from "@hr-attendance-app/data";
+import { DEFAULT_TENANT_ID, AttendanceStates, SalaryTypes, SalaryChangeTypes, nowIso } from "@hr-attendance-app/types";
 import {
   orgPolicy,
   jpFulltimePolicy, jpContractPolicy, jpOutsourcedPolicy,
@@ -15,7 +16,7 @@ import {
 const ENDPOINT = process.env["DYNAMODB_ENDPOINT"] ?? "http://localhost:8000";
 const TABLE_NAME = process.env["DYNAMODB_TABLE_NAME"] ?? "hr-attendance-app-dev-table";
 const REGION = process.env["AWS_REGION"] ?? "ap-northeast-1";
-const TENANT_ID = "default";
+const TENANT_ID = DEFAULT_TENANT_ID;
 
 const rawClient = new DynamoDBClient({
   region: REGION,
@@ -32,7 +33,7 @@ const put = async (item: Record<string, unknown>): Promise<void> => {
   await client.send(new PutCommand({ TableName: TABLE_NAME, Item: item }));
 };
 
-const NOW = new Date().toISOString();
+const NOW = nowIso();
 
 const seedEmployees = async (): Promise<void> => {
   const employees = [
@@ -154,7 +155,7 @@ const seedAttendanceStates = async (): Promise<void> => {
       PK: keys.EMP(id),
       SK: keys.ATT_STATE,
       employeeId: id,
-      state: "IDLE",
+      state: AttendanceStates.IDLE,
       lastEventTimestamp: "",
     });
   }
@@ -163,13 +164,13 @@ const seedAttendanceStates = async (): Promise<void> => {
 
 const seedSalaries = async (): Promise<void> => {
   const salaries = [
-    { id: "ADMIN001", amount: 500000, currency: "JPY", effectiveFrom: "2024-01-01", changeType: "INITIAL" },
-    { id: "ADMIN001", amount: 550000, currency: "JPY", effectiveFrom: "2025-04-01", changeType: "REVIEW" },
-    { id: "MGR001", amount: 400000, currency: "JPY", effectiveFrom: "2024-04-01", changeType: "INITIAL" },
-    { id: "MGR001", amount: 430000, currency: "JPY", effectiveFrom: "2025-10-01", changeType: "PROMOTION" },
-    { id: "JP001", amount: 300000, currency: "JPY", effectiveFrom: "2025-01-01", changeType: "INITIAL" },
-    { id: "JP001", amount: 320000, currency: "JPY", effectiveFrom: "2026-01-01", changeType: "PROBATION_END" },
-    { id: "NP001", amount: 80000, currency: "NPR", effectiveFrom: "2025-06-01", changeType: "INITIAL" },
+    { id: "ADMIN001", amount: 500000, currency: "JPY", effectiveFrom: "2024-01-01", changeType: SalaryChangeTypes.INITIAL },
+    { id: "ADMIN001", amount: 550000, currency: "JPY", effectiveFrom: "2025-04-01", changeType: SalaryChangeTypes.REVIEW },
+    { id: "MGR001", amount: 400000, currency: "JPY", effectiveFrom: "2024-04-01", changeType: SalaryChangeTypes.INITIAL },
+    { id: "MGR001", amount: 430000, currency: "JPY", effectiveFrom: "2025-10-01", changeType: SalaryChangeTypes.PROMOTION },
+    { id: "JP001", amount: 300000, currency: "JPY", effectiveFrom: "2025-01-01", changeType: SalaryChangeTypes.INITIAL },
+    { id: "JP001", amount: 320000, currency: "JPY", effectiveFrom: "2026-01-01", changeType: SalaryChangeTypes.PROBATION_END },
+    { id: "NP001", amount: 80000, currency: "NPR", effectiveFrom: "2025-06-01", changeType: SalaryChangeTypes.INITIAL },
   ];
 
   for (const s of salaries) {
@@ -180,7 +181,7 @@ const seedSalaries = async (): Promise<void> => {
       employeeId: s.id,
       amount: s.amount,
       currency: s.currency,
-      salaryType: "MONTHLY",
+      salaryType: SalaryTypes.MONTHLY,
       changeType: s.changeType,
       effectiveFrom: s.effectiveFrom,
       createdAt: NOW,

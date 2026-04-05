@@ -1,4 +1,5 @@
 import type { PayrollBreakdown, SalaryRecord } from "@hr-attendance-app/types";
+import { daysInMonth } from "@hr-attendance-app/types";
 import type { SalaryRepository } from "../repositories/salary.js";
 import type { PolicyService } from "../policies/service.js";
 import { getEffectiveSalary, calculatePayrollBreakdown } from "./calculator.js";
@@ -40,7 +41,7 @@ export class PayrollService {
     }
 
     const [year, month] = yearMonth.split("-").map(Number);
-    const totalDays = new Date(year!, (month ?? 1), 0).getDate();
+    const totalDays = daysInMonth(year!, month ?? 1);
     const hourlyRate = Math.round(effective.amount / monthlyMinimum);
 
     return calculatePayrollBreakdown({

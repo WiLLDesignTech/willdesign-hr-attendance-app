@@ -4,7 +4,7 @@ import type {
   MonthlyPayrollReportTotals,
   SalaryRecord,
 } from "@hr-attendance-app/types";
-import { EmployeeStatuses, nowIso } from "@hr-attendance-app/types";
+import { EmployeeStatuses, LeaveRequestStatuses, nowIso, isoToDateStr, daysInMonth } from "@hr-attendance-app/types";
 import type { EmployeeRepository } from "../repositories/employee.js";
 import type { AttendanceRepository } from "../repositories/attendance.js";
 import type { SalaryRepository } from "../repositories/salary.js";
@@ -31,14 +31,10 @@ export class MonthlyPayrollReportService {
 
   async generate(yearMonth: string): Promise<MonthlyPayrollReport> {
     const employees = await this.deps.employeeRepo.findAll({ status: EmployeeStatuses.ACTIVE });
-    const entries: MonthlyPayrollReportEntry[] = [];
-
-    for (const employee of employees) {
-      const entry = await this.buildEntry(employee.id, employee.name, employee.employmentType, employee.region, yearMonth);
-      if (entry) {
-        entries.push(entry);
-      }
-    }
+    const results = await Promise.all(
+      employees.map((e) => this.buildEntry(e.id, e.name, e.employmentType, e.region, yearMonth)),
+    );
+    const entries = results.filter((e): e is MonthlyPayrollReportEntry => e !== null);
 
     const totals = this.calculateTotals(entries);
 
@@ -66,7 +62,7 @@ export class MonthlyPayrollReportService {
     // Group events by date and sum daily hours
     const eventsByDate = new Map<string, typeof events>();
     for (const event of events) {
-      const date = event.timestamp.slice(0, 10);
+      const date = isoToDateStr(event.timestamp);
       const existing = eventsByDate.get(date) ?? [];
       eventsByDate.set(date, [...existing, event]);
     }
@@ -78,11 +74,14 @@ export class MonthlyPayrollReportService {
     }
 
     // Get approved leave credits for the month
-    const leaveRequests = await this.deps.leaveRepo.findByEmployee(employeeId, {
-      status: "APPROVED",
-      startDate: `${yearMonth}-01`,
-      endDate: `${yearMonth}-31`,
-    });
+    const [y, m] = yearMonth.split("-").map(Number);
+    const lastDay = daysInMonth(y!, m!);
+    const allLeave = await this.deps.leaveRepo.findByEmployee(employeeId);
+    const leaveRequests = allLeave.filter(
+      (r) => r.status === LeaveRequestStatuses.APPROVED &&
+             r.startDate >= `${yearMonth}-01` &&
+             r.startDate <= `${yearMonth}-${String(lastDay).padStart(2, "0")}`,
+    );
     const leaveCredits = leaveRequests.length * policy.hours.dailyMinimum;
 
     const totalHours = workedHours + leaveCredits;
@@ -97,8 +96,7 @@ export class MonthlyPayrollReportService {
 
     if (baseSalary === 0) return null;
 
-    const [yearStr, monthStr] = yearMonth.split("-");
-    const totalDays = new Date(Number(yearStr), Number(monthStr), 0).getDate();
+    const totalDays = daysInMonth(y!, m!);
     const hourlyRate = Math.round(baseSalary / requiredHours);
 
     const payroll = calculatePayrollBreakdown({

@@ -9,7 +9,8 @@ import {
   API_LEAVE_REQUESTS, API_LEAVE_BALANCE,
   API_PAYROLL, API_FLAGS, API_BANK, API_BANK_APPROVE,
   API_REPORTS, API_HOLIDAYS, API_AUDIT,
-  API_POLICIES, API_POLICY_EFFECTIVE, API_POLICY_COMPANY, API_POLICY_USER, API_ROLES, API_DOCUMENTS,
+  API_POLICIES, API_POLICY_EFFECTIVE, API_POLICY_COMPANY, API_POLICY_USER,
+  API_ADMIN_SALARY, API_ROLES, API_DOCUMENTS,
 } from "@hr-attendance-app/types";
 
 /** Sub-key constants for cache scoping within query key arrays. */
@@ -87,5 +88,9 @@ export const queryKeys = {
   documents: {
     all: [API_DOCUMENTS] as const,
     byEmployee: (employeeId: string) => [API_DOCUMENTS, employeeId] as const,
+  },
+  salary: {
+    all: [API_ADMIN_SALARY] as const,
+    byEmployee: (employeeId: string) => [API_ADMIN_SALARY, employeeId] as const,
   },
 } as const;

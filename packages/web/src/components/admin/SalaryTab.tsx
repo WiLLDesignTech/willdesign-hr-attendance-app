@@ -7,6 +7,7 @@ import { useEmployees, useSalaryHistory, useAddSalaryEntry } from "../../hooks/q
 import { SalaryTypes, SalaryChangeTypes, Currencies } from "@hr-attendance-app/types";
 import type { Employee, SalaryRecord } from "@hr-attendance-app/types";
 import { formatDate } from "../../utils/date";
+import { formatAmount } from "../../utils/currency";
 
 const CHANGE_TYPE_OPTIONS = [
   SalaryChangeTypes.INITIAL,
@@ -95,7 +96,7 @@ export const SalaryTab = () => {
                 <HistoryRow key={entry.id}>
                   <HistoryMain>
                     <HistoryAmount>
-                      {entry.currency} {entry.amount.toLocaleString()}
+                      {formatAmount(entry.amount, entry.currency)}
                     </HistoryAmount>
                     <HistoryMeta>
                       {t(`admin.salary.type.${entry.salaryType}`)} · {t(`admin.salary.change.${entry.changeType}`)}

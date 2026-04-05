@@ -17,71 +17,71 @@ interface UserPolicyResponse {
   readonly raw: RawPolicy;
 }
 
-export function usePolicies(groupName: string) {
+export const usePolicies = (groupName: string) => {
   const api = useApiClient();
   return useQuery({
     queryKey: queryKeys.policies.byGroup(groupName),
     queryFn: () => api.get<GroupPolicyResponse>(apiPath(API_POLICIES, { groupName })),
     enabled: !!groupName,
   });
-}
+};
 
-export function useCompanyPolicy() {
+export const useCompanyPolicy = () => {
   const api = useApiClient();
   return useQuery({
     queryKey: queryKeys.policies.company(),
     queryFn: () => api.get<RawPolicy>(API_POLICY_COMPANY),
   });
-}
+};
 
-export function useUserPolicy(userId: string) {
+export const useUserPolicy = (userId: string) => {
   const api = useApiClient();
   return useQuery({
     queryKey: queryKeys.policies.byUser(userId),
     queryFn: () => api.get<UserPolicyResponse>(apiPath(API_POLICY_USER, { userId })),
     enabled: !!userId,
   });
-}
+};
 
-export function useEffectivePolicy() {
+export const useEffectivePolicy = () => {
   const api = useApiClient();
   return useQuery({
     queryKey: queryKeys.policies.effective(),
     queryFn: () => api.get<EffectivePolicy>(API_POLICY_EFFECTIVE),
   });
-}
+};
 
-export function useUpdateGroupPolicy() {
+export const useUpdateGroupPolicy = () => {
   const api = useApiClient();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (input: { groupName: string; policy: RawPolicy }) =>
       api.put(apiPath(API_POLICIES, { groupName: input.groupName }), input.policy),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.policies.all });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.policies.all });
     },
   });
-}
+};
 
-export function useUpdateCompanyPolicy() {
+export const useUpdateCompanyPolicy = () => {
   const api = useApiClient();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (policy: RawPolicy) => api.put(API_POLICY_COMPANY, policy),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.policies.all });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.policies.all });
     },
   });
-}
+};
 
-export function useUpdateUserPolicy() {
+export const useUpdateUserPolicy = () => {
   const api = useApiClient();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (input: { userId: string; policy: RawPolicy }) =>
       api.put(apiPath(API_POLICY_USER, { userId: input.userId }), input.policy),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.policies.all });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.policies.all });
     },
   });
-}
+};
