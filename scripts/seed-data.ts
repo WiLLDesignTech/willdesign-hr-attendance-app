@@ -163,22 +163,25 @@ const seedAttendanceStates = async (): Promise<void> => {
 
 const seedSalaries = async (): Promise<void> => {
   const salaries = [
-    { id: "ADMIN001", amount: 500000, currency: "JPY", effectiveFrom: "2024-01-01" },
-    { id: "MGR001", amount: 400000, currency: "JPY", effectiveFrom: "2024-04-01" },
-    { id: "JP001", amount: 300000, currency: "JPY", effectiveFrom: "2025-01-01" },
-    { id: "NP001", amount: 80000, currency: "NPR", effectiveFrom: "2025-06-01" },
+    { id: "ADMIN001", amount: 500000, currency: "JPY", effectiveFrom: "2024-01-01", changeType: "INITIAL" },
+    { id: "ADMIN001", amount: 550000, currency: "JPY", effectiveFrom: "2025-04-01", changeType: "REVIEW" },
+    { id: "MGR001", amount: 400000, currency: "JPY", effectiveFrom: "2024-04-01", changeType: "INITIAL" },
+    { id: "MGR001", amount: 430000, currency: "JPY", effectiveFrom: "2025-10-01", changeType: "PROMOTION" },
+    { id: "JP001", amount: 300000, currency: "JPY", effectiveFrom: "2025-01-01", changeType: "INITIAL" },
+    { id: "JP001", amount: 320000, currency: "JPY", effectiveFrom: "2026-01-01", changeType: "PROBATION_END" },
+    { id: "NP001", amount: 80000, currency: "NPR", effectiveFrom: "2025-06-01", changeType: "INITIAL" },
   ];
 
   for (const s of salaries) {
     await put({
       PK: keys.EMP(s.id),
       SK: keys.SALARY(s.effectiveFrom),
-      id: `SAL#${s.id}#1`,
+      id: `SAL#${s.id}#${s.effectiveFrom}`,
       employeeId: s.id,
       amount: s.amount,
       currency: s.currency,
       salaryType: "MONTHLY",
-      changeType: "INITIAL",
+      changeType: s.changeType,
       effectiveFrom: s.effectiveFrom,
       createdAt: NOW,
     });

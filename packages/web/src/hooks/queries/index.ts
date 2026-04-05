@@ -2,7 +2,7 @@ export { queryKeys } from "./keys";
 export { useCurrentUser, useEmployees, useUpdateEmployee } from "./useEmployee";
 export { useAttendanceState, useAttendanceEvents, useEmployeeAttendanceEvents, useAttendanceSummary, useClockAction, useEditAttendanceEvent, useTeamAttendanceStates } from "./useAttendance";
 export { useLeaveRequests, usePendingLeaveRequests, useLeaveBalance, useCreateLeave, useApproveLeave, useRejectLeave } from "./useLeave";
-export { usePayroll } from "./usePayroll";
+export { usePayroll, usePayrollReport, useSalaryHistory, useAddSalaryEntry } from "./usePayroll";
 export { useFlags, useResolveFlag } from "./useFlags";
 export { useReports, useTeamReports, useSubmitReport } from "./useReports";
 export { useTeamMembers } from "./useTeam";

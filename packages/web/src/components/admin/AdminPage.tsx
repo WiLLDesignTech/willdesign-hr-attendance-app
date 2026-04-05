@@ -9,8 +9,10 @@ import { RolesTab } from "./RolesTab";
 import { HolidayTab } from "./HolidayTab";
 import { AttendanceLockTab } from "./AttendanceLockTab";
 import { EmployeesTab } from "./EmployeesTab";
+import { SalaryTab } from "./SalaryTab";
+import { PayrollReportTab } from "./PayrollReportTab";
 
-type AdminSection = "onboarding" | "offboarding" | "employees" | "policies" | "roles" | "holidays" | "locks";
+type AdminSection = "onboarding" | "offboarding" | "employees" | "salary" | "payrollReport" | "policies" | "roles" | "holidays" | "locks";
 
 interface SectionConfig {
   readonly id: AdminSection;
@@ -23,6 +25,8 @@ const SECTIONS: readonly SectionConfig[] = [
   { id: "onboarding", labelKey: "admin.onboarding", descKey: "admin.onboardingDesc", icon: "+" },
   { id: "offboarding", labelKey: "admin.offboarding", descKey: "admin.offboardingDesc", icon: "→" },
   { id: "employees", labelKey: "admin.employeesTitle", descKey: "admin.employeesDesc", icon: "⊡" },
+  { id: "salary", labelKey: "admin.salary.title", descKey: "admin.salary.desc", icon: "¥" },
+  { id: "payrollReport", labelKey: "admin.payrollReport.title", descKey: "admin.payrollReport.desc", icon: "▤" },
   { id: "policies", labelKey: "admin.policies", descKey: "admin.policiesDesc", icon: "≡" },
   { id: "roles", labelKey: "admin.roles", descKey: "admin.rolesDesc", icon: "⊕" },
   { id: "holidays", labelKey: "admin.holidays", descKey: "admin.holidaysDesc", icon: "◆" },
@@ -40,6 +44,10 @@ const getSectionContent = (section: AdminSection): ReactNode => {
       return <OffboardingTab />;
     case "employees":
       return <EmployeesTab />;
+    case "salary":
+      return <SalaryTab />;
+    case "payrollReport":
+      return <PayrollReportTab />;
     case "policies":
       return <PolicyTab />;
     case "roles":

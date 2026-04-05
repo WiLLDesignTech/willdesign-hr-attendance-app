@@ -54,6 +54,8 @@
     "onboarding": "Onboarding", "onboardingDesc": "Create a new employee record",
     "offboarding": "Offboarding", "offboardingDesc": "Process employee exit",
     "employeesTitle": "Employees", "employeesDesc": "View and edit employee details",
+    "salary": { "title": "Salary", "desc": "Manage employee salary history", "selectEmployee": "Select Employee", "history": "Salary History", "addEntry": "Add Salary Change", "noHistory": "No salary records", "added": "Salary entry added", "amount": "Amount", "changeType": "Change Type", "effectiveFrom": "Effective From", "type": { "MONTHLY": "Monthly", "ANNUAL": "Annual", "HOURLY": "Hourly" }, "change": { "INITIAL": "Initial", "PROBATION_END": "Probation End", "REVIEW": "Review", "PROMOTION": "Promotion", "ADJUSTMENT": "Adjustment" } },
+    "payrollReport": { "title": "Payroll Report", "desc": "Monthly payroll summary for all employees", "month": "Month", "totalWorked": "Total Worked", "totalRequired": "Total Required", "totalOvertime": "Total Overtime", "totalNet": "Total Net Pay", "noEntries": "No payroll entries for this month", "noData": "No report data available" },
     "policies": "Policies", "policiesDesc": "Manage policy configurations",
     "roles": "Roles", "rolesDesc": "Manage custom roles and permissions",
     "holidays": "Holidays", "holidaysDesc": "Manage regional holiday calendars",
