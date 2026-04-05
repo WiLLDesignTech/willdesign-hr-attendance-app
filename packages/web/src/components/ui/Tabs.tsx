@@ -3,6 +3,7 @@ import styled from "styled-components";
 interface TabItem {
   readonly key: string;
   readonly label: string;
+  readonly badge?: number;
 }
 
 interface TabsProps {
@@ -23,6 +24,9 @@ export const Tabs = ({ tabs, activeKey, onChange }: TabsProps) => {
           onClick={() => onChange(tab.key)}
         >
           {tab.label}
+          {tab.badge != null && tab.badge > 0 && (
+            <TabBadge>{tab.badge}</TabBadge>
+          )}
         </TabButton>
       ))}
     </TabBar>
@@ -71,4 +75,19 @@ const TabButton = styled.button<{ $active: boolean }>`
   &:hover {
     color: ${({ theme }) => theme.colors.accent};
   }
+`;
+
+const TabBadge = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  border-radius: ${({ theme }) => theme.radii.full};
+  background: ${({ theme }) => theme.colors.error};
+  color: ${({ theme }) => theme.colors.textInverse};
+  font-size: ${({ theme }) => theme.fontSizes.xxs};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
+  padding: 0 5px;
+  margin-left: ${({ theme }) => theme.space.xs};
 `;

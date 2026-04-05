@@ -29,9 +29,24 @@ export const TeamPage = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const isManager = useIsManager();
 
+  const { data: pendingLeave } = usePendingLeaveRequests({ enabled: true });
+  const { data: allFlags } = useFlags();
+  const { data: allBank } = useBank();
+
+  const pendingCount = useMemo(() => {
+    const leave = pendingLeave?.length ?? 0;
+    const flags = allFlags?.filter((f) => f.status === FlagStatuses.PENDING).length ?? 0;
+    const bank = allBank?.filter((b) => b.approvalStatus === "PENDING").length ?? 0;
+    return leave + flags + bank;
+  }, [pendingLeave, allFlags, allBank]);
+
   const localizedTabs = useMemo(
-    () => TEAM_TABS.map((tab) => ({ key: tab.key, label: t(tab.label) })),
-    [t],
+    () => TEAM_TABS.map((tab) => ({
+      key: tab.key,
+      label: t(tab.label),
+      ...(tab.key === "approvals" ? { badge: pendingCount } : {}),
+    })),
+    [t, pendingCount],
   );
 
   return (
