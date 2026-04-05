@@ -167,11 +167,11 @@ export const AttendancePage = () => {
         <DayHeader>
           <h3>{t("attendance.dayDetail", { date: selectedDate })}</h3>
         </DayHeader>
-        {eventsLoading ? (
-          <p>{t("common.loading")}</p>
-        ) : !events?.length ? (
+        {eventsLoading && <p>{t("common.loading")}</p>}
+        {!eventsLoading && !events?.length && (
           <EmptyState message={t("attendance.noRecords")} />
-        ) : (
+        )}
+        {!eventsLoading && !!events?.length && (
           <EventTimeline>
             {events.map((e) => (
               <TimelineItem key={e.id}>
