@@ -3,7 +3,7 @@ import type { AttendanceState } from "@hr-attendance-app/types";
 import type { theme } from "../theme/theme";
 
 export type ThemeColorKey = keyof typeof theme.colors;
-type BadgeVariant = "success" | "info" | "warning";
+type BadgeVariant = "success" | "info" | "warning" | "danger";
 
 export interface AttendanceStatusEntry {
   readonly labelKey: string;
@@ -12,8 +12,8 @@ export interface AttendanceStatusEntry {
 }
 
 export const ATTENDANCE_STATUS_CONFIG: Record<AttendanceState, AttendanceStatusEntry> = {
-  [AttendanceStates.IDLE]: { labelKey: "dashboard.statusIdle", color: "textMuted", variant: "success" },
-  [AttendanceStates.CLOCKED_IN]: { labelKey: "dashboard.statusWorking", color: "accent", variant: "info" },
+  [AttendanceStates.IDLE]: { labelKey: "dashboard.statusIdle", color: "textMuted", variant: "danger" },
+  [AttendanceStates.CLOCKED_IN]: { labelKey: "dashboard.statusWorking", color: "accent", variant: "success" },
   [AttendanceStates.ON_BREAK]: { labelKey: "dashboard.statusBreak", color: "warning", variant: "warning" },
 };
 

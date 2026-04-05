@@ -72,21 +72,21 @@ const TeamOverview = () => {
     <MemberGrid>
       {members.map((m) => {
         const state: AttendanceState = (stateMap.get(m.id) ?? AttendanceStates.IDLE) as AttendanceState;
+        const config = ATTENDANCE_STATUS_CONFIG[state];
         return (
           <MemberCard key={m.id}>
-            <Avatar>{m.name.charAt(0).toUpperCase()}</Avatar>
+            <AvatarWrapper>
+              <Avatar>{m.name.charAt(0).toUpperCase()}</Avatar>
+              <StatusDot $variant={config.variant} />
+            </AvatarWrapper>
             <MemberInfo>
-              <MemberName>{m.name}</MemberName>
+              <MemberNameRow>
+                <MemberName>{m.name}</MemberName>
+                <Badge label={t(config.labelKey)} variant={config.variant} />
+              </MemberNameRow>
               <MemberMeta>
-                <Badge label={t(`team.employmentType.${m.employmentType}`)} variant="info" />
-                <Badge label={t(`team.region.${m.region}`)} variant="info" />
+                {t(`team.employmentType.${m.employmentType}`)} · {t(`team.region.${m.region}`)}
               </MemberMeta>
-              <StatusBadge>
-                <Badge
-                  label={t(ATTENDANCE_STATUS_CONFIG[state].labelKey)}
-                  variant={ATTENDANCE_STATUS_CONFIG[state].variant}
-                />
-              </StatusBadge>
             </MemberInfo>
           </MemberCard>
         );
@@ -322,6 +322,11 @@ const MemberCard = styled(Card)`
   }
 `;
 
+const AvatarWrapper = styled.div`
+  position: relative;
+  flex-shrink: 0;
+`;
+
 const Avatar = styled.div`
   width: 44px;
   height: 44px;
@@ -333,14 +338,40 @@ const Avatar = styled.div`
   justify-content: center;
   font-size: ${({ theme }) => theme.fontSizes.md};
   font-weight: ${({ theme }) => theme.fontWeights.bold};
-  flex-shrink: 0;
+`;
+
+const STATUS_DOT_COLORS = {
+  success: "success",
+  info: "info",
+  warning: "warning",
+  danger: "textMuted",
+} as const;
+
+const StatusDot = styled.div<{ $variant: string }>`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: ${({ theme }) => theme.radii.full};
+  border: 2px solid ${({ theme }) => theme.colors.background};
+  background: ${({ theme, $variant }) =>
+    theme.colors[STATUS_DOT_COLORS[$variant as keyof typeof STATUS_DOT_COLORS] as keyof typeof theme.colors] ?? theme.colors.textMuted};
 `;
 
 const MemberInfo = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.space.xs};
+  gap: 2px;
   min-width: 0;
+  flex: 1;
+`;
+
+const MemberNameRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: ${({ theme }) => theme.space.sm};
 `;
 
 const MemberName = styled.span`
@@ -349,13 +380,10 @@ const MemberName = styled.span`
   color: ${({ theme }) => theme.colors.text};
 `;
 
-const MemberMeta = styled.div`
-  display: flex;
-  gap: ${({ theme }) => theme.space.xs};
-  flex-wrap: wrap;
+const MemberMeta = styled.span`
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  color: ${({ theme }) => theme.colors.textMuted};
 `;
-
-const StatusBadge = styled.div``;
 
 /* Approval Queue */
 
