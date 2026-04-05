@@ -15,7 +15,7 @@
       "script": "typecheck:watch",
       "isBackground": true,
       "problemMatcher": ["$tsc-watch"],
-      "presentation": { "reveal": "silent", "panel": "dedicated", "group": "dev" }
+      "presentation": { "reveal": "never", "focus": false, "panel": "dedicated", "group": "dev" }
     },
     {
       "label": "Web Dev Server",
@@ -30,7 +30,7 @@
           "endsPattern": "ready in"
         }
       },
-      "presentation": { "reveal": "always", "panel": "dedicated", "group": "dev" }
+      "presentation": { "reveal": "never", "focus": false, "panel": "dedicated", "group": "dev" }
     },
     {
       "label": "Test (Watch)",
@@ -38,7 +38,7 @@
       "script": "test:watch",
       "isBackground": true,
       "problemMatcher": [],
-      "presentation": { "reveal": "silent", "panel": "dedicated", "group": "dev" }
+      "presentation": { "reveal": "never", "focus": false, "panel": "dedicated", "group": "dev" }
     },
     {
       "label": "Test (Run Once)",
