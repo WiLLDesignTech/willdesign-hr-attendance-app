@@ -10,3 +10,4 @@ cdk.out/
 .vite/
 __pycache__/
 *.pyc
+.playwright-mcp
