@@ -13,10 +13,9 @@ import {
   useEmployeeAttendanceEvents,
 } from "../../hooks/queries";
 import { useIsManager } from "../../hooks/useRole";
-import { calculateDailyHours } from "@hr-attendance-app/core";
 import { formatDate, formatTime, isoToLocalDate } from "../../utils/date";
 import { ATTENDANCE_STATUS_CONFIG } from "../../utils/attendance-status";
-import { AttendanceStates, AttendanceActions, BankApprovalStatuses, FlagResolutions, FlagStatuses, LeaveRequestStatuses, isoToDateStr, nowIso } from "@hr-attendance-app/types";
+import { AttendanceStates, AttendanceActions, BankApprovalStatuses, FlagResolutions, FlagStatuses, LeaveRequestStatuses, calculateDailyHours, isoToDateStr, nowIso } from "@hr-attendance-app/types";
 import type { AttendanceAction, AttendanceState, Employee, LeaveRequest, Flag, BankEntry, DailyReport } from "@hr-attendance-app/types";
 
 const TEAM_TABS = [

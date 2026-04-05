@@ -203,6 +203,9 @@ export type {
   QuotaRedistributionBody,
 } from "./api-routes.js";
 
+export { calculateDailyHours } from "./hours-calculator.js";
+export type { HoursBreakdown } from "./hours-calculator.js";
+
 export { KeyPrefixes, KeyPatterns } from "./key-patterns.js";
 
 export { AppBranding, createBranding } from "./branding.js";
