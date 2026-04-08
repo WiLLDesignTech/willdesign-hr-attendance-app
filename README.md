@@ -1,4 +1,20 @@
-# HR Attendance App
+# ⚠️ DEPRECATED — This project has been archived
+
+> **Status:** Deprecated / Archived
+>
+> **Replaced by:** [Jobkan (ジョブカン)](https://jobcan.ne.jp/) — SaaS attendance tracking at ¥200/user/month
+>
+> **Decision date:** April 8, 2026
+>
+> **Rationale:** After evaluating build vs buy, we decided to adopt Jobkan for attendance tracking. Jobkan provides multilingual UI (English + Japanese), Slack integration (`/jobcan_touch`), flex time modes, leave management, and CSV export — all out of the box at a fraction of the cost of building and maintaining a custom system. See the [full proposal](https://github.com/WiLLDesignTech/willdesign-management/proposals/attendance-system-proposal.md) for details.
+>
+> **Work verification & performance tracking** will be handled by a separate system: [WillDesign Work Tracker](https://github.com/WiLLDesignTech/willdesign-management/proposals/willdesign-work-tracker-proposal.md) (post-WilReji launch, August 2026+).
+>
+> **This repo is no longer maintained. No new features or bug fixes will be added.**
+
+---
+
+# HR Attendance App (Archived)
 
 Open-source, self-hosted HR attendance platform built on AWS. Supports single-tenant (one company) and multi-tenant (managed cloud) deployments with configurable regions, policies, and branding.
 
