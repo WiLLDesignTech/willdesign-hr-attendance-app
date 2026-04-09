@@ -98,3 +98,28 @@ The app uses a 4-level cascade: **Region defaults → Company overrides → Grou
 - Load entire `.kiro/steering/` as project memory
 - Default files: `product.md`, `tech.md`, `structure.md`
 - Custom files are supported (managed via `/kiro:steering-custom`)
+
+## WiLLDesignTech Org-Wide Rules
+
+### Core Rules
+
+- **Confidence threshold**: 95% minimum before any changes. 99% if achievable with low effort. Ask ALL questions upfront.
+- **Ask questions when confused**: Highest priority rule. Never guess.
+- **Plan before acting**: For non-trivial tasks, present a plan and get approval before executing.
+
+### Pre-Commit Rules
+
+- **Run /simplify before every commit**: Review all changed code for reuse, quality, efficiency, and BDD test coverage.
+  - For non-Claude-Code agents: follow the prompt in willdesign-rules/development/pre-commit-review-prompt.md
+- **Grouped commits**: Group related changes into logical commits. Ask for user permission before committing.
+- **BDD review**: Verify all new/changed public functions have BDD-style test coverage before committing.
+
+### Branch Protection
+
+- main branch requires PR approval from senior-dev team before merge
+- Never force-push to main
+
+### Authentication
+
+- All new apps MUST use the centralized SSO (sso.wilreji.com / sso.staging.wilreji.com)
+- Do NOT implement custom auth — use @willdesign-sso/client
